@@ -1,2 +1,2 @@
-# shopme
-Referential Project for Shopme eCommerce Application
+# freshcart
+Referential Project for FreshCart eCommerce Application
