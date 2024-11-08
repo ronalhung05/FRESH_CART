@@ -2,6 +2,7 @@ package com.freshcart.shoppingcart;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.freshcart.common.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,8 @@ public class ShoppingCartRestController {
     private ShoppingCartService cartService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private MessageService messageService;
 
     @PostMapping("/cart/add/{productId}/{quantity}")
     public String addProductToCart(@PathVariable("productId") Integer productId,
@@ -30,7 +33,7 @@ public class ShoppingCartRestController {
 
             return updatedQuantity + " item(s) of this product were added to your shopping cart.";
         } catch (CustomerNotFoundException ex) {
-            return "You must login to add this product to cart.";
+           return messageService.getMessage("MUST_LOGIN_PRODUCT");
         } catch (ShoppingCartException ex) {
             return ex.getMessage();
         }

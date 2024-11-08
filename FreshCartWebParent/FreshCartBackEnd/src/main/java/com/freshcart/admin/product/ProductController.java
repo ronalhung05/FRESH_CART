@@ -3,6 +3,7 @@ package com.freshcart.admin.product;
 import java.io.IOException;
 import java.util.List;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ public class ProductController {
     private BrandService brandService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private MessageServiceAdmin messageService;
 
     @GetMapping("/products")
     public String listFirstPage(Model model) {
@@ -104,7 +107,8 @@ public class ProductController {
 
         ProductSaveHelper.deleteExtraImagesWeredRemovedOnForm(product);
 
-        ra.addFlashAttribute("message", "The product has been saved successfully.");
+        ra.addFlashAttribute("message", messageService.getMessage("SUCCESS_PRODUCT"));
+//        ra.addFlashAttribute("message", "The product has been saved successfully.");
 
         return defaultRedirectURL;
     }
