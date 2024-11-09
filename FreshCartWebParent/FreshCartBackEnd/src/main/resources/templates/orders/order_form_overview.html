@@ -56,7 +56,7 @@
 				<select th:field="*{paymentMethod}" class="form-control" required
 					style="max-width: 150px">
 					<option
-						th:each="pm : ${T(com.shopme.common.entity.order.PaymentMethod).values()}"
+						th:each="pm : ${T(com.freshcart.common.entity.order.PaymentMethod).values()}"
 						th:value="${pm}" th:text="${pm}" />
 				</select>
 			</div>
@@ -67,7 +67,7 @@
 				<select th:field="*{status}" class="form-control" required
 					style="max-width: 150px">
 					<option
-						th:each="os : ${T(com.shopme.common.entity.order.OrderStatus).values()}"
+						th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}"
 						th:value="${os}" th:text="${os}" />
 				</select>
 			</div>
