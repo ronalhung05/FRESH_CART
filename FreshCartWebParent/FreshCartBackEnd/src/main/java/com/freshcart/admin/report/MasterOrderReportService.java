@@ -43,8 +43,8 @@ public class MasterOrderReportService extends AbstractReportService {
             if (itemIndex >= 0) {
                 reportItem = listReportItems.get(itemIndex);
 
-                reportItem.addGrossSales(order.getTotal());
-                reportItem.addNetSales(order.getSubtotal() - order.getProductCost());
+                reportItem.addRevenue(order.getTotal());
+                reportItem.addProfit(order.getTotal() - order.getProductCost());
                 reportItem.increaseOrdersCount();
             }
         }
@@ -52,8 +52,8 @@ public class MasterOrderReportService extends AbstractReportService {
 
     private void printReportData(List<ReportItem> listReportItems) {
         listReportItems.forEach(item -> {
-            System.out.printf("%s, %10.2f, %10.2f, %d \n", item.getIdentifier(), item.getGrossSales(),
-                    item.getNetSales(), item.getOrdersCount());
+            System.out.printf("%s, %10.2f, %10.2f, %d \n", item.getIdentifier(), item.getRevenue(),
+                    item.getProfit(), item.getOrdersCount());
         });
 
     }

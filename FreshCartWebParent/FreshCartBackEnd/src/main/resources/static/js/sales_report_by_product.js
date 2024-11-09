@@ -29,17 +29,17 @@ function prepareChartDataForSalesReportByProduct(responseJSON) {
 	data = new google.visualization.DataTable();
 	data.addColumn('string', 'Product');
 	data.addColumn('number', 'Quantity');
-	data.addColumn('number', 'Gross Sales');
-	data.addColumn('number', 'Net Sales');
+	data.addColumn('number', 'Revenue');
+	data.addColumn('number', 'Profit');
 
-	totalGrossSales = 0.0;
-	totalNetSales = 0.0;
+	totalRevenue = 0.0;
+	totalProfit = 0.0;
 	totalItems = 0;
 
 	$.each(responseJSON, function(index, reportItem) {
-		data.addRows([[reportItem.identifier, reportItem.productsCount, reportItem.grossSales, reportItem.netSales]]);
-		totalGrossSales += parseFloat(reportItem.grossSales);
-		totalNetSales += parseFloat(reportItem.netSales);
+		data.addRows([[reportItem.identifier, reportItem.productsCount, reportItem.revenue, reportItem.profit]]);
+		totalRevenue += parseFloat(reportItem.revenue);
+		totalProfit += parseFloat(reportItem.profit);
 		totalItems += parseInt(reportItem.productsCount);
 	});
 }

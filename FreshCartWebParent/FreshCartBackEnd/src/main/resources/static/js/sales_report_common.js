@@ -88,13 +88,13 @@ function getDenominator(period, reportType) {
 }
 
 function setSalesAmount(period, reportType, labelTotalItems) {
-	$("#textTotalGrossSales" + reportType).text(formatCurrency(totalGrossSales));
-	$("#textTotalNetSales" + reportType).text(formatCurrency(totalNetSales));
+	$("#textTotalRevenue" + reportType).text(formatCurrency(totalRevenue));
+	$("#textTotalProfit" + reportType).text(formatCurrency(totalProfit));
 
-	denominator = getDenominator(period, reportType);
-
-	$("#textAvgGrossSales" + reportType).text(formatCurrency(totalGrossSales / denominator));
-	$("#textAvgNetSales" + reportType).text(formatCurrency(totalNetSales / denominator));
+	// denominator = getDenominator(period, reportType);
+	//
+	// $("#textAvgGrossSales" + reportType).text(formatCurrency(totalGrossSales / denominator));
+	// $("#textAvgNetSales" + reportType).text(formatCurrency(totalNetSales / denominator));
 	$("#labelTotalItems" + reportType).text(labelTotalItems);
 	$("#textTotalItems" + reportType).text(totalItems);
 }
