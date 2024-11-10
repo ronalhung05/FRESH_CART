@@ -1,8 +1,8 @@
 // Sales Report by Date
 var data;
 var chartOptions;
-var totalGrossSales;
-var totalNetSales;
+var totalRevenue;
+var totalProfit;
 var totalItems;
 
 $(document).ready(function() {
@@ -31,18 +31,18 @@ function loadSalesReportByDate(period) {
 function prepareChartDataForSalesReportByDate(responseJSON) {
 	data = new google.visualization.DataTable();
 	data.addColumn('string', 'Date');
-	data.addColumn('number', 'Gross Sales');
-	data.addColumn('number', 'Net Sales');
+	data.addColumn('number', 'Revenue');
+	data.addColumn('number', 'Profit');
 	data.addColumn('number', 'Orders');
-	
-	totalGrossSales = 0.0;
-	totalNetSales = 0.0;
+
+	totalRevenue = 0.0;
+	totalProfit = 0.0;
 	totalItems = 0;
-	
+
 	$.each(responseJSON, function(index, reportItem) {
-		data.addRows([[reportItem.identifier, reportItem.grossSales, reportItem.netSales, reportItem.ordersCount]]);
-		totalGrossSales += parseFloat(reportItem.grossSales);
-		totalNetSales += parseFloat(reportItem.netSales);
+		data.addRows([[reportItem.identifier, reportItem.revenue, reportItem.profit, reportItem.ordersCount]]);
+		totalRevenue += parseFloat(reportItem.revenue);
+		totalProfit += parseFloat(reportItem.profit);
 		totalItems += parseInt(reportItem.ordersCount);
 	});
 }

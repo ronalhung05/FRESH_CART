@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class ReportItem {
     private String identifier;
-    private float grossSales;
-    private float netSales;
+    private float revenue;
+    private float profit;
     private int ordersCount;
     private int productsCount;
 
@@ -16,17 +16,17 @@ public class ReportItem {
         this.identifier = identifier;
     }
 
-    public ReportItem(String identifier, float grossSales, float netSales) {
+    public ReportItem(String identifier, float revenue, float profit) {
         this.identifier = identifier;
-        this.grossSales = grossSales;
-        this.netSales = netSales;
+        this.revenue = revenue;
+        this.profit = profit;
     }
 
-    public ReportItem(String identifier, float grossSales, float netSales, int productsCount) {
+    public ReportItem(String identifier, float revenue, float profit, int productsCount) {
         super();
         this.identifier = identifier;
-        this.grossSales = grossSales;
-        this.netSales = netSales;
+        this.revenue = revenue;
+        this.profit = profit;
         this.productsCount = productsCount;
     }
 
@@ -38,20 +38,20 @@ public class ReportItem {
         this.identifier = identifier;
     }
 
-    public float getGrossSales() {
-        return grossSales;
+    public float getRevenue() {
+        return revenue;
     }
 
-    public void setGrossSales(float grossSales) {
-        this.grossSales = grossSales;
+    public void setRevenue(float revenue) {
+        this.revenue = revenue;
     }
 
-    public float getNetSales() {
-        return netSales;
+    public float getProfit() {
+        return profit;
     }
 
-    public void setNetSales(float netSales) {
-        this.netSales = netSales;
+    public void setProfit(float profit) {
+        this.profit = profit;
     }
 
     public int getOrdersCount() {
@@ -69,23 +69,20 @@ public class ReportItem {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         ReportItem other = (ReportItem) obj;
         return Objects.equals(identifier, other.identifier);
     }
 
-    public void addGrossSales(float amount) {
-        this.grossSales += amount;
+    public void addRevenue(float amount) {
+        this.revenue += amount;
 
     }
 
-    public void addNetSales(float amount) {
-        this.netSales += amount;
+    public void addProfit(float amount) {
+        this.profit += amount;
     }
 
     public void increaseOrdersCount() {

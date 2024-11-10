@@ -112,7 +112,6 @@ public class OrderController {
                             HttpServletRequest request) {
         try {
             Order order = orderService.get(id);
-            ;
 
             List<Country> listCountries = orderService.listAllCountries();
 

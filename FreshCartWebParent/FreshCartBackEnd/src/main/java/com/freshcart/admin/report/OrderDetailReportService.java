@@ -42,18 +42,18 @@ public class OrderDetailReportService extends AbstractReportService {
 
             ReportItem reportItem = new ReportItem(identifier);
 
-            float grossSales = detail.getSubtotal() + detail.getShippingCost();
-            float netSales = detail.getSubtotal() - detail.getProductCost();
+            float revenue = detail.getSubtotal() + detail.getShippingCost();
+            float profit = revenue - detail.getProductCost();
 
             int itemIndex = listReportItems.indexOf(reportItem);
 
             if (itemIndex >= 0) {
                 reportItem = listReportItems.get(itemIndex);
-                reportItem.addGrossSales(grossSales);
-                reportItem.addNetSales(netSales);
+                reportItem.addRevenue(revenue);
+                reportItem.addProfit(profit);
                 reportItem.increaseProductsCount(detail.getQuantity());
             } else {
-                listReportItems.add(new ReportItem(identifier, grossSales, netSales, detail.getQuantity()));
+                listReportItems.add(new ReportItem(identifier, revenue, profit, detail.getQuantity()));
             }
         }
 
@@ -65,7 +65,7 @@ public class OrderDetailReportService extends AbstractReportService {
     private void printReportData(List<ReportItem> listReportItems) {
         for (ReportItem item : listReportItems) {
             System.out.printf("%-20s, %10.2f, %10.2f, %d \n",
-                    item.getIdentifier(), item.getGrossSales(), item.getNetSales(), item.getProductsCount());
+                    item.getIdentifier(), item.getRevenue(), item.getProfit(), item.getProductsCount());
         }
     }
 
