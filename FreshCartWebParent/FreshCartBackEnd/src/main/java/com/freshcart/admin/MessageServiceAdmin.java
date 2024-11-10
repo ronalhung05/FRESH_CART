@@ -15,9 +15,7 @@ public class MessageServiceAdmin {
     // the path file location
     public MessageServiceAdmin() {
         String currentDir = System.getProperty("user.dir");
-        int lastSeparatorIndex = currentDir.lastIndexOf(File.separator); // find the last string after /
-
-        String modifiedPath = currentDir.substring(0, lastSeparatorIndex) + File.separator + "message" + File.separator + "message.csv";
+        String modifiedPath = currentDir + File.separator + "FreshCartWebParent" + File.separator + "message" + File.separator + "message.csv";
         //replace by message/message.csv
 
         //System.out.println("Modified file path: " + modifiedPath); // Debugging output

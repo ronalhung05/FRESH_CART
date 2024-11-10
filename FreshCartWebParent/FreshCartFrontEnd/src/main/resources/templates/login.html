@@ -1,67 +1,154 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="fragments :: page_head('Shopme', 'none')" />
-
+<head th:replace="fragments :: page_head('Shopme', 'none')"></head>
 <body>
-	<div class="container-fluid text-center">
-		<div th:replace="navigation :: header_menu"></div>
-		<div>
-			<h2>Customer Login</h2>
+<!-- Navigation -->
+<div class="border-bottom shadow-sm">
+	<nav class="navbar navbar-light py-2">
+		<div class="container justify-content-center justify-content-lg-between">
+			<a class="navbar-brand" th:href="@{/}">
+				<img alt="FreshCart" class="d-inline-block align-text-top" th:src="@{${S3_BASE_URI + SITE_LOGO}}"/>
+			</a>
 		</div>
+	</nav>
+</div>
 
-		<div class="mt-3">
-			<a class="btn btn-lg btn-secondary fab fa-google"
-				th:href="@{/oauth2/authorization/google}">&nbsp;&nbsp;Continue
-				with Google</a>
-		</div>
+<main>
+	<section class="my-lg-14 my-8">
+		<div class="container">
+			<div class="row justify-content-center align-items-center">
+				<!-- Left column for image -->
+				<div class="col-12 col-md-6 col-lg-4 order-lg-1 order-2">
+					<img alt="" class="img-fluid" src="images/svg-graphics/signin-g.svg"/>
+				</div>
 
-		<div class="mt-3">
-			<a class="btn btn-lg btn-secondary fab fa-facebook"
-				th:href="@{/oauth2/authorization/facebook}">&nbsp;&nbsp;Continue
-				with Facebook</a>
-		</div>
+				<!-- Right column for login form -->
+				<div class="col-12 col-md-6 offset-lg-1 col-lg-4 order-lg-2 order-1">
+					<div class="mb-4">
+						<h1 class="mb-1 h2 fw-bold">Sign in to FreshCart</h1>
+						<p>Welcome back to FreshCart! Enter your email to get started.</p>
+					</div>
+					<!-- Login Form -->
+					<form method="post" th:action="@{/login}">
 
-		<div>&nbsp;</div>
+						<div class="row g-3">
+							<!-- Email input -->
+							<div class="col-12">
+								<input class="form-control" name="email" placeholder="Email"
+									   required type="email"/>
+							</div>
 
-		<form th:action="@{/login}" method="post"
-			style="max-width: 350px; margin: 0 auto">
-			<div th:if="${param.error}">
-				<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+							<!-- Password input -->
+							<div class="col-12">
+								<div class="password-field position-relative">
+									<input class="form-control" id="password" name="password" placeholder="Password"
+										   required type="password"/>
+									<span><i id="passwordToggler" class="bi bi-eye-slash password-toggler"></i></span>
+								</div>
+
+							</div>
+
+							<!-- Remember me & Forgot password -->
+							<div class="d-flex justify-content-between">
+								<div class="form-check">
+									<input class="form-check-input" name="remember-me" type="checkbox"/>
+									<label class="form-check-label">Remember me</label>
+								</div>
+								<div>
+									<a th:href="@{/forgot_password}">Forgot password?</a>
+								</div>
+							</div>
+
+							<!-- Submit button -->
+							<div class="col-12 d-grid">
+								<button class="btn btn-primary" type="submit">Sign In</button>
+							</div>
+
+							<!-- Sign up link -->
+							<div>
+								Don't have an account? <a th:href="@{/register}">Sign up</a>
+							</div>
+							<div class="d-flex align-items-center my-4">
+								<hr class="w-100 m-0">
+								<span class="text-muted fw-medium text-nowrap mx-4">or continue with</span>
+								<hr class="w-100 m-0">
+							</div>
+							<div class="d-flex flex-column flex-sm-row gap-3 pb-4 mb-3 mb-lg-4">
+								<a class="btn btn-lg btn-light w-100 d-flex align-items-center justify-content-center gap-2"
+								   th:href="@{/oauth2/authorization/google}"
+								   type="button">
+									<svg height="20" viewBox="0 0 48 48" width="20">
+										<path d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+											  fill="#FFC107"/>
+										<path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+											  fill="#FF3D00"/>
+										<path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+											  fill="#4CAF50"/>
+										<path d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+											  fill="#1976D2"/>
+									</svg>
+									<span>Google</span>
+								</a>
+								<a class="btn btn-lg btn-light w-100 d-flex align-items-center justify-content-center gap-2"
+								   th:href="@{/oauth2/authorization/facebook}"
+								   type="button">
+									<i class="bi bi-facebook" style="color: #1877f2; font-size: 20px;"></i>
+									<span>Facebook</span>
+								</a>
+							</div>
+
+						</div>
+					</form>
+				</div>
 			</div>
-			<div th:if="${param.logout}">
-				<p class="text-warning">You have been logged out.</p>
-			</div>
-
-			<div class="border border-secondary rounded p-3">
-				<p>
-					<input type="email" name="email" class="form-control"
-						placeholder="E-mail" required />
-				</p>
-				<p>
-					<input type="password" name="password" class="form-control"
-						placeholder="Password" required />
-				</p>
-				<p>
-					<input type="checkbox" name="remember-me" />&nbsp;Remember Me
-				</p>
-				<p>
-					<input type="submit" value="Login" class="btn btn-primary" />
-				</p>
-			</div>
-		</form>
-
-		<div>&nbsp;</div>
-		<div>
-			or <a th:href="@{/forgot_password}">Forgot Password</a>
 		</div>
-		<div>
-			Don't have an account? <a th:href="@{/register}"><b>Sign up</b></a>
-		</div>
-		<div>&nbsp;</div>
+	</section>
+</main>
 
-		<div th:replace="navigation :: footer_menu"></div>
-	</div>
+<div th:replace="navigation :: footer_menu"></div>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
+<script th:inline="javascript">
+	// Kiểm tra và hiển thị thông báo nếu có lỗi
+	/*[# th:if="${param.error}"]*/
+	new Notify({
+		status: 'error',
+		text: [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]],
+		effect: 'fade',
+		speed: 300,
+		customClass: null,
+		customIcon: null,
+		showIcon: true,
+		showCloseButton: true,
+		autoclose: true,
+		autotimeout: 3000,
+		gap: 20,
+		distance: 20,
+		type: 1,
+		position: 'right top'
+	});
+	/*[/]*/
+
+	// Kiểm tra và hiển thị thông báo nếu đăng xuất thành công
+	/*[# th:if="${param.logout}"]*/
+	new Notify({
+		status: 'warning',
+		title: 'Notification',
+		text: 'You have been logged out.',
+		effect: 'fade',
+		speed: 300,
+		customClass: null,
+		customIcon: null,
+		showIcon: true,
+		showCloseButton: true,
+		autoclose: true,
+		autotimeout: 3000,
+		gap: 20,
+		distance: 20,
+		type: 1,
+		position: 'right top'
+	});
+	/*[/]*/
+</script>
+
 </body>
-
 </html>

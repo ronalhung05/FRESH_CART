@@ -2,7 +2,7 @@ package com.freshcart.shoppingcart;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.freshcart.common.service.MessageService;
+import com.freshcart.MessageServiceFrontend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +21,7 @@ public class ShoppingCartRestController {
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private MessageService messageService;
+    private MessageServiceFrontend messageService;
 
     @PostMapping("/cart/add/{productId}/{quantity}")
     public String addProductToCart(@PathVariable("productId") Integer productId,

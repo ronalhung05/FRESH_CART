@@ -15,12 +15,12 @@ public class MessageServiceFrontend {
     // the path file location
     public MessageServiceFrontend() {
         String currentDir = System.getProperty("user.dir");
-        int lastSeparatorIndex = currentDir.lastIndexOf(File.separator); // find the last string after /
 
-        String modifiedPath = currentDir.substring(0, lastSeparatorIndex) + File.separator + "message" + File.separator + "message.csv";
+        String modifiedPath = currentDir + File.separator + "FreshCartWebParent" + File.separator + "message" + File.separator + "message.csv";
         //replace by message/message.csv
-
-        //System.out.println("Modified file path: " + modifiedPath); // Debugging output
+//        System.out.println("Current directory: " + currentDir);
+//
+//        System.out.println("Modified file path: " + modifiedPath); // Debugging output
         loadMessagesFromCSV(modifiedPath);
     }
 
