@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menu"></div>
+    <div>
+        <h2>[[${pageTitle}]]</h2>
+    </div>
+
+    <form th:action="@{/imports/save}" method="post">
+        <!-- User Info -->
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">User ID:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" th:value="${user.id}" id="userId" readonly/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">User Name:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" th:value="${user.getFullName()}" readonly/>
+            </div>
+        </div>
+        <!-- List of Products Table -->
+        <h4 class="mt-4">List of Product</h4>
+        <button type="button" class="btn btn-success mb-2" id="addProductBtn">Add Product</button>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID Product</th>
+                <th>Product Name</th>
+                <th>Amount</th>
+                <th>Cost</th>
+                <th>Sub Total</th>
+                <th>Units</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="productTableBody">
+            <!-- Existing rows can be dynamically generated here -->
+            </tbody>
+        </table>
+
+        <div id="hiddenInputsContainer"></div>
+        <!-- Submit and Cancel Buttons -->
+        <div class="text-center">
+            <input type="submit" value="Save" class="btn btn-primary m-3"/>
+            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+        </div>
+    </form>
+
+    <div th:replace="fragments :: footer"></div>
+</div>
+
+<!-- Modal for Adding Product -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="container pt-3">
+                <!-- Product Selection -->
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Product:</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="productSelect">
+                            <th:block th:each="product : ${listProducts}">
+                                <option th:value="${product.id}" th:text="${product.name}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Amount:</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="productAmount" min="0" max="1000" value="1"/>
+                    </div>
+                </div>
+
+                <!-- Cost Input -->
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Cost:</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="productCost" min="0.01" step="0.01"
+                               value="1.00"/>
+                    </div>
+                </div>
+
+                <!-- Unit Input -->
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Unit:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="productUnit" value="Piece" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="saveProductBtn" class="btn btn-success">Add</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/import_form.js}"></script>
+</body>
+</html>

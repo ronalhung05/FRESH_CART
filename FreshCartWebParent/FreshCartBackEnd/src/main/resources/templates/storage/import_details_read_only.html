@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div>
+			<table class="table table-striped table-bordered table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th>Id</th>
+						<th>Product ID</th>
+						<th>Product Name</th>
+						<th>Quantity</th>
+						<th>Cost</th>
+						<th>Subtotal</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="detail: ${import.details}">
+						<td>[[${detail.id}]]</td>
+						<td>[[${detail.product.id}]]</td>
+						<td>[[${detail.product.shortName}]]</td>
+						<td>[[${detail.quantity}]]</td>
+						<td>[[${detail.cost}]]</td>
+						<td>[[${detail.quantity * detail.cost}]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>
