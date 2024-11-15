@@ -4,11 +4,13 @@ import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.admin.product.ProductService;
 import com.freshcart.admin.security.FreshCartUserDetails;
+import com.freshcart.admin.setting.SettingService;
 import com.freshcart.admin.storage.export.ImportCsvExporter;
 import com.freshcart.admin.storage.export.ImportExcelExporter;
 import com.freshcart.admin.user.UserService;
 import com.freshcart.common.entity.User;
 import com.freshcart.common.entity.product.Product;
+import com.freshcart.common.entity.setting.Setting;
 import com.freshcart.common.entity.storage.Import;
 import com.freshcart.common.exception.ImportNotFoundException;
 import com.freshcart.common.exception.ProductNotFoundException;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +38,8 @@ public class ImportController {
     private ProductService productService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SettingService settingService;
 
     @GetMapping("/imports")
     public String listFirstPage(Model model) {
@@ -49,18 +54,27 @@ public class ImportController {
         importService.listByPage(pageNum, helper);
         return "storage/import";
     }
+    private void loadCurrencySettingImport(HttpServletRequest request) {
+        List<Setting> currencySettings = settingService.getCurrencySettings();
+
+        for (Setting setting : currencySettings) {
+            request.setAttribute(setting.getKey(), setting.getValue());
+        }
+    }
 
     @GetMapping("/imports/detail/{id}")
     public String viewImportDetails(@PathVariable("id") Integer id, Model model,
+            HttpServletRequest request,
             RedirectAttributes ra){
         try{
             Import ip = importService.get(id);
             model.addAttribute("import",ip);
-
+            loadCurrencySettingImport(request);
             return "storage/import_detail_modal";
-        }catch (ImportNotFoundException e){
-            ra.addFlashAttribute("message", e.getMessage());
 
+        }catch (ImportNotFoundException e){
+
+            ra.addFlashAttribute("message", e.getMessage());
             return defaultRedirectURL;
         }
     }

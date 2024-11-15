@@ -70,6 +70,7 @@ public class ProductService {
             product.setAlias(product.getAlias().replaceAll(" ", "-"));
         }
 
+        product.setInStock(0);
         product.setUpdatedTime(new Date());
 
         Product updatedProduct = repo.save(product);
