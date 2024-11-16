@@ -28,18 +28,19 @@ public class OrderDetailRepositoryTests {
     @Test
     public void testFindWithCategoryAndTimeBetween() throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = dateFormatter.parse("2021-09-01");
-        Date endTime = dateFormatter.parse("2021-09-30");
+        Date startTime = dateFormatter.parse("2024-11-15");
+        Date endTime = dateFormatter.parse("2024-11-17");
 
         List<OrderDetail> listOrderDetails = repo.findWithCategoryAndTimeBetween(startTime, endTime);
 
         assertThat(listOrderDetails.size()).isGreaterThan(0);
 
         for (OrderDetail detail : listOrderDetails) {
-            System.out.printf("%-30s | %d | %10.2f| %10.2f | %10.2f \n",
-                    detail.getProduct().getCategory().getName(),
-                    detail.getQuantity(), detail.getProductCost(),
-                    detail.getShippingCost(), detail.getSubtotal());
+//            System.out.printf("%-30s | %d | %10.2f| %10.2f | %10.2f \n",
+//                    detail.getProduct().getCategory().getName(),
+//                    detail.getQuantity(), detail.getProductCost(),
+//                    detail.getShippingCost(), detail.getSubtotal());
+            System.out.println(detail);
         }
     }
 
