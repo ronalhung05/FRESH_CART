@@ -25,6 +25,6 @@ public class ProductRestController {
             throws ProductNotFoundException {
         Product product = service.get(id);
         return new ProductDTO(product.getName(), product.getMainImagePath(),
-                product.getDiscountPrice(), product.getCost());
+                product.getDiscountPrice(), product.getCost(), product.getInStock());
     }
 }

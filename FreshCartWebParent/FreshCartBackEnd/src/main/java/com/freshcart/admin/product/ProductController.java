@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.freshcart.admin.MessageServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +67,7 @@ public class ProductController {
 
         Product product = new Product();
         product.setEnabled(true);
-        product.setInStock(true);
+        product.setInStock(0);
 
         model.addAttribute("product", product);
         model.addAttribute("listBrands", listBrands);

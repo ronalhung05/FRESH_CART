@@ -16,10 +16,26 @@ $(document).ready(function() {
 	yesButton = $("#yesButton");
 	noButton = $("#noButton");
 
-	$(".linkUpdateStatus").on("click", function(e) {
+	$(document).on("click", ".linkUpdateStatus", function(e) {
 		e.preventDefault();
-		link = $(this);
+		const link = $(this);
+
+		console.log("Link clicked:", {
+			orderId: link.attr("orderId"),
+			status: link.attr("status"),
+			href: link.attr("href")
+		});
 		showUpdateConfirmModal(link);
+	});
+
+	$(document).on("click", "#noButton", function(e) {
+		console.log("NO button clicked");
+		$("#confirmModal").modal("hide");
+	});
+
+	$(document).on("click", ".close", function(e) {
+		console.log("Close button clicked");
+		$("#confirmModal").modal("hide");
 	});
 
 	addEventHandlerForYesButton();
@@ -64,14 +80,26 @@ function showUpdateConfirmModal(link) {
 	status = link.attr("status");
 	yesButton.attr("href", link.attr("href"));
 
+	const href = link.attr("href");
+	if (!orderId || !status || !href) {
+		console.error("Missing attributes for link:", link);
+		return;
+	}
+
 	confirmText.text("Are you sure you want to update status of the order ID #" + orderId
 		+ " to " + status + "?");
-
-	confirmModalDialog.modal();
+	console.log("Showing modal for:", { orderId, status, href });
+	$("#confirmModal").modal("show"); // Chỉ rõ ID modal
 }
 
 function showMessageModal(message) {
 	noButton.text("Close");
 	yesButton.hide();
 	confirmText.text(message);
+
+	noButton.off("click").on("click", function () {
+		confirmModalDialog.modal("hide");
+	});
+
+	confirmModalDialog.modal("show");
 }

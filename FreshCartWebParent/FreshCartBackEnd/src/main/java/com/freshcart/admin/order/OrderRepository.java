@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.freshcart.admin.paging.SearchRepository;
 import com.freshcart.common.entity.order.Order;
+import org.springframework.data.repository.query.Param;
 
 public interface OrderRepository extends SearchRepository<Order, Integer> {
 
@@ -30,4 +31,7 @@ public interface OrderRepository extends SearchRepository<Order, Integer> {
             + " o.subtotal, o.total) FROM Order o WHERE"
             + " o.orderTime BETWEEN ?1 AND ?2 ORDER BY o.orderTime ASC")
     public List<Order> findByOrderTimeBetween(Date startTime, Date endTime);
+
+    @Query("SELECT COALESCE(SUM(od.quantity), 0) FROM OrderDetail od WHERE od.order.id = :orderId AND od.product.id = :productId")
+    int getProductQuantityInOrder(@Param("orderId") Integer orderId, @Param("productId") Integer productId);
 }

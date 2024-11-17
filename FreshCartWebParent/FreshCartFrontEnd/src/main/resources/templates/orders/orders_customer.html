@@ -1,134 +1,187 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('My Orders', 'none')" />
+<head th:replace="fragments :: page_head('My Orders', 'none')"/>
 
-<body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div th:replace="navigation :: search_nav"></div>
-		<div>
-			<h2>My Orders</h2>
-		</div>
+<body class="bg-gray-50">
+<div class="container-fluid">
+    <div th:replace="navigation :: header_menu"></div>
+    <div th:replace="navigation :: search_nav"></div>
 
-		<div th:replace="fragments :: search_form"></div>
+    <main class="py-6">
+        <div class="container">
+            <div class="row">
+                <!-- Giữ nguyên sidebar -->
+                <div class="col-lg-3 col-md-4 col-12 border-end d-none d-md-block">
+                    <div class="pt-10 pe-lg-10">
+                        <ul class="nav flex-column nav-pills nav-pills-dark">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/account_details}">
+                                    <i class="feather-icon icon-user me-2"></i>Personal info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link active" th:href="@{/orders}">
+                                    <i class="feather-icon icon-shopping-bag me-2"></i>Your Orders
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/address_book}">
+                                    <i class="feather-icon icon-map-pin me-2"></i>Address
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/reviews}">
+                                    <i class="feather-icon icon-star me-2"></i>Reviews
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <hr>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript: document.logoutForm.submit()">
+                                    <i class="feather-icon icon-log-out me-2"></i>Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-		<div class="full-details">
-			<table
-				class="table table-bordered table-striped table-hover table-responsive-xl">
-				<thead class="thead-dark">
-					<tr>
-						<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
-						<th
-							th:replace="fragments :: column_link('orderTime', 'Order Time', 'none')" />
-						<th>Products</th>
-						<th
-							th:replace="fragments :: column_link('total', 'Total', 'none')" />
-						<th
-							th:replace="fragments :: column_link('status', 'Status', 'none')" />
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="order : ${listOrders}">
-						<td th:text="${order.id}">ID</td>
-						<td>
-							<div th:replace="fragments :: format_time(${order.orderTime})">Order
-								Time</div>
-						</td>
-						<td th:utext="${order.productNames}"></td>
-						<td>
-							<div th:replace="fragments :: format_currency(${order.total})">Total</div>
-						</td>
-						<td><span th:class="'textOrderStatus' + ${order.id}">[[${order.status}]]</span></td>
-						<td><a class="fas fa-file-alt fa-2x icon-green linkDetail"
-							th:href="@{'/orders/detail/' + ${order.id}}"
-							title="View details of this order"></a> <th:block
-								th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
-								&nbsp;&nbsp;&nbsp;
-								<a class="fas fa-undo fa-2x icon-dark linkReturnOrder" href=""
-									th:classappend="'linkReturn' + ${order.id}"
-									th:orderId="${order.id}" title="Return this order"></a>
-							</th:block></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+                <!-- Nội dung chính được cập nhật -->
+                <div class="col-lg-9 col-md-8 col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-6">
+                        <h2 class="h3 mb-0">Your Orders</h2>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="search-container position-relative">
+                                <div th:replace="fragments :: search_form"></div>
+                            </div>
+                        </div>
+                    </div>
 
-		<div class="less-details p-2">
-			<th:block th:each="order : ${listOrders}">
-				<div class="row m-1">
-					<div class="card">
-						<div class="card-header">
-							<div class="row">
-								<div class="col">
-									<span>Order ID #[[${order.id}]]</span>
-								</div>
-								<div class="col">
-									<div class="float-right">
-										<a class="fas fa-file-alt fa-2x icon-green linkDetail"
-											th:href="@{'/orders/detail/' + ${order.id}}"></a>
+                    <div class="table-responsive border-0">
+                        <table class="table mb-0 text-nowrap">
+                            <!-- Table Head -->
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-0" th:replace="fragments :: column_link('id', 'Order ID', 'none')" />
+                                    <th class="border-0" th:replace="fragments :: column_link('orderTime', 'Order Date', 'none')" />
+                                    <th class="border-0" th:replace="fragments :: column_link('status', 'Status', 'none')" />
+                                    <th class="border-0" th:replace="fragments :: column_link('total', 'Total', 'none')" />
+                                    <th class="border-0">Products</th>
+                                    <th class="border-0"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="order : ${listOrders}">
+                                    <td class="ps-6">
+                                        <a class="text-decoration-none link-primary fw-medium">
+                                            #[[${order.id}]]
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div th:replace="fragments :: format_time(${order.orderTime})"></div>
+                                    </td>
+                                    <td>
+                                        <span th:class="'textOrderStatus' + ${order.id} + ' badge rounded-pill'" 
+                                              th:with="status=${order.status.toString()}"
+                                              th:classappend="${
+                                                status == 'NEW' ? 'badge bg-danger' : 
+                                                status == 'DELIVERED' ? 'badge bg-success' : 
+                                                status == 'PROCESSING' ? 'badge bg-warning' :
+                                                status == 'CANCELLED' ? 'badge bg-danger' :
+                                                status == 'PACKAGED' ? 'badge bg-primary' :
+                                                status == 'PICKED' ? 'badge bg-secondary' :
+                                                status == 'SHIPPING' ? 'badge bg-info' :
+                                                status == 'RETURN_REQUESTED' ? 'badge bg-danger' :
+                                                'badge bg-secondary'}">
+                                            [[${order.status}]]
+                                        </span>
+                                    </td>
+                                    <td>
+                    <span class="fw-medium"
+                          th:replace="fragments :: format_currency(${order.total})"></span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <th:block th:each="detail, status : ${order.orderDetails}">
+                                                <div th:if="${status.index < 3}"
+                                                     class="border rounded-3 p-1 bg-white">
+                                                    <img class="rounded-2"
+                                                         style="width: 40px; height: 40px; object-fit: cover;"
+                                                         th:src="@{${detail.product.mainImagePath}}"
+                                                         th:alt="${detail.product.name}"/>
+                                                </div>
+                                                <span th:if="${status.index == 3}"
+                                                      class="badge rounded-pill bg-secondary-subtle text-secondary">
+                                +[[${order.orderDetails.size() - 3}]] more
+                            </span>
+                                            </th:block>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-6">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a class="btn btn-sm btn-light-primary linkDetail"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top"
+                                               th:href="@{'/orders/detail/' + ${order.id}}"
+                                               title="View Details">
+                                                <i class="feather-icon icon-eye"></i>
+                                            </a>
 
-										<th:block
-											th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
-											&nbsp;
-											<a class="fas fa-undo fa-2x icon-dark linkReturnOrder"
-												href="" th:classappend="'linkReturn' + ${order.id}"
-												th:orderId="${order.id}" title="Return this order"></a>
-										</th:block>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card-body">
-							<div>
-								<span th:utext="${order.productNames}"></span>
-							</div>
-							<div class="row">
-								<div class="col">
-									<div th:replace="fragments :: format_currency(${order.total})">Total</div>
-								</div>
-								<div class="col">
-									<span th:class="'textOrderStatus' + ${order.id}">[[${order.status}]]</span>
-								</div>
-							</div>
-							<div>
-								<small>
-									<div th:replace="fragments :: format_time(${order.orderTime})"></div>
-								</small>
-							</div>
-						</div>
-					</div>
-				</div>
-			</th:block>
-		</div>
+                                            <th:block
+                                                    th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
+                                                <button class="btn btn-sm btn-light-secondary linkReturnOrder"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        th:classappend="'linkReturn' + ${order.id}"
+                                                        th:orderId="${order.id}"
+                                                        title="Return Order">
+                                                    <i class="feather-icon icon-rotate-ccw"></i>
+                                                </button>
+                                            </th:block>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-		<div th:replace="fragments :: pagination('/orders', 'orders')"></div>
+                    <div th:replace="fragments :: pagination('/orders', 'orders')"></div>
+                </div>
 
-		<div th:replace="orders/return_order_modal :: content"></div>
+            </div>
+        </div>
+    </main>
 
-		<div class="modal fade" id="orderDetailsModal">
-			<div class="modal-dialog modal-xl">
-				<div class="modal-content"></div>
-			</div>
-		</div>
+    <!-- Modals -->
+    <div th:replace="orders/return_order_modal :: content"></div>
+    <div class="modal fade" id="orderDetailsModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
 
-		<div>&nbsp;</div>
-		<div th:replace="navigation :: footer_menu"></div>
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
 
-	</div>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/orders}]]";
-		contextPath = "[[@{/}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
 
-		$(document).ready(function () {
-			handleDetailLink(".linkDetail", "#orderDetailsModal");
-		});
-	</script>
-	<script type="text/javascript" th:src="@{/js/return_order.js}"></script>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+    moduleURL = "[[@{/orders}]]";
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
+
+    $(document).ready(function () {
+        handleDetailLink(".linkDetail", "#orderDetailsModal");
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    });
+</script>
+<script th:src="@{/js/return_order.js}" type="text/javascript"></script>
 </body>
-
 </html>
