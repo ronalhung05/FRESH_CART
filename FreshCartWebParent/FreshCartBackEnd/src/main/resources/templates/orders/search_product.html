@@ -18,9 +18,15 @@
 			<th:block th:each="product : ${listProducts}">
 				<div class="col">
 					<div>
-						<a href="" class="linkProduct" th:pid="${product.id}"> <img
-							th:src="@{${product.mainImagePath}}" height="150"> <br />
-							<b th:id="'pname' + ${product.id}">[[${product.shortName}]]</b>
+						<a href="" class="linkProduct" th:pid="${product.id}">
+							<img th:src="@{${product.mainImagePath}}" height="150">
+							<br />
+							<b th:id="'pname' + ${product.id}">
+								[[${product.shortName}]]
+							</b>
+							<br />
+							In stock:
+							<span th:id="'pstock' + ${product.id}" th:text="${product.inStock}"></span>
 						</a>
 					</div>
 				</div>
@@ -40,10 +46,14 @@
 				e.preventDefault();
 				productId = $(this).attr("pid");
 				productName = $("#pname" + productId).text();
+				productStock = $("#pstock" + productId);
 
 				if (window.parent.isProductAlreadyAdded(productId)) {
 					showWarningModal("The product '" + productName + "' was already added.");
-				} else {
+				} else if (parseInt(productStock.text()) === 0) {
+					showWarningModal("The product '" + productName + "' is out of stock.");
+				}
+				else {
 					window.parent.addProduct(productId, productName);
 				}
 

@@ -46,3 +46,65 @@
 		display: table-cell;
 	}
 }
+
+.status-success {
+	background-color: #d4edda;
+	color: #155724;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.status-pending {
+	background-color: #fff3cd;
+	color: #856404;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.status-cancel {
+	background-color: #f8d7da;
+	color: #721c24;
+	padding: 5px 10px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+
+.pagination {
+	display: flex !important;
+	list-style: none !important;
+	padding: 0 !important;
+}
+
+.pagination li a {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	margin: 0 2px !important;
+	text-decoration: none !important;
+	color: #6c757d !important; /* Màu chữ cho nút bình thường */
+	background-color: #f8f9fa !important; /* Màu nền cho nút bình thường */
+	border: 1px solid #dee2e6 !important; /* Viền của nút */
+	border-radius: 5px !important;
+	font-weight: bold !important;
+}
+
+.pagination .active a {
+	background-color: #28a745 !important; /* Màu xanh cho nút đang chọn */
+	color: white !important; /* Màu chữ trắng cho nút đang chọn */
+	border: none !important;
+}
+
+.pagination li a:hover {
+	background-color: #28a745 !important; /* Màu nền khi di chuột */
+	color: white !important; /* Màu chữ khi di chuột */
+	border-color: none !important; /* Viền khi di chuột */
+}
+
+.pagination .disabled a {
+	background-color: #e9ecef !important; /* Màu nền cho nút bị vô hiệu */
+	color: #adb5bd !important; /* Màu chữ cho nút bị vô hiệu */
+	cursor: not-allowed !important;
+}

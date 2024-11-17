@@ -3,11 +3,15 @@ package com.freshcart.admin.order;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.freshcart.common.exception.ProductNotFoundException;
+import com.freshcart.common.exception.ProductOutOfStockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,7 @@ import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.admin.security.FreshCartUserDetails;
 import com.freshcart.admin.setting.SettingService;
+import com.freshcart.admin.product.ProductService;
 import com.freshcart.common.entity.Country;
 import com.freshcart.common.entity.order.Order;
 import com.freshcart.common.entity.order.OrderDetail;
@@ -36,6 +41,10 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ProductService productService;
+
     @Autowired
     private SettingService settingService;
 
@@ -129,19 +138,53 @@ public class OrderController {
     }
 
     @PostMapping("/order/save")
-    public String saveOrder(Order order, HttpServletRequest request, RedirectAttributes ra) {
+    public String saveOrder(Order order, HttpServletRequest request, Model model, RedirectAttributes ra) throws ProductNotFoundException {
         String countryName = request.getParameter("countryName");
         order.setCountry(countryName);
 
+        // Kiểm tra tồn kho sản phẩm trước khi lưu
+        Map<Integer, String> stockErrors = checkProductStock(order, request);
+
+        if (stockErrors != null && !stockErrors.isEmpty()) {
+            // Chuyển lỗi tồn kho thành chuỗi JSON hoặc danh sách
+            ra.addFlashAttribute("stockErrors", stockErrors);
+            ra.addFlashAttribute("message", "There are stock errors in the order.");
+
+            return "redirect:/orders/edit/" + order.getId(); // Redirect về trang chỉnh sửa
+        }
+
+        // Nếu không có lỗi tồn kho, tiếp tục lưu đơn hàng
         updateProductDetails(order, request);
         updateOrderTracks(order, request);
 
         orderService.save(order);
-
         ra.addFlashAttribute("message", "The order ID " + order.getId() + " has been updated successfully");
 
         return defaultRedirectURL;
     }
+
+
+    private Map<Integer, String> checkProductStock(Order order, HttpServletRequest request) throws ProductNotFoundException {
+        String[] productIds = request.getParameterValues("productId");
+        String[] quantities = request.getParameterValues("quantity");
+        Map<Integer, String> stockErrors = new HashMap<>();
+
+        for (int i = 0; i < productIds.length; i++) {
+            Integer productId = Integer.parseInt(productIds[i]);
+            int requestedQuantity = Integer.parseInt(quantities[i]);
+
+            Product product = productService.get(productId);
+
+            int existingOrderQuantity = orderService.getExistingOrderQuantity(order.getId(), productId);
+
+            if (product.getInStock() + existingOrderQuantity < requestedQuantity) {
+                stockErrors.put(productId, "Số lượng yêu cầu vượt quá tồn kho cho sản phẩm: " + product.getName());
+            }
+        }
+
+        return stockErrors.isEmpty() ? null : stockErrors; // Trả về null nếu không có lỗi tồn kho
+    }
+
 
     private void updateOrderTracks(Order order, HttpServletRequest request) {
         String[] trackIds = request.getParameterValues("trackId");
@@ -174,12 +217,14 @@ public class OrderController {
         }
     }
 
+
+
     private void updateProductDetails(Order order, HttpServletRequest request) {
-        String[] detailIds = request.getParameterValues("detailId");
         String[] productIds = request.getParameterValues("productId");
+        String[] quantities = request.getParameterValues("quantity");
+        String[] detailIds = request.getParameterValues("detailId");
         String[] productPrices = request.getParameterValues("productPrice");
         String[] productDetailCosts = request.getParameterValues("productDetailCost");
-        String[] quantities = request.getParameterValues("quantity");
         String[] productSubtotals = request.getParameterValues("productSubtotal");
         String[] productShipCosts = request.getParameterValues("productShipCost");
 
@@ -187,7 +232,7 @@ public class OrderController {
 
         for (int i = 0; i < detailIds.length; i++) {
             System.out.println("Detail ID: " + detailIds[i]);
-            System.out.println("\t Prodouct ID: " + productIds[i]);
+            System.out.println("\t Product ID: " + productIds[i]);
             System.out.println("\t Cost: " + productDetailCosts[i]);
             System.out.println("\t Quantity: " + quantities[i]);
             System.out.println("\t Subtotal: " + productSubtotals[i]);

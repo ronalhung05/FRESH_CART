@@ -3,7 +3,7 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		if (doesOrderHaveOnlyOneProduct()) {
-			showWarningModal("Could not remove product. The order must have eat least one product.");
+			showWarningModal("Could not remove product. The order must have at least one product.");
 		} else {
 			removeProduct($(this));
 			updateOrderAmounts();
@@ -21,7 +21,8 @@ function removeProduct(link) {
 	});
 }
 
+
 function doesOrderHaveOnlyOneProduct() {
-	productCount = $(".hiddenProductId").length;
+	const productCount = $(".hiddenProductId").length;
 	return productCount == 1;
 }
