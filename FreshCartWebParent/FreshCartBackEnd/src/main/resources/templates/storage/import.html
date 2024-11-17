@@ -49,7 +49,7 @@
                 <td class="hideable-column">[[${import.user.id}]]</td>
                 <td class="hideable-column">[[${import.user.firstName} + ' ' + ${import.user.lastName}]]</td>
                 <td class="hideable-column">[[${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
-                <td class="hideable-column">[[${#numbers.formatDecimal(import.sumCost, 0, 'COMMA', 'POINT')}]]</td>
+                <td class="hideable-column">[[${import.sumCost}]]</td>
 
                 <td><a class="fas fa-file-alt fa-2x icon-green link-detail"
                        th:href="@{'/imports/detail/' + ${import.id}}"
