@@ -1,161 +1,134 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
+<head th:replace="fragments :: page_head('Sign Up', 'none')"/>
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div>&nbsp;</div>
+<!-- navigation -->
+<div class="border-bottom shadow-sm">
+    <nav class="navbar navbar-light py-2">
+        <div class="container justify-content-center justify-content-lg-between">
+            <a class="navbar-brand" th:href="@{/}">
+                <img alt="" class="d-inline-block align-text-top" src="../assets/images/logo/freshcart-logo.svg">
+            </a>
+            <span class="navbar-text">
+                    Already have an account? <a th:href="@{/login}">Sign in</a>
+                </span>
+        </div>
+    </nav>
+</div>
 
-		<div class="text-center">
-			<h2>Customer Registration</h2>
-		</div>
+<main>
+    <section class="my-lg-14 my-8">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <!-- Left side image -->
+                <div class="col-12 col-md-6 col-lg-4 order-lg-1 order-2">
+                    <img alt="" class="img-fluid" src="images/svg-graphics/signup-g.svg">
+                </div>
 
-		<form th:action="@{/create_customer}" method="post"
-			th:object="${customer}" style="max-width: 600px; margin: 0 auto"
-			onsubmit="return checkEmailUnique(this);">
-			<div class="border border-secondary rounded p-3">
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">First Name:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{firstName}" class="form-control"
-							required="required" maxlength="45" minlength="2" />
-					</div>
-				</div>
+                <!-- Right side form -->
+                <div class="col-12 col-md-6 offset-lg-1 col-lg-4 order-lg-2 order-1">
+                    <div class="mb-4">
+                        <h1 class="mb-1 h2 fw-bold">Get Started Shopping</h1>
+                        <p>Welcome! Please enter your details to create your account.</p>
+                    </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Last Name:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{lastName}" class="form-control"
-							required="required" maxlength="45" minlength="2" />
-					</div>
-				</div>
+                    <form method="post" onsubmit="return checkEmailUnique(this);" th:action="@{/create_customer}"
+                          th:object="${customer}">
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">E-mail:</label>
-					<div class="col-sm-8">
-						<input type="email" th:field="*{email}" class="form-control"
-							required="required" maxlength="45" minlength="8" />
-					</div>
-				</div>
+                        <!-- Step 1: Basic Info -->
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <input class="form-control" maxlength="45" minlength="2"
+                                       placeholder="First name" required th:field="*{firstName}" type="text">
+                            </div>
+                            <div class="col-6">
+                                <input class="form-control" maxlength="45" minlength="2"
+                                       placeholder="Last name" required th:field="*{lastName}" type="text">
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Password:</label>
-					<div class="col-sm-8">
-						<input type="password" th:field="*{password}" class="form-control"
-							required="required" maxlength="15" minlength="6"
-							oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" />
-					</div>
-				</div>
+                            <div class="col-12">
+                                <input class="form-control" maxlength="45" minlength="8"
+                                       placeholder="Email" required th:field="*{email}" type="email">
+                            </div>
+                            <div class="col-12">
+                                <div class="password-field position-relative">
+                                    <input class="form-control" id="password" maxlength="15"
+                                           minlength="6"
+                                           oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
+                                           placeholder="Password" required
+                                           th:field="*{password}" type="password">
+                                    <span><i class="bi bi-eye-slash password-toggler"></i></span>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Re-type Password:</label>
-					<div class="col-sm-8">
-						<input type="password" id="confirmPassword" class="form-control"
-							required="required" maxlength="15" minlength="6"
-							oninput="checkPasswordMatch(this)" />
-					</div>
-				</div>
+                            <div class="col-12">
+                                <div class="password-field position-relative">
+                                    <input class="form-control" id="confirmPassword" maxlength="15"
+                                           minlength="6" oninput="checkPasswordMatch(this)"
+                                           placeholder="Confirm Password" required
+                                           type="password">
+                                    <span><i class="bi bi-eye-slash password-toggler"></i></span>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Phone Number:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{phoneNumber}" class="form-control"
-							required="required" maxlength="15" minlength="8" />
-					</div>
-				</div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Address Line 1:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{addressLine1}" class="form-control"
-							required="required" maxlength="64" minlength="3" />
-					</div>
-				</div>
+                            <div class="col-12">
+                                <input class="form-control" maxlength="15" minlength="8"
+                                       placeholder="Phone Number" required th:field="*{phoneNumber}" type="tel">
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Address Line 2:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{addressLine2}" class="form-control"
-							maxlength="64" />
-					</div>
-				</div>
+                            <div class="col-12 d-grid">
+                                <button class="btn btn-primary" type="submit">Create Account</button>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">City:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{city}" class="form-control"
-							maxlength="45" minlength="2" />
-					</div>
-				</div>
+                            <div class="col-12">
+                                <p class="small">By continuing, you agree to our
+                                    <a href="#!">Terms of Service</a> &
+                                    <a href="#!">Privacy Policy</a>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Country:</label>
-					<div class="col-sm-8">
-						<select class="form-control" th:field="*{country}">
-							<th:block th:each="country : ${listCountries}">
-								<option th:value="${country.id}">[[${country.name}]]</option>
-							</th:block>
-						</select>
-					</div>
-				</div>
+<div th:replace="fragments :: modal_dialog"></div>
+<div th:replace="navigation :: footer_menu"></div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">State/Province:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{state}" class="form-control"
-							maxlength="45" minlength="3" list="listStates" />
-						<datalist id="listStates"></datalist>
-					</div>
-				</div>
+<script th:inline="javascript">
+    let contextPath = "[[@{/}]]";
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Postal Code:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{postalCode}" class="form-control"
-							maxlength="10" minlength="2" />
-					</div>
-				</div>
+    function checkEmailUnique(form) {
+        const url = contextPath + "customers/check_unique_email";
+        const customerEmail = $("#email").val();
+        const csrfValue = $("input[name='_csrf']").val();
 
-				<div class="text-center">
-					<input type="submit" value="Create Account" class="btn btn-primary" />
-				</div>
-			</div>
-		</form>
+        const params = {
+            email: customerEmail,
+            _csrf: csrfValue
+        };
 
-		<div>&nbsp;</div>
-		<div th:replace="fragments :: modal_dialog"></div>
-		<div th:replace="navigation :: footer_menu"></div>
-	</div>
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "Duplicated") {
+                showWarningModal("There is another customer having the email " + customerEmail);
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server");
+        });
 
-		function checkEmailUnique(form) {
-			url = contextPath + "customers/check_unique_email";
-			customerEmail = $("#email").val();
-			csrfValue = $("input[name='_csrf']").val();
-
-			params = {email: customerEmail, _csrf: csrfValue};
-
-			$.post(url, params, function (response) {
-				if (response == "OK") {
-					form.submit();
-				} else if (response == "Duplicated") {
-					showWarningModal("There is another cusotmer having the email " + customerEmail);
-				} else {
-					showErrorModal("Unknown response from server");
-				}
-			}).fail(function () {
-				showErrorModal("Could not connect to the server");
-			});
-
-			return false;
-		}
-
-	</script>
-	<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common_customer_form.js}"></script>
+        return false;
+    }
+</script>
+<script th:src="@{/js/common_modal.js}" type="text/javascript"></script>
+<script src="js/password.js"></script>
 </body>
-
 </html>

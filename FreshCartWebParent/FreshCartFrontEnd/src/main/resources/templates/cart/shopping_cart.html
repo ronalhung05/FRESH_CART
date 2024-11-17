@@ -4,122 +4,184 @@
 <head th:replace="fragments :: page_head('Shopping Cart', 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div th:replace="navigation :: search_nav"></div>
+<div class="container-fluid">
+	<div th:replace="navigation :: header_menu"></div>
+	<div th:replace="navigation :: search_nav"></div>
 
-		<div class="text-center">
-			<h2>Your Shopping Cart</h2>
-		</div>
-
-		<div class="row m-1">
-			<div class="col-sm-8">
-				<th:block th:each="item, status : ${cartItems}">
-					<div class="row border rounded p-1"
-						th:with="product = ${item.product}"
-						th:id="'row' + ${status.count}">
-						<div class="col-1">
-							<div class="divCount">[[${status.count}]]</div>
-							<div>
-								<a class="fas fa-trash icon-dark linkRemove"
-									th:rowNumber="${status.count}"
-									th:href="@{'/cart/remove/' + ${product.id}}"></a>
-							</div>
-						</div>
-						<div class="col-3">
-							<img th:src="@{${product.mainImagePath}}" class="img-fluid" />
-						</div>
-						<div class="col-6">
-							<div>
-								<a th:href="@{'/p/' + ${product.alias}}" target="_blank"
-									th:title="${product.name}"> <b>[[${product.shortName}]]</b>
-								</a>
-							</div>
-							<div
-								th:replace="cart/quantity_control :: quantity_control(${item.quantity}, ${product.id})">
-							</div>
-
-							<div>
-								<span>X&nbsp;</span>
-								<div th:replace="product/product_fragment :: product_price"></div>
-							</div>
-							<div>
-								<span>=&nbsp;</span> <span
-									th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
-									th:remove="tag">[[${CURRENCY_SYMBOL}]]</span><span
-									th:id="'subtotal' + ${product.id}" class="h4 subtotal">[[${#numbers.formatDecimal(item.subtotal,
-									1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span><span
-									th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
-									th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
-							</div>
-						</div>
-					</div>
-					<div class="row m-1" th:id="'blankLine' + ${status.count}">&nbsp;</div>
-				</th:block>
-			</div>
-
-			<div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"
-				id="sectionTotal">
-				<div>
-					<span class="h3">Estimated Total:</span>
-				</div>
-				<div class="mt-2">
-					<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
-						th:remove="tag">[[${CURRENCY_SYMBOL}]]</span><span id="total"
-						class="h2">[[${#numbers.formatDecimal(estimatedTotal, 1,
-						THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span><span
-						th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
-						th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
-				</div>
-				<div class="mt-2">
-					<div th:if="${shippingSupported}">
-						<form th:action="@{/checkout}">
-							<button type="submit" class="btn btn-danger p-3 mt-2">Check
-								Out</button>
-						</form>
-					</div>
-
-					<div th:unless="${shippingSupported}">
-						<div>
-							<span class="h5 text-warning">No shipping available for
-								your location</span>
-						</div>
-
-						<div th:if="${usePrimaryAddressAsDefault}">
-							<a th:href="@{/account_details(redirect=cart)}" class="h6">Update
-								your address</a>
-						</div>
-
-						<div th:unless="${usePrimaryAddressAsDefault}">
-							<a th:href="@{/address_book(redirect=cart)}" class="h6">Use
-								another shipping address</a>
-						</div>
-					</div>
-				</div>
+	<!-- Main Content -->
+	<div class="container">
+		<!-- Heading -->
+		<div class="row mt-8 mb-4">
+			<div class="col">
+				<h2>Shopping Cart</h2>
 			</div>
 		</div>
 
-		<div id="sectionEmptyCartMessage"
-			th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}">
-			<h3>You have not chosen any products yet.</h3>
+		<div class="row" th:unless="${#lists.isEmpty(cartItems)}">
+			<!-- Cart Items -->
+			<div class="col-12 col-lg-8 mb-4">
+				<div class="card">
+					<div class="card-body p-0">
+						<!-- Cart Item -->
+						<th:block th:each="item, status : ${cartItems}">
+							<div class="row align-items-center p-4 border-bottom" th:id="'row' + ${item.product.id}" th:with="product = ${item.product}">
+								<!-- Product Image -->
+								<div class="col-3 col-md-2">
+									<img th:src="@{${product.mainImagePath}}" class="img-fluid" />
+								</div>
+
+								<!-- Product Details -->
+								<div class="col-4 col-md-5">
+									<a th:href="@{'/p/' + ${product.alias}}" class="text-decoration-none">
+										<h6 class="mb-0" th:text="${product.shortName}"></h6>
+									</a>
+									<!-- Remove Link -->
+									<div class="mt-2 small lh-1">
+										<a class="text-decoration-none text-inherit linkRemove"
+										   th:rowNumber="${status.count}"
+										   th:href="@{'/cart/remove/' + ${product.id}}">
+											<span class="me-1 align-text-bottom">
+												<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+													stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+													class="feather feather-trash-2 text-success">
+													<polyline points="3 6 5 6 21 6"></polyline>
+													<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+													<line x1="10" y1="11" x2="10" y2="17"></line>
+													<line x1="14" y1="11" x2="14" y2="17"></line>
+												</svg>
+											</span>
+											<span class="text-muted">Remove</span>
+										</a>
+									</div>
+								</div>
+
+								<!-- Quantity -->
+								<div class="col-3 col-md-3 col-lg-2">
+									<div class="input-group input-spinner">
+										<input type="button" value="-" class="button-minus btn btn-sm" th:pid="${product.id}"/>
+										<input type="number" th:id="'quantity' + ${product.id}"
+											   th:pid="${product.id}"
+											   th:value="${item.quantity}" class="quantity-field form-control-sm form-input"
+											   step="1" max="10"/>
+										<input type="button" value="+" class="button-plus btn btn-sm" th:pid="${product.id}"/>
+									</div>
+								</div>
+
+								<!-- Price -->
+								<div class="col-2 text-lg-end text-start text-md-end col-md-2">
+									<span th:if="${item.product.discountPercent <= 0}" class="fw-bold">
+										<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										<span th:id="'subtotal' + ${item.product.id}" class="subtotal" 
+											  th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}">
+										</span>
+										<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+									</span>
+									<span th:if="${item.product.discountPercent > 0}">
+										<span class="fw-bold text-danger">
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											<span th:id="'subtotal' + ${product.id}" class="subtotal" th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										</span>
+										<div class="text-decoration-line-through text-muted small">
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											<span th:text="${#numbers.formatDecimal(item.product.price, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										</div>
+									</span>
+								</div>
+							</div>
+						</th:block>
+					</div>
+				</div>
+				<div class="mt-4">
+					<a th:href="@{/}" class="btn btn-primary">Continue Shopping</a>
+				</div>
+			</div>
+
+			<!-- Order Summary -->
+			<div class="col-12 col-lg-4">
+				<div class="card shadow-sm">
+					<div class="card-body p-6">
+						<!-- heading -->
+						<h2 class="h5 mb-4">Summary</h2>
+						
+						<div class="card mb-2">
+							<!-- list group -->
+							<ul class="list-group list-group-flush">
+								<!-- Subtotal -->
+								<li class="list-group-item d-flex justify-content-between align-items-start">
+									<div class="me-auto">
+										<div class="fw-bold">Subtotal</div>
+									</div>
+									<span class="fw-bold">
+										<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										<span class="estimatedTotal" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+										<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+									</span>
+								</li>
+							</ul>
+						</div>
+
+						<!-- Checkout Button -->
+						<div th:if="${shippingSupported}" class="d-grid mb-1 mt-4">
+							<a th:href="@{/checkout}" class="btn btn-primary btn-lg d-flex justify-content-between align-items-center">
+								Go to Checkout 
+								<span class="fw-bold">
+									<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+									<span id="checkout-amount" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+									<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+								</span>
+							</a>
+						</div>
+
+						<!-- No Shipping Available Message -->
+						<div th:unless="${shippingSupported}">
+							<div>
+								<span class="h5 text-warning">No shipping available for your location</span>
+							</div>
+
+							<div th:if="${usePrimaryAddressAsDefault}">
+								<a th:href="@{/account_details(redirect=cart)}" class="h6">Update your address</a>
+							</div>
+
+							<div th:unless="${usePrimaryAddressAsDefault}">
+								<a th:href="@{/address_book(redirect=cart)}" class="h6">Use another shipping address</a>
+							</div>
+						</div>
+
+						<!-- Terms -->
+						<p class="small text-muted mt-2 mb-0">
+							By placing your order, you agree to be bound by the Freshcart 
+							<a href="#" class="text-success text-decoration-none">Terms of Service</a> and 
+							<a href="#" class="text-success text-decoration-none">Privacy Policy</a>.
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div th:replace="fragments :: modal_dialog"></div>
-		<div th:replace="navigation :: footer_menu"></div>
+		<!-- Empty Cart Message -->
+		<div id="sectionEmptyCartMessage" class="text-center py-5"
+			 th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}">
+			<h3>Your shopping cart is empty</h3>
+			<a th:href="@{/}" class="btn btn-primary mt-3">Continue Shopping</a>
+		</div>
 	</div>
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
 
-		decimalDigits = [[${DECIMAL_DIGITS}]];
-		decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
-		thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+	<div th:replace="fragments :: modal_dialog"></div>
+	<div th:replace="navigation :: footer_menu"></div>
 
-	</script>
-	<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/shopping_cart.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
+</div>
+
+<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+	decimalDigits = [[${DECIMAL_DIGITS}]];
+	decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+	thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/shopping_cart.js}"></script>
 </body>
-
 </html>

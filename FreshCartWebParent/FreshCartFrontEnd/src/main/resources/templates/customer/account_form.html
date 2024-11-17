@@ -1,151 +1,236 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Your Account Details', 'none')" />
+<head th:replace="fragments :: page_head('Your Account Details', 'none')"/>
 
-<body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div th:replace="navigation :: search_nav"></div>
-		<div>&nbsp;</div>
+<body class="bg-gray-50">
+<div class="container-fluid">
+    <div th:replace="navigation :: header_menu"></div>
+    <div th:replace="navigation :: search_nav"></div>
 
-		<div class="text-center">
-			<h2>Your Account Details</h2>
-		</div>
-		<div>&nbsp;</div>
+    <main class="py-8">
+        <div class="container">
+            <div class="row g-6">
+                <!-- Sidebar -->
+                <div class="col-lg-3 col-md-4 col-12 border-end d-none d-md-block">
+                    <div class="pt-10 pe-lg-10">
+                        <ul class="nav flex-column nav-pills nav-pills-dark">
+                            <li class="nav-item">
+                                <a class="nav-link active" th:href="@{/account_details}">
+                                    <i class="feather-icon icon-user me-2"></i>Personal Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/orders}">
+                                    <i class="feather-icon icon-shopping-bag me-2"></i>Your Orders
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/address_book}">
+                                    <i class="feather-icon icon-map-pin me-2"></i>Address
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/reviews}">
+                                    <i class="feather-icon icon-star me-2"></i>Reviews
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <hr>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript: document.logoutForm.submit()">
+                                    <i class="feather-icon icon-log-out me-2"></i>Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-		<form th:action="@{/update_account_details}" method="post"
-			th:object="${customer}" style="max-width: 600px; margin: 0 auto">
-			<input type="hidden" th:field="*{id}" /> <input type="hidden"
-				name="redirect" th:value="${param.redirect}" />
-			<div th:if="${message != null}"
-				class="alert alert-success text-center">[[${message}]]</div>
-			<div class="border border-secondary rounded p-3">
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Authentication Type:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{authenticationType}"
-							class="form-control" readonly="readonly" />
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">E-mail:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{email}" class="form-control"
-							readonly="readonly" />
-					</div>
-				</div>
+                <!-- Main Content -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="px-4 pt-4 pb-4">
+                        <!-- Header with Avatar -->
+                        <div class="d-flex align-items-center gap-4 mb-4">
+                            <div class="avatar-circle">
+                                <span class="avatar-initials">[[${#strings.substring(customer.firstName,0,1)} + ${#strings.substring(customer.lastName,0,1)}]]</span>
+                            </div>
+                            <div>
+                                <h2 class="h4 mb-1">[[${customer.firstName + ' ' + customer.lastName}]]</h2>
+                                <p class="text-gray-600 mb-0">
+                                    <i class="bi bi-envelope me-2"></i>[[${customer.email}]]
+                                </p>
+                            </div>
+                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">First Name:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{firstName}" class="form-control"
-							required="required" maxlength="45" minlength="2" />
-					</div>
-				</div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Last Name:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{lastName}" class="form-control"
-							required="required" maxlength="45" minlength="2" />
-					</div>
-				</div>
+                        <form method="post" th:action="@{/update_account_details}" th:object="${customer}">
+                            <!-- Hidden inputs -->
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="hidden" name="redirect" th:value="${param.redirect}"/>
+                            <input type="hidden" th:field="*{email}"/>
 
-				<th:block
-					th:if="${customer.authenticationType.name() == 'DATABASE'}">
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label">Password:</label>
-						<div class="col-sm-8">
-							<input type="password" th:field="*{password}"
-								class="form-control" maxlength="15" minlength="6"
-								oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" />
-						</div>
-					</div>
+                            <!-- Personal Info Section -->
+                            <div class="mb-4">
+                                <h5 class="text-dark mb-3">Personal Information</h5>
+                                <div class="row g-3">
+                                    <!-- First Name & Last Name -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{firstName}"
+                                                   required minlength="2" maxlength="45" id="firstName">
+                                            <label for="firstName">First Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{lastName}"
+                                                   required minlength="2" maxlength="45" id="lastName">
+                                            <label for="lastName">Last Name</label>
+                                        </div>
+                                    </div>
 
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label">Re-type Password:</label>
-						<div class="col-sm-8">
-							<input type="password" id="confirmPassword" class="form-control"
-								maxlength="15" minlength="6" oninput="checkPasswordMatch(this)" />
-						</div>
-					</div>
-				</th:block>
+                                    <!-- Phone Number -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{phoneNumber}"
+                                                   required minlength="8" maxlength="15" id="phone">
+                                            <label for="phone">Phone Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Phone Number:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{phoneNumber}" class="form-control"
-							required="required" maxlength="15" minlength="8" />
-					</div>
-				</div>
+                            <!-- Security Section -->
+                            <div class="mb-4" th:if="${customer.authenticationType.name() == 'DATABASE'}">
+                                <h5 class="text-dark mb-3">Security</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating position-relative">
+                                            <input type="password" class="form-control custom-input" 
+                                                   th:field="*{password}" minlength="8" maxlength="20" 
+                                                   id="password" placeholder="Password">
+                                            <label for="password">Password</label>
+                                            <button type="button" class="btn position-absolute top-50 end-0 translate-middle-y toggle-password me-2">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-text text-muted">Leave blank if you don't want to change password</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating position-relative">
+                                            <input type="password" class="form-control custom-input" 
+                                                   id="confirmPassword" minlength="8" maxlength="20"
+                                                   placeholder="Confirm Password">
+                                            <label for="confirmPassword">Confirm Password</label>
+                                            <button type="button" class="btn position-absolute top-50 end-0 translate-middle-y toggle-password me-2">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Address Line 1:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{addressLine1}" class="form-control"
-							required="required" maxlength="64" minlength="3" />
-					</div>
-				</div>
+                            <!-- Address Section -->
+                            <div class="mb-4">
+                                <h5 class="text-dark mb-3">Address Information</h5>
+                                <div class="row g-3">
+                                    <!-- Address fields -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{addressLine1}"
+                                                   required maxlength="64" minlength="3" id="addressLine1">
+                                            <label for="addressLine1">Address Line 1</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{addressLine2}"
+                                                   maxlength="64" id="addressLine2">
+                                            <label for="addressLine2">Address Line 2 (Optional)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{city}"
+                                                   required maxlength="45" minlength="2" id="city">
+                                            <label for="city">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{state}"
+                                                   required maxlength="45" minlength="3" id="state">
+                                            <label for="state">State/Province</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select class="form-select custom-input" th:field="*{country}" id="country">
+                                                <option value="">Select Country</option>
+                                                <option th:each="country : ${listCountries}"
+                                                        th:value="${country.id}">[[${country.name}]]</option>
+                                            </select>
+                                            <label for="country">Country</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control custom-input" th:field="*{postalCode}"
+                                                   required maxlength="10" minlength="2" id="postalCode">
+                                            <label for="postalCode">Postal Code</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Address Line 2:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{addressLine2}" class="form-control"
-							maxlength="64" />
-					</div>
-				</div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-check2-circle me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">City:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{city}" class="form-control"
-							maxlength="45" minlength="2" />
-					</div>
-				</div>
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Country:</label>
-					<div class="col-sm-8">
-						<select class="form-control" th:field="*{country}">
-							<th:block th:each="country : ${listCountries}">
-								<option th:value="${country.id}">[[${country.name}]]</option>
-							</th:block>
-						</select>
-					</div>
-				</div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">State/Province:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{state}" class="form-control"
-							maxlength="45" minlength="3" list="listStates" />
-						<datalist id="listStates"></datalist>
-					</div>
-				</div>
+<script type="text/javascript">
+    console.log("Script loaded");
+    contextPath = "[[@{/}]]";
+</script>
+<script th:src="@{/js/common_toast.js}" type="text/javascript"></script>
+<script th:src="@{/js/common_customer_form.js}" type="text/javascript"></script>
+<script>
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function () {
+            const input = this.closest('.form-floating').querySelector('input');
+            const icon = this.querySelector('i');
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Postal Code:</label>
-					<div class="col-sm-8">
-						<input type="text" th:field="*{postalCode}" class="form-control"
-							maxlength="10" minlength="2" />
-					</div>
-				</div>
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+    });
+</script>
 
-				<div class="text-center">
-					<input type="submit" value="Update" class="btn btn-primary" />
-				</div>
-			</div>
-		</form>
-
-		<div>&nbsp;</div>
-		<div th:replace="navigation :: footer_menu"></div>
-	</div>
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
-	</script>
-	<script type="text/javascript" th:src="@{/js/common_customer_form.js}"></script>
+<script th:if="${message != null}">
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Message from server:", "[[${message}]]");
+        showSuccessMessage("[[${message}]]");
+    });
+</script>
 </body>
-
 </html>

@@ -30,12 +30,6 @@ public class ShoppingCartService {
 
         if (cartItem != null) {
             updatedQuantity = cartItem.getQuantity() + quantity;
-
-            if (updatedQuantity > 5) {
-                throw new ShoppingCartException("Could not add more " + quantity + " item(s)"
-                        + " because there's already " + cartItem.getQuantity() + " item(s) "
-                        + "in your shopping cart. Maximum allowed quantity is 5.");
-            }
         } else {
             cartItem = new CartItem();
             cartItem.setCustomer(customer);
@@ -66,5 +60,10 @@ public class ShoppingCartService {
 
     public void deleteByCustomer(Customer customer) {
         cartRepo.deleteByCustomer(customer.getId());
+    }
+
+    public Integer getNumberOfProducts(Customer customer) {
+        List<CartItem> cartItems = cartRepo.findByCustomer(customer);
+        return cartItems.size();
     }
 }

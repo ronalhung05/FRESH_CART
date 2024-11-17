@@ -2,165 +2,298 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<head th:replace="fragments :: page_head(${pageTitle}, 'tag')" />
-<link th:href="@{/star-rating/css/star-rating.css}" media="all"
-	rel="stylesheet" type="text/css" />
-<script th:src="@{/star-rating/js/star-rating.js}"
-	type="text/javascript"></script>
-<link th:href="@{/star-rating/themes/krajee-svg/theme.css}" media="all"
-	rel="stylesheet" type="text/css" />
-<script th:src="@{/star-rating/themes/krajee-svg/theme.js}"></script>
+    <head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+    <script crossorigin="anonymous"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link th:href="@{/star-rating/css/star-rating.css}" media="all" rel="stylesheet" type="text/css"/>
+    <script th:src="@{/star-rating/js/star-rating.js}" type="text/javascript"></script>
+    <link th:href="@{/star-rating/themes/krajee-svg/theme.css}" media="all" rel="stylesheet" type="text/css"/>
+    <script th:src="@{/star-rating/themes/krajee-svg/theme.js}"></script>
+    <link th:href="@{/libs/feather-webfont/dist/feather-icons.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick-theme.css}" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
+
 </head>
-
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div th:replace="navigation :: search_nav"></div>
-		<div th:replace="breadcrumb :: content"></div>
+<div class="container-fluid">
+    <div th:replace="navigation :: header_menu"></div>
+    <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="breadcrumb :: content"></div>
 
-		<div class="row">
-			<div class="col-sm">
-				<div>
-					<img id="bigImage" th:src="@{${product.mainImagePath}}"
-						class="img-fluid" index="0" />
-				</div>
-				<div class="row justify-content-center">
-					<div class="m-2 border border-secondary p-1">
-						<img class="image-thumbnail" th:src="@{${product.mainImagePath}}"
-							height="50" index="0" />
-					</div>
-					<th:block th:each="extraImage, status : ${product.images}">
-						<div class="m-2 border border-secondary p-1">
-							<img class="image-thumbnail" th:src="@{${extraImage.imagePath}}"
-								height="50" th:index="${status.count}" />
-						</div>
-					</th:block>
-				</div>
-			</div>
-			<div class="col-sm">
-				<div>
-					<h2>[[${product.name}]]</h2>
-				</div>
-				<div class="row ml-1">
-					<div class="col-xs">
-						<input type="text" class="product-detail-rating-star" dir="ltr"
-							data-size="md" th:value="${product.averageRating}" />
-					</div>
-					<div class="col-xs ml-1 mt-3">
-						<a th:href="@{${product.URI} + '#review'}">[[${product.reviewCount}]]
-							rating(s)</a>
-					</div>
-				</div>
-				<div>
-					<span>Brand: [[${product.brand.name}]]</span>
-				</div>
-				<div>
-					List Price: <span th:if="${product.discountPercent <= 0}">
-						<div
-							th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-					</span>
-					<del th:if="${product.discountPercent > 0}">
-						<span>
-							<div
-								th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-						</span>
-					</del>
-				</div>
-				<div th:if="${product.discountPercent > 0}">
-					Price: <span style="font-size: larger; color: darkred">
-						<div
-							th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
-					</span> ([[${#numbers.formatDecimal(product.discountPercent, 1,
-					THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]] % off)
-				</div>
-				<div>&nbsp;</div>
-				<div th:utext="${product.shortDescription}"></div>
-			</div>
-			<div class="col-sm-2">
-				<div>
-					<span th:if="${product.inStock}" class="text-success"><b>In
-							Stock</b></span> <span th:unless="${product.inStock}" class="text-danger"><b>Out
-							of Stock</b></span>
-				</div>
+    <section class="mt-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="slider slider-for">
+                        <div>
+                            <img th:src="@{${product.mainImagePath}}" alt="" class="img-fluid zoom-image">
+                        </div>
+                        <th:block th:each="extraImage : ${product.images}">
+                            <div>
+                                <img th:src="@{${extraImage.imagePath}}" alt="" class="img-fluid zoom-image">
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="slider slider-nav mt-4">
+                        <div>
+                            <img th:src="@{${product.mainImagePath}}" alt="" class="img-fluid rounded">
+                        </div>
+                        <th:block th:each="extraImage : ${product.images}">
+                            <div>
+                                <img th:src="@{${extraImage.imagePath}}" alt="" class="img-fluid rounded">
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="ps-lg-10 mt-6 mt-md-0">
+                        <a href="#!" class="mb-4 d-block">[[${product.brand.name}]]</a>
+                        <h1 class="mb-1">[[${product.name}]]</h1>
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="rating-stars">
+                                    <th:block th:with="num=${product.averageRating}">
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <i class="fas fa-star"
+                                               th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+                                            </i>
+                                        </span>
+                                    </th:block>
+                                </div>
+                                <a th:href="@{${product.URI} + '#review'}" class="ms-2 text-decoration-none">
+                                    ([[${product.reviewCount}]] reviews)
+                                </a>
+                            </div>
 
-				<th:block th:if="${product.inStock}">
-					<div
-						th:replace="cart/quantity_control :: quantity_control(1, ${product.id})"></div>
-					<div class="mt-3">
-						<input type="button" value="Add to Cart" id="buttonAdd2Cart"
-							class="btn btn-primary" />
-					</div>
-				</th:block>
-			</div>
-		</div>
+                        </div>
+                        <div class="fs-4">
+                            <span class="fw-bold text-dark" th:if="${product.discountPercent <= 0}">
+                                <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+                            </span>
+                            <span th:if="${product.discountPercent > 0}">
+                                <span class="fw-bold text-danger">
+                                    <div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
+                                </span>
+                                <span class="text-decoration-line-through text-muted">
+                                    <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+                                </span>
+                                <span class="text-danger">
+                                    ([[${#numbers.formatDecimal(product.discountPercent, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]% Off)
+                                </span>
+                            </span>
+                        </div>
+                        <hr class="my-6">
+                        <div th:if="${product.inStock}">
+                            <div th:replace="cart/quantity_control :: quantity_control(1, ${product.id})"></div>
+                        </div>
+                        <div class="mt-3 row justify-content-start g-2 align-items-center">
+                            <div class="col-xxl-4 col-lg-4 col-md-5 col-5 d-grid">
+                                <button type="button" class="btn btn-primary" th:if="${product.inStock}"
+                                        id="buttonAdd2Cart">
+                                    <i class="feather-icon icon-shopping-bag me-2"></i>Add to cart
+                                </button>
+                                <button type="button" class="btn btn-secondary" th:unless="${product.inStock}" disabled>
+                                    Out of Stock
+                                </button>
+                            </div>
+                            <!-- Thêm trạng thái In Stock kế bên nút -->
+                            <div class="col-auto" th:if="${product.inStock}">
+                                <span class="badge bg-success">In Stock</span>
+                            </div>
+                            <div class="col-auto" th:unless="${product.inStock}">
+                                <span class="badge bg-danger">Out of Stock</span>
+                            </div>
+                        </div>
 
-		<div class="row">
-			<div class="col-12">
-				<div>
-					<hr />
-				</div>
-				<div>
-					<h3>Product Description:</h3>
-				</div>
-				<div th:utext="${product.fullDescription}"></div>
-			</div>
-		</div>
+                        <hr class="my-6">
 
-		<div class="row">
-			<div class="col-12">
-				<div>
-					<hr />
-				</div>
-				<div>
-					<h3>Product Details:</h3>
-				</div>
-				<th:block th:each="detail : ${product.details}">
-					<div>
-						<b>[[${detail.name}]]</b>: <span>[[${detail.value}]]</span>
-					</div>
-				</th:block>
-			</div>
-		</div>
-		<div th:replace="product/product_top_reviews :: content"></div>
+                        <!-- Thay thế bảng bằng short description -->
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="mb-0">Short Description</h6>
+                            </div>
+                            <div class="col-auto">
+                                <a href="#" class="text-decoration-none"
+                                   onclick="switchToDescriptionTab(); return false;">View more</a>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="mb-0" th:text="${product.shortDescription}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-		<div th:replace="product/images_carousel :: content"></div>
-		<div th:replace="fragments :: modal_dialog"></div>
-		<div th:replace="navigation :: footer_menu"></div>
-	</div>
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
-		productId = "[[${product.id}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
+    <section class="mt-lg-14 mt-8 ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills nav-lb-tab" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="product-tab" data-bs-toggle="tab"
+                                    data-bs-target="#product-tab-pane" type="button" role="tab"
+                                    aria-controls="product-tab-pane"
+                                    aria-selected="true">Product Description
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="details-tab" data-bs-toggle="tab"
+                                    data-bs-target="#details-tab-pane" type="button" role="tab"
+                                    aria-controls="details-tab-pane"
+                                    aria-selected="false">Product Details
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab"
+                                    data-bs-target="#reviews-tab-pane" type="button" role="tab"
+                                    aria-controls="reviews-tab-pane"
+                                    aria-selected="false">Reviews
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="product-tab-pane" role="tabpanel"
+                             aria-labelledby="product-tab"
+                             tabindex="0">
+                            <div class="my-8">
+                                <div class="mb-5">
+                                    <h4 class="mb-1">Product Description</h4>
+                                    <p class="mb-0" th:utext="${product.fullDescription}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="details-tab-pane" role="tabpanel" aria-labelledby="details-tab"
+                             tabindex="0">
+                            <div class="my-8">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class="mb-4">Details</h4>
+                                    </div>
+                                    <div class="col-12">
+                                        <table class="table table-striped">
+                                            <tbody>
+                                            <tr th:each="detail : ${product.details}">
+                                                <th>[[${detail.name}]]</th>
+                                                <td>[[${detail.value}]]</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab"
+                             tabindex="0">
+                            <div class="my-8">
+                                <div class="mb-5">
+                                    <div th:replace="product/product_top_reviews :: content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-		decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-		thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    <!--    <div th:replace="fragments :: modal_dialog"></div>-->
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
+<script type="text/javascript">
+    contextPath = "[[@{/}]]";
+    productId = "[[${product.id}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
 
-		$(document).ready(function () {
-			bigImage = $("#bigImage");
+    decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
 
-			$(".image-thumbnail").mouseover(function () {
-				currentImageSource = $(this).attr("src");
-				currentImageIndex = $(this).attr("index");
+    $(document).ready(function () {
+        $('.slider-for').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: '.slider-nav',
+            prevArrow: '<button type="button" class="slick-prev"><i class="feather-icon icon-chevron-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="feather-icon icon-chevron-right"></i></button>'
+        });
+        $('.slider-nav').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            asNavFor: '.slider-for',
+            dots: true,
+            centerMode: true,
+            focusOnSelect: true,
+            prevArrow: '<button type="button" class="slick-prev"><i class="feather-icon icon-chevron-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="feather-icon icon-chevron-right"></i></button>'
+        });
 
-				bigImage.attr("src", currentImageSource);
-				bigImage.attr("index", currentImageIndex);
-			});
+        $(".product-detail-rating-star").rating({
+            displayOnly: true,
+            hoverOnClear: false,
+            showCaption: false,
+            theme: 'krajee-svg'
+        });
+    });
 
-			bigImage.on("click", function () {
-				$("#carouselModal").modal("show");
-				imageIndex = parseInt(bigImage.attr("index"));
-				$("#carouselExampleIndicators").carousel(imageIndex);
-			});
-		});
+    function switchToDescriptionTab() {
+        // Tìm tất cả các tab và tab content
+        const tabs = document.querySelectorAll('.nav-link');
+        const tabContents = document.querySelectorAll('.tab-pane');
 
-	</script>
-	<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common_rating.js}"></script>
-	<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>
-	<script type="text/javascript" th:src="@{/js/quantity_control.js}"></script>
-	<script type="text/javascript" th:src="@{/js/add_to_cart.js}"></script>
-	<script type="text/javascript" th:src="@{/js/review_vote.js}"></script>
+        // Tìm tab và tab content cụ thể cho mô tả sản phẩm
+        const descriptionTab = document.querySelector('#product-tab');
+        const descriptionTabContent = document.querySelector('#product-tab-pane');
+
+        // Loại bỏ active class từ tất cả các tab và tab content
+        tabs.forEach(tab => tab.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('show', 'active'));
+
+        // Thêm active class vào tab và tab content mô tả
+        descriptionTab.classList.add('active');
+        descriptionTabContent.classList.add('show', 'active');
+
+        // Tính toán vị trí scroll
+        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+        const offset = 100;
+        const tabPosition = descriptionTabContent.getBoundingClientRect().top + window.pageYOffset - headerHeight - offset;
+
+        // Scroll đến vị trí đã tính
+        window.scrollTo({
+            top: tabPosition,
+            behavior: 'auto'
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        mediumZoom('.zoom-image', {
+            margin: 24,
+            background: 'rgba(0, 0, 0, 0.9)',
+            scrollOffset: window.innerHeight / 2,  // Thêm scrollOffset bằng nửa chiều cao viewport
+            container: null,  // Bỏ container constraint để cho phép zoom full màn hình
+        });
+    });
+
+
+</script>
+
+<script type="text/javascript" th:src="@{/js/common_rating.js}"></script>
+<script type="text/javascript" th:src="@{/js/add_to_cart.js}"></script>
+<script type="text/javascript" th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
+<script type="text/javascript" th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script type="text/javascript" th:src="@{/js/tns-slider.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+<!--<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>-->
+<script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
+<script type="text/javascript" th:src="@{/js/quantity_control.js}"></script>
+<script type="text/javascript" th:src="@{/js/review_vote.js}"></script>
 </body>
-
 </html>

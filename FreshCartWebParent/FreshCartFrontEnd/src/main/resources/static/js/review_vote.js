@@ -1,73 +1,60 @@
-$(document).ready(function() {
-	$(".linkVoteReview").on("click", function(e) {
-		e.preventDefault();
-		voteReview($(this));
-	});
+$(document).ready(function () {
+    // Khởi tạo trạng thái ban đầu
+    $(".linkVoteReview").each(function () {
+        if ($(this).hasClass("active")) {
+            $(this).addClass("text-primary").removeClass("text-muted");
+        }
+    });
+
+    $(".linkVoteReview").on("click", function (e) {
+        e.preventDefault();
+        voteReview($(this));
+    });
 });
 
 function voteReview(currentLink) {
-	requestURL = currentLink.attr("href");
+    let requestURL = currentLink.attr("href");
 
-	$.ajax({
-		type: "POST",
-		url: requestURL,
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader(csrfHeaderName, csrfValue);
-		}
-	}).done(function(voteResult) {
-		console.log(voteResult);
+    $.ajax({
+        type: "POST",
+        url: requestURL,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(csrfHeaderName, csrfValue);
+        }
+    }).done(function (voteResult) {
+        console.log("Vote Result:", voteResult); // Log kết quả
 
-		if (voteResult.successful) {
-			$("#modalDialog").on("hide.bs.modal", function(e) {
-				updateVoteCountAndIcons(currentLink, voteResult);
-			});
-		}
-
-		showModalDialog("Vote Review", voteResult.message);
-
-	}).fail(function() {
-		showErrorModal("Error voting review.");
-	});
+        if (voteResult.successful) {
+            updateVoteCountAndHighlight(currentLink, voteResult);
+            showSuccessMessage(voteResult.message);
+        } else {
+            showWarningMessage(voteResult.message);
+        }
+    }).fail(function () {
+        showErrorMessage("Error voting review.");
+    });
 }
 
-function updateVoteCountAndIcons(currentLink, voteResult) {
-	reviewId = currentLink.attr("reviewId");
-	voteUpLink = $("#linkVoteUp-" + reviewId);
-	voteDownLink = $("#linkVoteDown-" + reviewId);
+function updateVoteCountAndHighlight(currentLink, voteResult) {
+    let reviewId = currentLink.attr("reviewId");
+    let voteUpLink = $("#linkVoteUp-" + reviewId);
+    let voteDownLink = $("#linkVoteDown-" + reviewId);
 
-	$("#voteCount-" + reviewId).text(voteResult.voteCount + " Votes");
+    // Cập nhật số vote
+    $("#voteCount-" + reviewId).text(voteResult.voteCount + " Votes");
 
-	message = voteResult.message;
+    // Reset cả hai link về trạng thái mặc định
+    voteUpLink.removeClass("text-primary").addClass("text-muted");
+    voteDownLink.removeClass("text-primary").addClass("text-muted");
 
-	if (message.includes("successfully voted up")) {
-		highlightVoteUpIcon(currentLink, voteDownLink);
-	} else if (message.includes("successfully voted down")) {
-		highlightVoteDownIcon(currentLink, voteUpLink);
-	} else if (message.includes("unvoted down")) {
-		unhighlightVoteDownIcon(voteDownLink);
-	} else if (message.includes("unvoted up")) {
-		unhighlightVoteDownIcon(voteUpLink);
-	}
+    let message = voteResult.message;
+
+    // Xử lý highlight dựa trên message
+    if (message.includes("successfully voted up")) {
+        voteUpLink.addClass("text-primary").removeClass("text-muted");
+    } else if (message.includes("successfully voted down")) {
+        voteDownLink.addClass("text-primary").removeClass("text-muted");
+    }
+    // Khi unvote, không cần làm gì thêm vì đã reset ở trên
 }
 
-function highlightVoteUpIcon(voteUpLink, voteDownLink) {
-	voteUpLink.removeClass("far").addClass("fas");
-	voteUpLink.attr("title", "Undo vote up this review");
-	voteDownLink.removeClass("fas").addClass("far");
-}
-
-function highlightVoteDownIcon(voteDownLink, voteUpLink) {
-	voteDownLink.removeClass("far").addClass("fas");
-	voteDownLink.attr("title", "Undo vote down this review");
-	voteUpLink.removeClass("fas").addClass("far");
-}
-
-function unhighlightVoteDownIcon(voteDownLink) {
-	voteDownLink.attr("title", "Vote down this review");
-	voteDownLink.removeClass("fas").addClass("far");
-}
-
-function unhighlightVoteUpIcon(voteUpLink) {
-	voteUpLink.attr("title", "Vote up this review");
-	voteUpLink.removeClass("fas").addClass("far");
-}

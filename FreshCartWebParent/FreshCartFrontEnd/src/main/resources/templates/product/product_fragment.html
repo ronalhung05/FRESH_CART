@@ -2,49 +2,117 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" class="col-sm-2">
-		<div>
-			<a th:href="@{${product.URI}}"> <img
-				th:src="@{${product.mainImagePath}}" width="150" /> <br /> <b>[[${product.shortName}]]</b>
-			</a>
-		</div>
-		<div>
-			<table>
-				<tr>
-					<td><input type="text" class="product-detail-rating-star"
-						dir="ltr" data-size="xs" th:value="${product.averageRating}" /></td>
-					<td><small>[[${product.reviewCount}]]</small></td>
-				</tr>
-			</table>
-		</div>
-		<div th:replace="product/product_fragment :: product_price"></div>
-	</div>
+<th:block th:fragment="productList">
+    <div th:each="product : ${listProducts}" class="col">
+        <div class="card card-product h-100">
+            <div class="card-body">
+                <!-- Product Image & Actions -->
+                <div class="text-center position-relative">
+                    <div class="product-img-wrapper" style="height: 200px; overflow: hidden;">
+                        <a th:href="@{${product.URI}}">
+                            <img th:src="@{${product.mainImagePath}}" alt="Product"
+                                 class="mb-3 img-fluid"
+                                 style="width: 100%; height: 100%; object-fit: contain;">
+                        </a>
+                    </div>
 
-	<div th:fragment="product_price" th:remove="tag">
-		<th:block th:if="${product.discountPercent &lt;= 0}">
-			<div
-				th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-		</th:block>
-		<th:block th:if="${product.discountPercent > 0}">
-			<span style="font-size: larger; color: darkred">
-				<div
-					th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="text-small mb-1" style="min-height: 20px;">
+                    <a href="#!" class="text-decoration-none text-muted">
+                        <small>[[${product.category.name}]]</small>
+                    </a>
+                </div>
+                <h2 class="fs-6" style="min-height: 40px;">
+                    <a th:href="@{${product.URI}}"
+                       class="text-inherit text-decoration-none">[[${product.shortName}]]</a>
+                </h2>
+
+                <!-- Rating -->
+                <div class="text-warning d-flex align-items-center" style="min-height: 24px;">
+                    <div class="rating-stars">
+                        <th:block th:with="num=${product.averageRating}">
+								<span th:each="i : ${#numbers.sequence(1, 5)}">
+									<i class="fas fa-star"
+                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+									</i>
+								</span>
+                        </th:block>
+                    </div>
+                    <span class="text-muted small ms-2">
+							<span>[[${#numbers.formatDecimal(product.averageRating, 1, 1)}]]</span>
+							<span>([[${product.reviewCount}]])</span>
+						</span>
+                </div>
+
+                <!-- Price and Add to Cart button -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div th:fragment="product_price" th:remove="tag">
+                        <th:block th:if="${product.discountPercent <= 0}">
+                            <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+                        </th:block>
+                        <th:block th:if="${product.discountPercent > 0}">
+                            <div class="d-flex align-items-center">
+									<span class="text-dark me-2">
+										<div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
+									</span>
+                                <span class="text-decoration-line-through text-muted">
+										<div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+									</span>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div>
+                        <th:block th:if="${product.inStock}">
+                            <button class="btn btn-primary btn-sm buttonAdd2Cart"
+                                    th:pid="${product.id}"
+                                    th:data-context-path="@{/}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     class="feather feather-plus">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Add
+                            </button>
+                            <input type="hidden" th:id="'quantity' + ${product.id}" value="1"/>
+                        </th:block>
+                        <button class="btn btn-secondary btn-sm" th:unless="${product.inStock}" disabled>
+                            Out of Stock
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- Existing price fragments remain unchanged -->
+<div th:fragment="product_price" th:remove="tag">
+    <th:block th:if="${product.discountPercent <= 0}">
+        <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+    </th:block>
+    <th:block th:if="${product.discountPercent > 0}">
+			<span class="text-dark">
+				<div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
 			</span>
-			<del>
-				<span>
-					<div
-						th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-				</span>
-			</del>
-		</th:block>
-	</div>
+        <span class="text-decoration-line-through text-muted">
+				<div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+			</span>
+    </th:block>
+</div>
 
-	<div th:fragment="price_fragment(productPrice)" th:remove="tag">
-		<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
-			th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(productPrice,
-		1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]<span
-			th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
-	</div>
+<div th:fragment="price_fragment(productPrice)" th:remove="tag">
+    <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(productPrice,
+    1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]<span
+        th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+</div>
+
+<!-- Add these scripts at the end of the body tag -->
 
 </body>
 

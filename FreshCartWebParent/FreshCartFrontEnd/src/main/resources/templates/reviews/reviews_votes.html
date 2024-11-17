@@ -2,59 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" class="row m-2">
-		<div class="col">
-			<th:block th:each="review : ${listReviews}">
-				<div class="row">
-					<div class="col-xs">
-						<input type="text" class="product-detail-rating-star" dir="ltr"
-							data-size="xs" th:value="${review.rating}" />
-					</div>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Reviews</h4>
+    </div>
+    <div class="mb-10">
+        <th:block th:each="review : ${listReviews}">
+            <div class="mb-4 pb-4 border-bottom">
+                <div class="mb-2">
+                    <h6 class="mb-1">[[${review.customer.fullName}]]</h6>
+                    <small class="text-muted">
+                        <div th:replace="fragments :: format_time(${review.reviewTime})"></div>
+                    </small>
+                </div>
 
-					<div class="col-xs ml-2">
-						<a class="linkVoteReview fa-thumbs-up"
-							th:classappend="${review.upvotedByCurrentCustomer ? 'fas' : 'far'}"
-							th:id="'linkVoteUp-' + ${review.id}" th:reviewId="${review.id}"
-							th:href="@{'/vote_review/' + ${review.id} + '/up'}"></a>
-					</div>
+                <div class="d-flex align-items-center mb-2">
+                    <div class="rating-stars">
+                        <th:block th:with="num=${review.rating}">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="fas fa-star"
+                                   th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+                                </i>
+                            </span>
+                        </th:block>
+                    </div>
+                    <span class="ms-2 fw-bold text-dark">[[${review.headline}]]</span>
+                </div>
 
-					<div class="col-xs ml-2">
-						<span th:id="'voteCount-' + ${review.id}">[[${review.votes}]]
-							Votes</span>
-					</div>
+                <p class="mb-3">[[${review.comment}]]</p>
 
-					<div class="col-xs ml-2">
-						<a class="linkVoteReview fa-thumbs-down"
-							th:classappend="${review.downvotedByCurrentCustomer ? 'fas' : 'far'}"
-							th:id="'linkVoteDown-' + ${review.id}" th:reviewId="${review.id}"
-							th:href="@{'/vote_review/' + ${review.id} + '/down'}"></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<b>[[${review.headline}]]</b>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">[[${review.comment}]]</div>
-				</div>
-
-				<div class="row">
-					<div class="col ml-3">
-						<small>[[${review.customer.fullName}]],
-							<div th:replace="fragments :: format_time(${review.reviewTime})"></div>
-						</small>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col">
-						<hr />
-					</div>
-				</div>
-			</th:block>
-		</div>
-	</div>
+                <div class="d-flex align-items-center">
+                    <a href="#" class="text-muted me-3 linkVoteReview"
+                       th:classappend="${review.upvotedByCurrentCustomer ? 'active' : ''}"
+                       th:id="'linkVoteUp-' + ${review.id}" th:reviewId="${review.id}"
+                       th:href="@{'/vote_review/' + ${review.id} + '/up'}">
+                        <i class="feather-icon icon-thumbs-up me-1"></i>
+                        Helpful
+                    </a>
+                    <a href="#" class="text-muted linkVoteReview"
+                       th:classappend="${review.downvotedByCurrentCustomer ? 'active' : ''}"
+                       th:id="'linkVoteDown-' + ${review.id}" th:reviewId="${review.id}"
+                       th:href="@{'/vote_review/' + ${review.id} + '/down'}">
+                        <i class="feather-icon icon-thumbs-down me-1"></i>
+                        Dislike
+                    </a>
+                    <span class="ms-auto text-muted" th:id="'voteCount-' + ${review.id}">
+                        [[${review.votes}]] Votes
+                    </span>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
 </body>
 
 </html>

@@ -1,73 +1,102 @@
-<div class="modal-header">
-	<h4 class="modal-title">Review Details</h4>
-	<button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="modal-content border-0 shadow-lg">
+    <!-- Header -->
+    <div class="modal-header bg-white border-0 pb-0">
+        <h5 class="modal-title d-flex align-items-center gap-2">
+            <i class="feather-icon icon-star text-primary"></i>
+            <span class="fw-semibold">Review Details</span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body p-4">
+        <!-- Product and Rating Section -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <!-- Product Image -->
+            <div class="flex-shrink-0">
+                <img th:if="${review.product.mainImagePath != null}"
+                     th:src="@{${review.product.mainImagePath}}"
+                     class="rounded-3 object-cover"
+                     width="80" height="80"
+                     alt="product image">
+            </div>
+
+            <!-- Product Info -->
+            <div class="flex-grow-1">
+                <h6 class="mb-2">
+                    <a th:href="@{'/p/' + ${review.product.alias}}"
+                       class="text-decoration-none text-gray-900 hover-text-blue-600 fw-semibold"
+                       target="_blank"
+                       th:text="${review.product.name}">
+                    </a>
+                </h6>
+                <div class="d-flex align-items-center flex-wrap gap-3">
+                    <div class="rating-stars">
+                        <th:block th:with="num=${review.rating}">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="fas fa-star"
+                                   th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+                                </i>
+                            </span>
+                        </th:block>
+                    </div>
+                    <span class="badge bg-warning-subtle text-warning rounded-pill px-2 fw-medium"
+                          th:text="${review.rating + '.0'}">
+                    </span>
+                    <span class="text-gray-500 small"
+                          th:replace="fragments :: format_time(${review.reviewTime})">
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Content -->
+        <div class="review-content">
+            <!-- Headline with Votes -->
+            <div class="d-flex align-items-start justify-content-between gap-4 mb-4 pb-3 border-bottom">
+                <h6 class="text-gray-900 fw-semibold mb-0" th:text="${review.headline}"></h6>
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <button class="btn btn-sm btn-light rounded-pill d-flex align-items-center gap-1 px-3">
+                        <i class="feather-icon icon-thumbs-up"></i>
+                        <span th:text="${review.votes}" class="fw-medium"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Enhanced Comment Section -->
+            <div class="comment-container bg-light rounded-4 p-4">
+                <div class="comment-header d-flex align-items-center gap-3 mb-3">
+                    <div class="comment-icon-wrapper">
+                        <i class="feather-icon icon-message-square"></i>
+                    </div>
+                    <div class="comment-info">
+                        <span class="fw-medium text-gray-800">Review Comment</span>
+                    </div>
+                </div>
+
+                <div class="comment-body position-relative">
+                    <div class="comment-quotes">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <div class="comment-content">
+                        <p class="text-gray-700 mb-0 preserve-whitespace" th:text="${review.comment}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer border-0 pt-0">
+        <button type="button"
+                class="btn btn-light rounded-pill px-4 d-flex align-items-center gap-2"
+                data-bs-dismiss="modal">
+            <i class="feather-icon icon-x"></i>
+            Close
+        </button>
+    </div>
 </div>
 
-<div class="modal-body">
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Review ID:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.id}" />
-		</div>
-	</div>
+<style>
 
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Product:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.product.name}" />
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Customer:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.customer.fullName}" />
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Headline:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.headline}" />
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Rating:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.rating}" />
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Comment:</label>
-		<div class="col-sm-10">
-			<textarea rows="3" class="form-control" readonly>[[${review.comment}]]</textarea>
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Votes:</label>
-		<div class="col-sm-10">
-			<input type="text" readonly class="form-control"
-				th:value="${review.votes}" />
-		</div>
-	</div>
-
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Review Time:</label>
-		<div class="col-sm-10">
-			<span
-				th:text="${#dates.format(review.reviewTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
-		</div>
-	</div>
-</div>
-
-<div class="modal-footer">
-	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-</div>
+</style>
