@@ -23,6 +23,7 @@ import com.freshcart.common.entity.order.PaymentMethod;
 import com.freshcart.common.entity.product.Product;
 import com.freshcart.common.exception.OrderNotFoundException;
 
+
 @Service
 public class OrderService {
     public static final int ORDERS_PER_PAGE = 5;
@@ -129,4 +130,5 @@ public class OrderService {
 
         repo.save(order);
     }
+
 }

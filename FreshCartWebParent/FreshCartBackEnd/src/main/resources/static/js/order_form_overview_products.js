@@ -32,7 +32,12 @@ $(document).ready(function() {
 	$("#productList").on("change", ".ship-input", function(e) {
 		updateOrderAmounts();
 	});
+
+	fieldTax.on("change", function() {
+		updateOrderAmounts();
+	});
 });
+
 
 function updateOrderAmounts() {
 	totalCost = 0.0;
@@ -83,15 +88,19 @@ function getNumberValueRemovedThousandSeparator(fieldRef) {
 }
 
 function updateSubtotalWhenPriceChanged(input) {
-	priceValue = getNumberValueRemovedThousandSeparator(input);
-	rowNumber = input.attr("rowNumber");
+	let priceValue = getNumberValueRemovedThousandSeparator(input);
+	let rowNumber = input.attr("rowNumber");
 
-	quantityField = $("#quantity" + rowNumber);
-	quantityValue = quantityField.val();
-	newSubtotal = parseFloat(quantityValue) * priceValue;
+	let quantityField = $("#quantity" + rowNumber);
+	let quantityValue = quantityField.val();
+
+	let newSubtotal = parseFloat(quantityValue) * priceValue;
 
 	setAndFormatNumberForField("subtotal" + rowNumber, newSubtotal);
+
+	updateOrderAmounts();
 }
+
 
 function updateSubtotalWhenQuantityChanged(input) {
 	quantityValue = input.val();

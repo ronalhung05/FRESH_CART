@@ -105,4 +105,9 @@ public class OrderService {
         }
 
     }
+
+    public int getExistingOrderQuantity(Integer orderId, Integer productId) {
+        return orderRepo.getProductQuantityInOrder(orderId, productId);
+    }
+
 }

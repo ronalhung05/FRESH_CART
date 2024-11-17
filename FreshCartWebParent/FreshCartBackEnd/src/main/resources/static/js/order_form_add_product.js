@@ -16,6 +16,56 @@ $(document).ready(function() {
 	})
 });
 
+$(document).on("input", ".cost-input, .price-input, .ship-input, .tax-input", function () {
+	validateInput(this, /^\d*\.?\d*$/, "Vui lòng chỉ nhập số!");
+});
+
+$(document).on("input", ".firstName-input, .lastName-input", function () {
+	validateInput(this, /^[a-zA-Z\s]*$/, "Vui lòng chỉ nhập chữ!", 50);
+});
+
+$(document).on("input", ".phone-input", function () {
+	validateInput(this, /^\d*\.?\d*$/, "Vui lòng chỉ nhập số!", 11);
+});
+
+// Hàm kiểm tra input với regex và thông báo lỗi
+function validateInput(input, regex, errorMessage, maxLength = null) {
+	const value = input.value;
+
+	// Nếu giá trị không khớp với regex, hiển thị lỗi
+	if (!regex.test(value)) {
+		input.value = value.slice(0, -1); // Loại bỏ ký tự không hợp lệ
+		showErrorMessage(input, errorMessage);
+	} else if (maxLength !== null && value.length > maxLength) {
+		// Nếu độ dài vượt quá giới hạn, cắt bớt ký tự thừa
+		input.value = value.slice(0, maxLength);
+		showErrorMessage(input, `Chỉ được nhập tối đa ${maxLength} ký tự.`);
+	} else {
+		clearErrorMessage(input);
+	}
+}
+
+// Hiển thị thông báo lỗi
+function showErrorMessage(input, message) {
+	let errorContainer = $(input).next(".error-message");
+
+	// Nếu chưa tồn tại, tạo phần tử hiển thị lỗi
+	if (errorContainer.length === 0) {
+		errorContainer = $("<div class='error-message alert alert-danger p-1 mt-1'></div>")
+			.hide()
+			.insertAfter(input);
+	}
+
+	errorContainer.text(message).fadeIn(200);
+}
+
+// Xóa thông báo lỗi
+function clearErrorMessage(input) {
+	$(input).next(".error-message").fadeOut(200, function () {
+		$(this).remove();
+	});
+}
+
 function addProduct(productId, productName) {
 	getShippingCost(productId);
 }
@@ -58,9 +108,10 @@ function getProductInfo(productId, shippingCost) {
 		mainImagePath = contextPath.substring(0, contextPath.length - 1) + productJson.imagePath;
 		productCost = $.number(productJson.cost, 2);
 		productPrice = $.number(productJson.price, 2);
+		inStock = productJson.inStock;
 
-		htmlCode = generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost);
-		$("#productList").append(htmlCode);
+		htmlCode = generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost, inStock);
+		$("#productList tbody").append(htmlCode);
 
 		updateOrderAmounts();
 
@@ -69,90 +120,82 @@ function getProductInfo(productId, shippingCost) {
 	});
 }
 
-function generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost) {
+function generateProductCode(productId, productName, mainImagePath, productCost, productPrice, shippingCost, inStock) {
 	nextCount = productDetailCount + 1;
 	productDetailCount++;
 	rowId = "row" + nextCount;
 	quantityId = "quantity" + nextCount;
 	priceId = "price" + nextCount;
 	subtotalId = "subtotal" + nextCount;
-	blankLineId = "blankLine" + nextCount;
+	mainImagePath = mainImagePath.replace("/FreshCartAdmin", "");
 
 	htmlCode = `
-		<div class="border rounded p-1" id="${rowId}">
-			<input type="hidden" name="detailId" value="0" />
-			<input type="hidden" name="productId" value="${productId}" class="hiddenProductId" />
-			<div class="row">
-				<div class="col-1">
-					<div class="divCount">${nextCount}</div>
-					<div><a class="fas fa-trash icon-dark linkRemove" href="" rowNumber="${nextCount}"></a></div>				
-				</div>
-				<div class="col-3">
-					<img src="${mainImagePath}" class="img-fluid" />
-				</div>
-			</div>
-			
-			<div class="row m-2">
-				<b>${productName}</b>
-			</div>
-			
-			<div class="row m-2">
-			<table>
-				<tr>
-					<td>Product Cost:</td>
-					<td>
-						<input type="text" required class="form-control m-1 cost-input"
-							name="productDetailCost"
-							rowNumber="${nextCount}" 
-							value="${productCost}" style="max-width: 140px"/>
-					</td>
-				</tr>
-				<tr>
-					<td>Quantity:</td>
-					<td>
-						<input type="number" step="1" min="1" max="5" class="form-control m-1 quantity-input"
-							name="quantity"
-							id="${quantityId}"
-							rowNumber="${nextCount}" 
-							value="1" style="max-width: 140px"/>
-					</td>
-				</tr>	
-				<tr>
-					<td>Unit Price:</td>
-					<td>
-						<input type="text" required class="form-control m-1 price-input"
-							name="productPrice"
-							id="${priceId}"
-							rowNumber="${nextCount}" 
-							value="${productPrice}" style="max-width: 140px"/>
-					</td>
-				</tr>
-				<tr>
-					<td>Subtotal:</td>
-					<td>
-						<input type="text" readonly="readonly" class="form-control m-1 subtotal-output"
-							name="productSubtotal"
-							id="${subtotalId}" 
-							value="${productPrice}" style="max-width: 140px"/>
-					</td>
-				</tr>				
-				<tr>
-					<td>Shipping Cost:</td>
-					<td>
-						<input type="text" required class="form-control m-1 ship-input"
-							name="productShipCost" 
-							value="${shippingCost}" style="max-width: 140px"/>
-					</td>
-				</tr>											
-			</table>
-			</div>
-			
-		</div>
-		<div id="${blankLineId}"class="row">&nbsp;</div>	
-	`;
+        <tr id="${rowId}">
+            <input type="hidden" name="detailId" value="0" />
+            <input type="hidden" name="productId" value="${productId}" class="hiddenProductId" />
+
+            <td class="product-column">
+                <div class="product-container">
+                    <img src="${mainImagePath}" class="img-fluid product-image" style="width: 60px; height: 60px;" />
+                    <div class="ms-2">
+                        <b class="product-name">${productName}</b>
+                    </div>
+                </div>
+            </td>
+
+            <td class="unit-cost-column">
+                <input type="number" required class="form-control w-auto cost-input"
+                       name="productDetailCost"
+                       rowNumber="${nextCount}"
+                       value="${productCost}"
+                       step="0.01" />
+            </td>
+
+            <td class="quantity-column">
+                <input type="number" required class="form-control w-auto quantity-input"
+                       name="quantity"
+                       id="${quantityId}"
+                       rowNumber="${nextCount}"
+                       value="1"
+                       max="${inStock}"
+                       min="1" />
+            </td>
+
+            <td class="price-column">
+                <input type="number" required class="form-control w-auto price-input"
+                       name="productPrice"
+                       id="${priceId}"
+                       rowNumber="${nextCount}"
+                       value="${productPrice}"
+                       step="0.01" />
+            </td>
+
+            <td class="total-column">
+                <input type="text" readonly class="form-control w-auto subtotal-output"
+                       name="productSubtotal"
+                       id="${subtotalId}"
+                       value="${(productPrice * 1).toFixed(2)}" />
+            </td>
+
+            <td class="shipping-cost-column">
+                <input type="number" required class="form-control w-auto ship-input"
+                       name="productShipCost"
+                       value="${shippingCost}"
+                       step="0.01" />
+            </td>
+
+            <td>
+                <a href="#" class="fas fa-trash icon-dark linkRemove" rowNumber="${nextCount}">
+                </a>
+            </td>
+        </tr>
+    `;
 
 	return htmlCode;
 }
+
+
+
 
 function isProductAlreadyAdded(productId) {
 	productExists = false;
@@ -168,3 +211,4 @@ function isProductAlreadyAdded(productId) {
 
 	return productExists;
 }
+

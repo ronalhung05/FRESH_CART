@@ -18,17 +18,17 @@
 <body>
 
 	<div th:fragment="footer" class="text-center m-3">
-		<p>Shopme Control Panel - Copyright &copy; Shopme</p>
+		<p>Fresh Cart Control Panel - Copyright &copy; Fresh Cart</p>
 	</div>
 
 	<th th:fragment="column_link(fieldName, columnLabel, removeTag)"
-		th:remove="${removeTag}"><a class="text-white"
+		th:remove="${removeTag}"><a class="text-dark"
 		th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}  +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
 			[[${columnLabel}]] </a> <span th:if="${sortField == fieldName}"
 		th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
 	</th>
 
-	<a th:fragment="page_link(pageNum, label)" class="page-link"
+	<a th:fragment="page_link(pageNum, label)" class="page-link active"
 		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${label}]]</a>
 
 	<div th:fragment="user_photos" th:remove="tag">
@@ -49,48 +49,58 @@
 	</div>
 
 	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
-		<a class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
+		<a class="fas fa-edit me-2 icon-green" th:href="@{${editURL}}"
 			th:title="'Edit this ' + ${entityName}"></a>
 	</div>
 
 	<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
 		<th:block th:if="${visible}">
 			<a class="fas fa-trash fa-2x icon-dark link-delete"
-				th:href="@{${deleteURL}}" th:entityId="${entityId}"
-				th:title="'Delete this ' + ${entityName}"></a>
+			   th:href="@{${deleteURL}}" th:entityId="${entityId}"
+			   th:title="'Delete this ' + ${entityName}"></a>
 		</th:block>
 	</div>
 
 
-	<div th:fragment="pagination(entityName)" th:remove="tag">
-		<div class="text-center m-1" th:if="${totalItems > 0}">
-			<span>Showing [[${entityName}]] # [[${startCount}]] to
-				[[${endCount}]] of [[${totalItems}]]</span>
-		</div>
-		<div class="text-center m-1" th:unless="${totalItems > 0}">
-			<span>No [[${entityName}]] found</span>
-		</div>
 
-		<div th:if="${totalPages > 1}">
-			<nav>
-				<ul class="pagination justify-content-center flex-wrap">
-					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+	<div th:fragment="pagination(entityName)" th:remove="tag">
+		<div th:if="${totalPages > 1}" class="border-top d-md-flex justify-content-between align-items-center p-6">
+			<span style="margin-left: 20px; margin-block: 20px">Showing [[${entityName}]] [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+			<nav class="mt-2 mt-md-0" style="margin-right: 20px; margin-top: 20px">
+				<ul class="pagination mb-0">
+					<!-- Nút "First" -->
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}" >
 						<a th:replace="fragments :: page_link(1, 'First')"></a>
 					</li>
-					<li	th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a
-						th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a>
+
+					<!-- Nút "Previous" -->
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a>
 					</li>
 
-					<li	th:class="${currentPage != i ? 'page-item': 'page-item active'}"
-						th:each="i : ${#numbers.sequence(1, totalPages)}"><a
-						th:replace="fragments :: page_link(${i}, ${i})"></a></li>
+					<!-- Hiển thị dấu "..." nếu có trang trước phạm vi hiển thị -->
+					<li th:if="${currentPage > 3}" class="page-item disabled">
+						<span class="page-link">...</span>
+					</li>
 
-					<li	th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+					<!-- Hiển thị các trang xung quanh trang hiện tại (tối đa 5 trang) -->
+					<li th:each="i : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage < totalPages - 2 ? currentPage + 2 : totalPages)}"
+						th:class="${currentPage != i ? 'page-item' : 'page-item active'}">
+						<a th:replace="fragments :: page_link(${i}, ${i})"></a>
+					</li>
+
+					<!-- Hiển thị dấu "..." nếu có trang sau phạm vi hiển thị -->
+					<li th:if="${currentPage < totalPages - 2}" class="page-item disabled">
+						<span class="page-link">...</span>
+					</li>
+
+					<!-- Nút "Next" -->
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
 						<a th:replace="fragments :: page_link(${currentPage + 1}, 'Next')"></a>
 					</li>
 
-					<li	th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+					<!-- Nút "Last" -->
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
 						<a th:replace="fragments :: page_link(${totalPages}, 'Last')"></a>
 					</li>
 				</ul>
@@ -98,25 +108,26 @@
 		</div>
 	</div>
 
+
 	<div th:fragment="search_form_and_message()">
 		<form th:action="@{${moduleURL} + '/page/1'}" class="form-inline m-3">
-			<input type="hidden" name="sortField" th:value="${sortField}" /> 
-			<input type="hidden" name="sortDir" th:value="${sortDir}" /> 
-			
-			Filter:&nbsp;
-			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required /> &nbsp;&nbsp;
-			
-			<button type="submit" class="btn btn-primary">
-				<i class="fas fa-search"></i>
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+			<input type="search" name="keyword" th:value="${keyword}" class="form-control" placeholder="Search" required/> &nbsp;&nbsp;
+
+			<button type="submit" class="btn btn-primary" style="border-color: green; background-color: green;">
+				<i class="fas fa-search icon-white"></i>
 			</button>
 			&nbsp;&nbsp;
-			
+
 			<button type="button" class="btn btn-secondary"	onclick="clearFilter()">
 				<i class="fas fa-eraser"></i>
 			</button>
 		</form>
 
 		<div th:if="${message != null}" class="alert alert-success text-center">[[${message}]]</div>
+
 	</div>
 
 	<div th:fragment="format_currency(amount)" th:remove="tag">

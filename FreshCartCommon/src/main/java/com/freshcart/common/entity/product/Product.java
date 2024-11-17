@@ -16,8 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-
-import com.freshcart.common.entity.storage.ImportDetail;
 import com.freshcart.common.Constants;
 import com.freshcart.common.entity.Brand;
 import com.freshcart.common.entity.Category;
@@ -48,7 +46,7 @@ public class Product extends IdBasedEntity {
     private boolean enabled;
 
     @Column(name = "in_stock")
-    private Integer inStock;
+    private boolean inStock;
 
     private float cost;
 
@@ -79,9 +77,6 @@ public class Product extends IdBasedEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductDetail> details = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImportDetail> importDetails = new ArrayList<>();
-
     private int reviewCount;
     private float averageRating;
 
@@ -101,13 +96,6 @@ public class Product extends IdBasedEntity {
         this.name = name;
     }
 
-    public List<ImportDetail> getImportDetails() {
-        return importDetails;
-    }
-
-    public void setImportDetails(List<ImportDetail> importDetails) {
-        this.importDetails = importDetails;
-    }
     public String getName() {
         return name;
     }
@@ -164,11 +152,11 @@ public class Product extends IdBasedEntity {
         this.enabled = enabled;
     }
 
-    public Integer getInStock() {
+    public boolean isInStock() {
         return inStock;
     }
 
-    public void setInStock(Integer inStock) {
+    public void setInStock(boolean inStock) {
         this.inStock = inStock;
     }
 
