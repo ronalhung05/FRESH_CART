@@ -84,12 +84,9 @@
 							th:href="@{/reports}">Sales Report</a></li>
 					</th:block>
 
-					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
 						<li class="nav-item"><a class="nav-link"
-							th:href="@{/articles}">Articles</a></li>
-
-						<li class="nav-item"><a class="nav-link" th:href="@{/menus}">Menus</a>
-						</li>
+                            th:href="@{/imports}">Storage</a></li>
 					</th:block>
 
 					<li class="nav-item dropdown" sec:authorize="hasAuthority('Admin')">

@@ -27,7 +27,7 @@ public class OrderDetailReportService extends AbstractReportService {
             listOrderDetails = repo.findWithProductAndTimeBetween(startDate, endDate);
         }
 
-        //printRawData(listOrderDetails);
+
 
         List<ReportItem> listReportItems = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class OrderDetailReportService extends AbstractReportService {
             ReportItem reportItem = new ReportItem(identifier);
 
             float revenue = detail.getSubtotal() + detail.getShippingCost();
-            float profit = revenue - detail.getProductCost();
+            float profit = detail.getSubtotal() - detail.getProductCost();
 
             int itemIndex = listReportItems.indexOf(reportItem);
 
@@ -57,7 +57,7 @@ public class OrderDetailReportService extends AbstractReportService {
             }
         }
 
-        //printReportData(listReportItems);
+        printReportData(listReportItems);
 
         return listReportItems;
     }

@@ -16,7 +16,6 @@ public class MasterOrderReportService extends AbstractReportService {
     @Autowired
     private OrderRepository repo;
 
-
     protected List<ReportItem> getReportDataByDateRangeInternal(Date startTime, Date endTime, ReportType reportType) {
         List<Order> listOrders = repo.findByOrderTimeBetween(startTime, endTime);
         printRawData(listOrders);
@@ -38,13 +37,15 @@ public class MasterOrderReportService extends AbstractReportService {
 
             ReportItem reportItem = new ReportItem(orderDateString);
 
+            float revenue = order.getTotal();
+            float profit  = order.getSubtotal() - order.getProductCost();
+
             int itemIndex = listReportItems.indexOf(reportItem);
 
             if (itemIndex >= 0) {
                 reportItem = listReportItems.get(itemIndex);
-
-                reportItem.addRevenue(order.getTotal());
-                reportItem.addProfit(order.getTotal() - order.getProductCost());
+                reportItem.addRevenue(revenue);
+                reportItem.addProfit(profit);
                 reportItem.increaseOrdersCount();
             }
         }

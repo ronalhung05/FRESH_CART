@@ -66,7 +66,7 @@ public class ProductController {
 
         Product product = new Product();
         product.setEnabled(true);
-        product.setInStock(true);
+        product.setInStock(0);
 
         model.addAttribute("product", product);
         model.addAttribute("listBrands", listBrands);

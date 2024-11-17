@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head
+        th:replace="fragments :: page_head('Imports - FreshCart Admin', 'none')"/>
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: menu"></div>
+    <div>
+        <h2>Manage Imports</h2>
+
+        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+            <a th:href="@{/imports/new}"
+               class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+            <a th:href="@{/imports/export/csv}"
+               class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+            <a th:href="@{/imports/export/excel}"
+               class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
+        </th:block>
+
+    </div>
+
+    <div th:replace="fragments :: search_form_and_message"/>
+    <div class="full-details">
+        <table
+                class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+            <tr>
+                <th class="hideable-column">
+                <th th:replace="fragments :: column_link('id', 'Import ID', 'tag')"/>
+                </th>
+
+                <th class="hideable-column">
+                <th
+                        th:replace="fragments :: column_link('userId', 'User ID', 'tag')"/>
+                </th>
+                <th>User Name</th>
+                <th
+                        th:replace="fragments :: column_link('transactionTime', 'Transaction Time', 'none')"/>
+                <th
+                        th:replace="fragments :: column_link('sumCost', 'Sum Cost', 'none')"/>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="import : ${listImports}">
+                <td class="hideable-column">[[${import.id}]]</td>
+                <td class="hideable-column">[[${import.user.id}]]</td>
+                <td class="hideable-column">[[${import.user.firstName} + ' ' + ${import.user.lastName}]]</td>
+                <td class="hideable-column">[[${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+                <td class="hideable-column">[[${import.sumCost}]]</td>
+
+                <td><a class="fas fa-file-alt fa-2x icon-green link-detail"
+                       th:href="@{'/imports/detail/' + ${import.id}}"
+                       title="View details of this import"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="modal_fragments :: confirm_modal"/>
+
+    <div class="modal fade" id="detailModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: pagination('imports')"></div>
+
+    <div th:replace="fragments :: footer"></div>
+
+</div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+    moduleURL = "[[@{/imports}]]";
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'product');
+        });
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            linkDetailURL = $(this).attr("href");
+            $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+        });
+
+        $("#dropdownCategory").on("change", function () {
+            $("#searchForm").submit();
+        });
+
+    });
+</script>
+</body>
+
+</html>
