@@ -1,5 +1,6 @@
 package com.freshcart.admin.storage;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.product.ProductService;
 import com.freshcart.admin.user.UserService;
@@ -24,7 +25,7 @@ public class ImportService {
     @Autowired ImportRepository importRepo;
     @Autowired UserService userService;
     @Autowired ProductService productService;
-
+    @Autowired MessageServiceAdmin messageService;
     public List<Import> listAll() {return (List<Import>) importRepo.findAll();}
 
     public void listByPage(int pageNum, PagingAndSortingHelper helper){
@@ -35,7 +36,7 @@ public class ImportService {
         try {
             return importRepo.findById(id).get();
         } catch (NoSuchElementException ex) {
-            throw new ImportNotFoundException("Could not find any import with ID " + id);
+            throw new ImportNotFoundException(messageService.getMessage("IMPORT_NOT_FOUND") + " " + id);
         }
     }
 

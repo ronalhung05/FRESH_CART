@@ -36,11 +36,10 @@ public class OrderDetailRepositoryTests {
         assertThat(listOrderDetails.size()).isGreaterThan(0);
 
         for (OrderDetail detail : listOrderDetails) {
-//            System.out.printf("%-30s | %d | %10.2f| %10.2f | %10.2f \n",
-//                    detail.getProduct().getCategory().getName(),
-//                    detail.getQuantity(), detail.getProductCost(),
-//                    detail.getShippingCost(), detail.getSubtotal());
-            System.out.println(detail);
+            System.out.printf("%-30s | %d | %10.2f| %10.2f | %10.2f \n",
+                    detail.getProduct().getCategory().getName(),
+                    detail.getQuantity(), detail.getProductCost(),
+                    detail.getShippingCost(), detail.getSubtotal());
         }
     }
 

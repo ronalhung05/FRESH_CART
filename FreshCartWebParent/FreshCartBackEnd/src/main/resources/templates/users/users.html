@@ -58,18 +58,19 @@
 						<td>[[${user.firstName}]]</td>
 						<td>[[${user.lastName}]]</td>
 						<td>[[${user.roles}]]</td>
-
 						<td>
-							<div
-								th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
+							<!-- Conditionally show status -->
+							<div th:if="${user.email != loggedUser}">
+								<div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
+							</div>
 						</td>
-
 						<td>
-							<div
-								th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
-							&nbsp;&nbsp;
-							<div
-								th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
+							<!-- Conditionally show edit and delete options -->
+							<div th:if="${user.email != loggedUser}">
+								<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
+								&nbsp;&nbsp;
+								<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
+							</div>
 						</td>
 					</tr>
 				</tbody>

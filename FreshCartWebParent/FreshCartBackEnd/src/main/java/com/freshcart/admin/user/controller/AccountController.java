@@ -2,6 +2,7 @@ package com.freshcart.admin.user.controller;
 
 import java.io.IOException;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,9 @@ public class AccountController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private MessageServiceAdmin messageService;
 
     @GetMapping("/account")
     public String viewDetails(@AuthenticationPrincipal FreshCartUserDetails loggedUser,
@@ -58,7 +62,7 @@ public class AccountController {
         loggedUser.setFirstName(user.getFirstName());
         loggedUser.setLastName(user.getLastName());
 
-        redirectAttributes.addFlashAttribute("message", "Your account details have been updated.");
+        redirectAttributes.addFlashAttribute("message", messageService.getMessage("ACCOUNT_UPDATE_SUCCESS"));
 
         return "redirect:/account";
     }

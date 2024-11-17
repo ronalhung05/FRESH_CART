@@ -30,15 +30,17 @@ function prepareChartDataForSalesReportByCategory(responseJSON) {
 	data.addColumn('string', 'Category');
 	data.addColumn('number', 'Revenue');
 	data.addColumn('number', 'Profit');
-
+	data.addColumn('number', 'Shipping Cost')
 	totalRevenue = 0.0;
 	totalProfit = 0.0;
+	totalShippingCost = 0.0;
 	totalItems = 0;
 
 	$.each(responseJSON, function(index, reportItem) {
-		data.addRows([[reportItem.identifier, reportItem.revenue, reportItem.profit]]);
+		data.addRows([[reportItem.identifier, reportItem.revenue, reportItem.profit ,reportItem.shippingCost]]);
 		totalRevenue += parseFloat(reportItem.revenue);
 		totalProfit += parseFloat(reportItem.profit);
+		totalShippingCost += parseFloat(reportItem.shippingCost)
 		totalItems += parseInt(reportItem.productsCount);
 	});
 }

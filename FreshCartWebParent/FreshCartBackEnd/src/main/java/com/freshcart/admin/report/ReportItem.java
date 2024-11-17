@@ -6,6 +6,7 @@ public class ReportItem {
     private String identifier;
     private float revenue;
     private float profit;
+    private float shipping;
     private int ordersCount;
     private int productsCount;
 
@@ -22,11 +23,12 @@ public class ReportItem {
         this.profit = profit;
     }
 
-    public ReportItem(String identifier, float revenue, float profit, int productsCount) {
+    public ReportItem(String identifier, float revenue, float profit, float shipping, int productsCount) {
         super();
         this.identifier = identifier;
         this.revenue = revenue;
         this.profit = profit;
+        this.shipping = shipping;
         this.productsCount = productsCount;
     }
 
@@ -62,6 +64,10 @@ public class ReportItem {
         this.ordersCount = ordersCount;
     }
 
+    public float getShippingCost() { return shipping; }
+
+    public void setShippingCost(float shippingCost) { this.shipping = shippingCost; }
+
     @Override
     public int hashCode() {
         return Objects.hash(identifier);
@@ -76,14 +82,13 @@ public class ReportItem {
         return Objects.equals(identifier, other.identifier);
     }
 
-    public void addRevenue(float amount) {
-        this.revenue += amount;
-
-    }
+    public void addRevenue(float amount) { this.revenue += amount; }
 
     public void addProfit(float amount) {
         this.profit += amount;
     }
+
+    public void addShipping(float amount) { this.shipping += amount;}
 
     public void increaseOrdersCount() {
         this.ordersCount++;
