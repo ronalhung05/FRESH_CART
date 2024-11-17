@@ -1,5 +1,6 @@
 package com.freshcart.admin.review;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,8 @@ public class ReviewController {
 
     @Autowired
     private ReviewService service;
+    @Autowired
+    private MessageServiceAdmin messageService;
 
     @GetMapping("/reviews")
     public String listFirstPage(Model model) {
@@ -66,7 +69,7 @@ public class ReviewController {
     @PostMapping("/reviews/save")
     public String saveReview(Review reviewInForm, RedirectAttributes ra) {
         service.save(reviewInForm);
-        ra.addFlashAttribute("message", "The review ID " + reviewInForm.getId() + " has been updated successfully.");
+        ra.addFlashAttribute(messageService.getMessage("REVIEW_UPDATE_SUCCESS") + " (ID: " + reviewInForm.getId() + ")");
         return defaultRedirectURL;
     }
 
@@ -74,7 +77,7 @@ public class ReviewController {
     public String deleteReview(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
             service.delete(id);
-            ra.addFlashAttribute("message", "The review ID " + id + " has been deleted.");
+            ra.addFlashAttribute("message", messageService.getMessage("REVIEW_UPDATE_SUCCESS") + " (ID: " + id + ")");
         } catch (ReviewNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
         }

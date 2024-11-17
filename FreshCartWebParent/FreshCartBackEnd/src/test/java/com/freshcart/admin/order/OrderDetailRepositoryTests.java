@@ -28,8 +28,8 @@ public class OrderDetailRepositoryTests {
     @Test
     public void testFindWithCategoryAndTimeBetween() throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = dateFormatter.parse("2021-09-01");
-        Date endTime = dateFormatter.parse("2021-09-30");
+        Date startTime = dateFormatter.parse("2024-11-15");
+        Date endTime = dateFormatter.parse("2024-11-17");
 
         List<OrderDetail> listOrderDetails = repo.findWithCategoryAndTimeBetween(startTime, endTime);
 

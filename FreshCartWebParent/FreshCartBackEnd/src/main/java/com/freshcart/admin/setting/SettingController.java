@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,8 @@ public class SettingController {
     @Autowired
     private CurrencyRepository currencyRepo;
 
+    @Autowired
+    private MessageServiceAdmin messageService;
     @GetMapping("/settings")
     public String listAll(Model model) {
         List<Setting> listSettings = service.listAllSettings();
@@ -56,7 +59,8 @@ public class SettingController {
 
         updateSettingValuesFromForm(request, settingBag.list());
 
-        ra.addFlashAttribute("message", "General settings have been saved.");
+
+        ra.addFlashAttribute("message", messageService.getMessage("SETTING_GENERAL_SAVE_SUCCESS"));
 
         return "redirect:/settings";
     }
@@ -99,7 +103,7 @@ public class SettingController {
         List<Setting> mailServerSettings = service.getMailServerSettings();
         updateSettingValuesFromForm(request, mailServerSettings);
 
-        ra.addFlashAttribute("message", "Mail server settings have been saved");
+        ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_SERVER_SAVE_SUCCESS"));
 
         return "redirect:/settings#mailServer";
     }
@@ -109,7 +113,7 @@ public class SettingController {
         List<Setting> mailTemplateSettings = service.getMailTemplateSettings();
         updateSettingValuesFromForm(request, mailTemplateSettings);
 
-        ra.addFlashAttribute("message", "Mail template settings have been saved");
+        ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_TEMPLATE_SAVE_SUCCESS"));
 
         return "redirect:/settings#mailTemplates";
     }
@@ -119,7 +123,7 @@ public class SettingController {
         List<Setting> paymentSettings = service.getPaymentSettings();
         updateSettingValuesFromForm(request, paymentSettings);
 
-        ra.addFlashAttribute("message", "Payment settings have been saved");
+        ra.addFlashAttribute("message", messageService.getMessage("SETTING_PAYMENT_SAVE_SUCCESS"));
 
         return "redirect:/settings#payment";
     }

@@ -63,11 +63,12 @@ public class Order extends AbstractAddress {
     public Order() {
     }
 
-    public Order(Integer id, Date orderTime, float productCost, float subtotal, float total) {
+    public Order(Integer id, Date orderTime, float productCost, float subtotal, float shippingCost, float total) {
         this.id = id;
         this.orderTime = orderTime;
         this.productCost = productCost;
         this.subtotal = subtotal;
+        this.shippingCost = shippingCost;
         this.total = total;
     }
 

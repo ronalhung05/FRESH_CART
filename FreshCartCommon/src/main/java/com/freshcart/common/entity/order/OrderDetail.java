@@ -33,7 +33,7 @@ public class OrderDetail extends IdBasedEntity {
         this.product = new Product();
         this.product.setCategory(new Category(categoryName));
         this.quantity = quantity;
-        this.productCost = productCost * quantity;
+        this.productCost = productCost;
         this.shippingCost = shippingCost;
         this.subtotal = subtotal;
     }
@@ -41,7 +41,7 @@ public class OrderDetail extends IdBasedEntity {
     public OrderDetail(int quantity, String productName, float productCost, float shippingCost, float subtotal) {
         this.product = new Product(productName);
         this.quantity = quantity;
-        this.productCost = productCost * quantity;
+        this.productCost = productCost;
         this.shippingCost = shippingCost;
         this.subtotal = subtotal;
     }
@@ -101,6 +101,4 @@ public class OrderDetail extends IdBasedEntity {
     public void setOrder(Order order) {
         this.order = order;
     }
-
-
 }
