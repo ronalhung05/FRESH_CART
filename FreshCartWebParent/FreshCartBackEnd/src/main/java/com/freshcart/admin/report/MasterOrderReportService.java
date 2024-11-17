@@ -26,7 +26,7 @@ public class MasterOrderReportService extends AbstractReportService {
 
         calculateSalesForReportData(listOrders, listReportItems);
 
-        printReportData(listReportItems);
+        //printReportData(listReportItems);
 
         return listReportItems;
     }
@@ -39,6 +39,7 @@ public class MasterOrderReportService extends AbstractReportService {
 
             float revenue = order.getTotal();
             float profit  = order.getSubtotal() - order.getProductCost();
+            float shipping = order.getShippingCost();
 
             int itemIndex = listReportItems.indexOf(reportItem);
 
@@ -47,6 +48,7 @@ public class MasterOrderReportService extends AbstractReportService {
                 reportItem.addRevenue(revenue);
                 reportItem.addProfit(profit);
                 reportItem.increaseOrdersCount();
+                reportItem.addShipping(shipping);
             }
         }
     }

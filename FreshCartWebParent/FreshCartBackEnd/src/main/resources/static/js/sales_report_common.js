@@ -90,11 +90,7 @@ function getDenominator(period, reportType) {
 function setSalesAmount(period, reportType, labelTotalItems) {
 	$("#textTotalRevenue" + reportType).text(formatCurrency(totalRevenue));
 	$("#textTotalProfit" + reportType).text(formatCurrency(totalProfit));
-
-	// denominator = getDenominator(period, reportType);
-	//
-	// $("#textAvgGrossSales" + reportType).text(formatCurrency(totalGrossSales / denominator));
-	// $("#textAvgNetSales" + reportType).text(formatCurrency(totalNetSales / denominator));
+	$("#textTotalShippingCost" + reportType).text(formatCurrency(totalShippingCost));
 	$("#labelTotalItems" + reportType).text(labelTotalItems);
 	$("#textTotalItems" + reportType).text(totalItems);
 }

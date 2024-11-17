@@ -20,7 +20,7 @@
 					<label class="col-sm-4 col-form-label">E-mail:</label>
 					<div class="col-sm-8">
 						<input type="email" class="form-control" th:field="*{email}"
-							required minlength="8" maxlength="128" />
+							required minlength="8" maxlength="128"  th:attr="readonly=${pageTitle != 'Create New User'} ? 'readonly' : null"/>
 					</div>
 				</div>
 

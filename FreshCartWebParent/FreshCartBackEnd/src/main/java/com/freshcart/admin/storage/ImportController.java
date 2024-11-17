@@ -1,5 +1,6 @@
 package com.freshcart.admin.storage;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.admin.product.ProductService;
@@ -40,6 +41,8 @@ public class ImportController {
     private UserService userService;
     @Autowired
     private SettingService settingService;
+    @Autowired
+    private MessageServiceAdmin messageService;
 
     @GetMapping("/imports")
     public String listFirstPage(Model model) {
@@ -73,7 +76,6 @@ public class ImportController {
             return "storage/import_detail_modal";
 
         }catch (ImportNotFoundException e){
-
             ra.addFlashAttribute("message", e.getMessage());
             return defaultRedirectURL;
         }
@@ -107,7 +109,7 @@ public class ImportController {
 
         importService.save(ip, userEmail);
 
-        ra.addFlashAttribute("message", "The product has been saved successfully.");
+        ra.addFlashAttribute("message", messageService.getMessage("IMPORT_SAVE_SUCCESS"));
 
         return defaultRedirectURL;
     }

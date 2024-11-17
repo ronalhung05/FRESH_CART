@@ -23,10 +23,10 @@ public class OrderDetailReportService extends AbstractReportService {
 
         if (reportType.equals(ReportType.CATEGORY)) {
             listOrderDetails = repo.findWithCategoryAndTimeBetween(startDate, endDate);
+            printRawDataCategory(listOrderDetails);
         } else if (reportType.equals(ReportType.PRODUCT)) {
             listOrderDetails = repo.findWithProductAndTimeBetween(startDate, endDate);
         }
-
 
 
         List<ReportItem> listReportItems = new ArrayList<>();
@@ -44,6 +44,7 @@ public class OrderDetailReportService extends AbstractReportService {
 
             float revenue = detail.getSubtotal() + detail.getShippingCost();
             float profit = detail.getSubtotal() - detail.getProductCost();
+            float shipping = detail.getShippingCost();
 
             int itemIndex = listReportItems.indexOf(reportItem);
 
@@ -51,9 +52,10 @@ public class OrderDetailReportService extends AbstractReportService {
                 reportItem = listReportItems.get(itemIndex);
                 reportItem.addRevenue(revenue);
                 reportItem.addProfit(profit);
+                reportItem.addShipping(shipping);
                 reportItem.increaseProductsCount(detail.getQuantity());
             } else {
-                listReportItems.add(new ReportItem(identifier, revenue, profit, detail.getQuantity()));
+                listReportItems.add(new ReportItem(identifier, revenue, profit, shipping, detail.getQuantity()));
             }
         }
 
@@ -64,15 +66,15 @@ public class OrderDetailReportService extends AbstractReportService {
 
     private void printReportData(List<ReportItem> listReportItems) {
         for (ReportItem item : listReportItems) {
-            System.out.printf("%-20s, %10.2f, %10.2f, %d \n",
-                    item.getIdentifier(), item.getRevenue(), item.getProfit(), item.getProductsCount());
+            System.out.printf("%-20s, %10.2f, %10.2f, %10.2f, %d \n",
+                    item.getIdentifier(), item.getRevenue(), item.getProfit(), item.getShippingCost(), item.getProductsCount());
         }
     }
 
-    private void printRawData(List<OrderDetail> listOrderDetails) {
+    private void printRawDataCategory(List<OrderDetail> listOrderDetails) {
         for (OrderDetail detail : listOrderDetails) {
             System.out.printf("%d, %-20s, %10.2f, %10.2f, %10.2f \n",
-                    detail.getQuantity(), detail.getProduct().getShortName().substring(0, 20),
+                    detail.getQuantity(), detail.getProduct().getCategory().getName(),
                     detail.getSubtotal(), detail.getProductCost(), detail.getShippingCost());
         }
     }

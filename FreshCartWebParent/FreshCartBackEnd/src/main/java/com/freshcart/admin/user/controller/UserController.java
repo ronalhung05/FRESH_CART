@@ -5,7 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.freshcart.admin.MessageServiceAdmin;
+import com.freshcart.admin.security.FreshCartUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -33,6 +37,9 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private MessageServiceAdmin messageService;
+
     @GetMapping("/users")
     public String listFirstPage() {
         return defaultRedirectURL;
@@ -41,13 +48,14 @@ public class UserController {
     @GetMapping("/users/page/{pageNum}")
     public String listByPage(
             @PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
-            @PathVariable(name = "pageNum") int pageNum) {
+            @PathVariable(name = "pageNum") int pageNum,
+            @AuthenticationPrincipal FreshCartUserDetails loggedUser,
+            Model model) {
+        model.addAttribute("loggedUser", loggedUser.getUsername());
         service.listByPage(pageNum, helper);
-
         return "users/users";
     }
 
-    //MOSTRAR USUARIOS
     @GetMapping("/users/new")
     public String newUser(Model model) {
         List<Role> listRoles = service.listRoles();
@@ -62,7 +70,6 @@ public class UserController {
         return "users/user_form";
     }
 
-    //CREAR UN USUARIO
     @PostMapping("/users/save")
     public String saveUser(User user, RedirectAttributes redirectAttributes,
                            @RequestParam("image") MultipartFile multipartFile) throws IOException {
@@ -80,10 +87,7 @@ public class UserController {
             if (user.getPhotos().isEmpty()) user.setPhotos(null);
             service.save(user);
         }
-
-
-        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
-
+        redirectAttributes.addFlashAttribute("message", messageService.getMessage("USER_SAVE_SUCCESS"));
         return getRedirectURLtoAffectedUser(user);
     }
 
@@ -92,13 +96,17 @@ public class UserController {
         return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
 
-    //ACTUALIZAR UN USUARIO
     @GetMapping("/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Integer id,
                            Model model,
-                           RedirectAttributes redirectAttributes) {
+                           @AuthenticationPrincipal FreshCartUserDetails loggedUser,
+                           RedirectAttributes redirectAttributes){
         try {
             User user = service.get(id);
+            String loggedUsername = loggedUser.getUsername();
+            if(loggedUsername.equals(user.getEmail())){
+                return defaultRedirectURL;
+            }
             List<Role> listRoles = service.listRoles();
 
             model.addAttribute("user", user);
@@ -112,18 +120,22 @@ public class UserController {
         }
     }
 
-    //ELIMINAR USUARIO
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id,
-                             Model model,
+                             Model model, @AuthenticationPrincipal FreshCartUserDetails loggedUser,
                              RedirectAttributes redirectAttributes) {
         try {
+            String editedUser = service.get(id).getEmail();
+            String loggedUsername = loggedUser.getUsername();
+            if(loggedUsername.equals(editedUser)){
+                return defaultRedirectURL;
+            }
             service.delete(id);
             String userPhotosDir = "user-photos/" + id;
             AmazonS3Util.removeFolder(userPhotosDir);
 
             redirectAttributes.addFlashAttribute("message",
-                    "The user ID " + id + " has been deleted successfully");
+                    messageService.getMessage("USER_DELETE_SUCCESS") + " (ID: " + id + ")");
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
@@ -131,19 +143,24 @@ public class UserController {
         return defaultRedirectURL;
     }
 
-    //ESTATUS DEL USUARIO
     @GetMapping("/users/{id}/enabled/{status}")
-    public String updateUserEnabledStatus(@PathVariable("id") Integer id,
-                                          @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
+    public String updateUserEnabledStatus(@PathVariable("id") Integer id, @AuthenticationPrincipal FreshCartUserDetails loggedUser,
+                                          @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) throws UserNotFoundException {
+        String editedUser = service.get(id).getEmail();
+        String loggedUsername = loggedUser.getUsername();
+        if(loggedUsername.equals(editedUser)){
+            return defaultRedirectURL;
+        }
         service.updateUserEnabledStatus(id, enabled);
-        String status = enabled ? "enabled" : "disabled";
-        String message = "The user ID " + id + " has been " + status;
+        String message = messageService.getMessage("USER_ENABLE_SUCCESS") + " (ID: " + id + ")";
+        if (!enabled) {
+            message = messageService.getMessage("USER_DISABLE_SUCCESS") + " (ID: " + id + ")";
+        }
         redirectAttributes.addFlashAttribute("message", message);
 
         return defaultRedirectURL;
     }
 
-    //TIPOS DE EXPORTACION, CSV, EXCEL Y PDF
     @GetMapping("/users/export/csv")
     public void exportToCSV(HttpServletResponse response) throws IOException {
         List<User> listUsers = service.listAll();

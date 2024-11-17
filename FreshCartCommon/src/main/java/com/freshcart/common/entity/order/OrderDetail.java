@@ -101,16 +101,4 @@ public class OrderDetail extends IdBasedEntity {
     public void setOrder(Order order) {
         this.order = order;
     }
-
-    @Override
-    public String toString() {
-        return "OrderDetail{" +
-                "category=" + product.getCategory().getName() +
-                ", quantity=" + quantity +
-                ", productCost=" + productCost +
-                ", shippingCost=" + shippingCost +
-                ", unitPrice=" + unitPrice +
-                ", subtotal=" + subtotal +
-                '}';
-    }
 }
