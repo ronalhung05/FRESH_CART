@@ -178,4 +178,19 @@ public class ProductSpecification {
                 return Sort.by(Sort.Direction.ASC, "finalPrice");
         }
     }
+
+    public static Specification<Product> searchProduct(String keyword) {
+        return (root, query, cb) -> {
+            if (keyword == null || keyword.trim().isEmpty()) {
+                return cb.conjunction();
+            }
+
+            String searchTerm = "%" + keyword.trim().toLowerCase() + "%";
+
+            return cb.and(
+                cb.isTrue(root.get(Product_.enabled)),
+                cb.like(cb.lower(root.get(Product_.name)), searchTerm)
+            );
+        };
+    }
 }
