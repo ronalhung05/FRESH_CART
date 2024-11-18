@@ -8,17 +8,20 @@
 <body>
 <div class="container-fluid">
     <div th:replace="navigation :: menu"></div>
-    <div>
-        <div class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 20px;">
-            <h2>Manage Import | [[${pageTitle}]]</h2>
-            <div class="d-flex justify-content-end" style="margin-right: 10px;">
-                <input type="submit" value="Save" class="btn btn-primary m-1" style="background-color: green; color: white;"/>
-                <input type="button" value="Cancel" class="btn btn-secondary m-1" id="buttonCancel" />
-            </div>
-        </div>
-    </div>
 
     <form th:action="@{/imports/save}" method="post">
+        <div>
+            <div class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 20px;">
+                <h2>Manage Import | [[${pageTitle}]]</h2>
+                <div class="d-flex justify-content-end" style="margin-right: 10px;">
+                    <input type="submit" value="Save" class="btn btn-primary m-1"
+                           style="background-color: green; color: white;"/>
+                    <input type="button" value="Cancel" class="btn btn-secondary m-1" id="buttonCancel"/>
+                </div>
+            </div>
+        </div>
+
+
         <!-- User Info -->
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">User ID:</label>
@@ -51,9 +54,7 @@
             <!-- Existing rows can be dynamically generated here -->
             </tbody>
         </table>
-
         <div id="hiddenInputsContainer"></div>
-
     </form>
 
     <div th:replace="fragments :: footer"></div>
@@ -115,6 +116,6 @@
     </div>
 </div>
 <script th:src="@{/js/common_form.js}"></script>
-<script th:src="@{/js/import_form_2.js}"></script>
+<script th:src="@{/js/import_form.js}"></script>
 </body>
 </html>
