@@ -9,7 +9,13 @@
 <div class="container-fluid">
     <div th:replace="navigation :: menu"></div>
     <div>
-        <h2>[[${pageTitle}]]</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 20px;">
+            <h2>Manage Import | [[${pageTitle}]]</h2>
+            <div class="d-flex justify-content-end" style="margin-right: 10px;">
+                <input type="submit" value="Save" class="btn btn-primary m-1" style="background-color: green; color: white;"/>
+                <input type="button" value="Cancel" class="btn btn-secondary m-1" id="buttonCancel" />
+            </div>
+        </div>
     </div>
 
     <form th:action="@{/imports/save}" method="post">
@@ -30,15 +36,15 @@
         <h4 class="mt-4">List of Product</h4>
         <button type="button" class="btn btn-success mb-2" id="addProductBtn">Add Product</button>
         <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
+            <thead class="bg-light">
             <tr>
                 <th>ID Product</th>
                 <th>Product Name</th>
                 <th>Amount</th>
                 <th>Cost</th>
-                <th>Sub Total</th>
-                <th>Units</th>
-                <th>Actions</th>
+                <th>Subtotal</th>
+                <th>Unit</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody id="productTableBody">
@@ -47,11 +53,7 @@
         </table>
 
         <div id="hiddenInputsContainer"></div>
-        <!-- Submit and Cancel Buttons -->
-        <div class="text-center">
-            <input type="submit" value="Save" class="btn btn-primary m-3"/>
-            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
-        </div>
+
     </form>
 
     <div th:replace="fragments :: footer"></div>
@@ -113,6 +115,6 @@
     </div>
 </div>
 <script th:src="@{/js/common_form.js}"></script>
-<script th:src="@{/js/import_form.js}"></script>
+<script th:src="@{/js/import_form_2.js}"></script>
 </body>
 </html>

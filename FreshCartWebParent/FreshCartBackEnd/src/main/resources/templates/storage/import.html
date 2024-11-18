@@ -24,7 +24,7 @@
     <div class="full-details">
         <table
                 class="table table-bordered table-striped table-hover table-responsive-xl">
-            <thead class="thead-dark">
+            <thead class="bg-light">
             <tr>
                 <th class="hideable-column">
                 <th th:replace="fragments :: column_link('id', 'Import ID', 'tag')"/>
@@ -39,7 +39,7 @@
                         th:replace="fragments :: column_link('transactionTime', 'Transaction Time', 'none')"/>
                 <th
                         th:replace="fragments :: column_link('sumCost', 'Sum Cost', 'none')"/>
-                <th></th>
+                <th>Action</th>
             </tr>
             </thead>
 
@@ -49,9 +49,10 @@
                 <td class="hideable-column">[[${import.user.id}]]</td>
                 <td class="hideable-column">[[${import.user.firstName} + ' ' + ${import.user.lastName}]]</td>
                 <td class="hideable-column">[[${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
-                <td class="hideable-column">[[${import.sumCost}]]</td>
-
-                <td><a class="fas fa-file-alt fa-2x icon-green link-detail"
+                <td class="hideable-column">
+                    <div th:replace="fragments :: format_currency(${import.sumCost})"></div>
+                </td>
+                <td><a class="fas fa-solid fa-eye me-2 icon-green link-detail"
                        th:href="@{'/imports/detail/' + ${import.id}}"
                        title="View details of this import"></a>
                 </td>

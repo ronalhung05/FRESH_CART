@@ -107,7 +107,6 @@ public class OrderController {
     public String deleteOrder(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
             orderService.delete(id);
-            ;
             ra.addFlashAttribute("message", "The order ID " + id + " has been deleted.");
         } catch (OrderNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
@@ -246,7 +245,7 @@ public class OrderController {
 
             orderDetail.setOrder(order);
             orderDetail.setProduct(new Product(Integer.parseInt(productIds[i])));
-            orderDetail.setProductCost(Float.parseFloat(productDetailCosts[i]));
+            orderDetail.setProductCost(Float.parseFloat(productDetailCosts[i]) * Integer.parseInt(quantities[i]));
             orderDetail.setSubtotal(Float.parseFloat(productSubtotals[i]));
             orderDetail.setShippingCost(Float.parseFloat(productShipCosts[i]));
             orderDetail.setQuantity(Integer.parseInt(quantities[i]));

@@ -60,7 +60,9 @@ $(document).ready(function () {
                     <td>${totalCost.toFixed(2)}</td>
                     <td>${productUnit}</td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-row-index="${rowIndex}" data-product-id="${selectedProductId}" data-product-name="${selectedProductName}">Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-row-index="${rowIndex}" 
+                        data-product-id="${selectedProductId}" 
+                        data-product-name="${selectedProductName}">Delete</button>
                     </td>
                 </tr>
             `;

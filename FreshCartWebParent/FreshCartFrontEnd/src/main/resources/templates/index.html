@@ -30,20 +30,20 @@
                             </svg>
                             All Categories
                         </a>
-                    
+
                         <div class="dropdown-menu">
                             <div class="main-categories">
                                 <th:block th:each="cat : ${listCategories}">
                                     <!-- Main category wrapper -->
                                     <div class="category-wrapper">
                                         <!-- Main category item -->
-                                        <a class="dropdown-item" href="#" 
+                                        <a class="dropdown-item" href="#"
                                            th:href="@{'/category/' + ${cat.alias}}"
                                            th:classappend="${cat.name == selectedMainCategory ? 'active' : ''}">
                                             <span th:text="${cat.name}"></span>
                                             <i th:if="${not #lists.isEmpty(cat.children)}" class="bi bi-chevron-right"></i>
                                         </a>
-                                        
+
                                         <!-- Sub categories -->
                                         <div class="subcategory-group" th:if="${not #lists.isEmpty(cat.children)}">
                                             <th:block th:each="subCat : ${cat.children}">
@@ -56,7 +56,7 @@
                                                         <span th:text="${subCat.name}"></span>
                                                         <i th:if="${not #lists.isEmpty(subCat.children)}" class="bi bi-chevron-right"></i>
                                                     </a>
-                                                    
+
                                                     <!-- Child categories -->
                                                     <div class="childcategory-group" th:if="${not #lists.isEmpty(subCat.children)}">
                                                         <th:block th:each="childCat : ${subCat.children}">
@@ -105,10 +105,15 @@
                     </li>
                 </ul>
             </div>
+
         </div>
     </nav>
 
-    
+
+    <div th:if="${listCategories != null}">
+        <p>List Categories Size: <span th:text="${#lists.size(listCategories)}"></span></p>
+    </div>
+
     <div th:replace="navigation :: footer_menu"></div>
 </div>
 
