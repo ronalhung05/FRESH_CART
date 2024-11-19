@@ -2,6 +2,8 @@ package com.freshcart;
 
 import com.freshcart.category.CategoryService;
 import com.freshcart.common.entity.Category;
+import com.freshcart.product.ProductService;
+import com.freshcart.common.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,12 +19,24 @@ public class MainController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("")
     public String viewHomePage(Model model) {
         List<Category> listCategories = categoryService.listHierarchicalCategories();
-        model.addAttribute("listCategories", listCategories);
+        
+        // Thêm danh sách sản phẩm cho trang chủ
+        List<Product> listNewProducts = productService.listNewProducts();
+        List<Product> listSpecialOffers = productService.listSpecialOffers();
+         List<Product> listBestSellers = productService.listBestSellingProducts(10); // Lấy top 10 sản phẩm bán chạy
 
+
+        model.addAttribute("listCategories", listCategories);
+        model.addAttribute("listNewProducts", listNewProducts);
+        model.addAttribute("listSpecialOffers", listSpecialOffers);
+         model.addAttribute("listBestSellers", listBestSellers);
+        
         return "index";
     }
 

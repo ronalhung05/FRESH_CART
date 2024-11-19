@@ -17,3 +17,4 @@ USER_ENABLE_SUCCESS,The user has been enabled
 USER_DISABLE_SUCCESS,The user has been disabled
 REVIEW_UPDATE_SUCCESS,The review has been updated
 REVIEW_DELETE_SUCCESS,The review has been deleted
+SUCCESS_PRODUCT,The product has been saved successfully
