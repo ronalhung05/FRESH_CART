@@ -42,4 +42,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,
            "ORDER BY SUM(od.quantity) DESC")
     Page<Product> findBestSellingProducts(Pageable pageable);
 
+    @Query("SELECT p FROM Product p " +
+           "LEFT JOIN OrderDetail od ON p.id = od.product.id " +
+           "LEFT JOIN od.order o " +
+           "WHERE p.enabled = true " +
+           "AND (p.category.id = ?1 OR p.category.allParentIDs LIKE %?2%) " +
+           "GROUP BY p " +
+           "ORDER BY COALESCE(SUM(CASE WHEN o.status = 'DELIVERED' THEN od.quantity ELSE 0 END), 0) DESC")
+    Page<Product> findAllOrderByMostSold(Integer categoryId, String categoryIDMatch, Pageable pageable);
+
 }

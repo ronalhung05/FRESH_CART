@@ -3,6 +3,10 @@ package com.freshcart.product;
 import com.freshcart.common.entity.Brand;
 import com.freshcart.common.entity.Brand_;
 import com.freshcart.common.entity.Category;
+import com.freshcart.common.entity.order.Order;
+import com.freshcart.common.entity.order.OrderDetail;
+import com.freshcart.common.entity.order.OrderDetail_;
+import com.freshcart.common.entity.order.OrderStatus;
 import com.freshcart.common.entity.product.Product;
 import com.freshcart.common.entity.product.Product_;
 import org.springframework.data.domain.Sort;
@@ -10,6 +14,9 @@ import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+
 import java.util.List;
 
 public class ProductSpecification {
@@ -170,7 +177,7 @@ public class ProductSpecification {
             case "HIGH_TO_LOW":
                 return Sort.by(Sort.Direction.DESC, "finalPrice");
             case "MOST_SOLD":
-                return Sort.by(Sort.Direction.DESC, "soldCount");
+                return Sort.by("id");
             case "HIGH_RATING":
                 return Sort.by(Sort.Direction.DESC, "averageRating");
             case "LOW_TO_HIGH":
@@ -193,4 +200,6 @@ public class ProductSpecification {
             );
         };
     }
+    
+    
 }

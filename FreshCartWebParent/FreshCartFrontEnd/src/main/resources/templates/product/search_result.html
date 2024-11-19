@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<div class="container-fluid">
+<div class="container">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
 
@@ -79,6 +79,9 @@
 <script type="text/javascript">
     decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
     thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
 </script>
 <script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/common_rating.js}"></script>
