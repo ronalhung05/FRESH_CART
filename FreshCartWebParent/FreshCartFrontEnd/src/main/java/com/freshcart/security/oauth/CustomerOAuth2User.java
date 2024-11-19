@@ -1,10 +1,10 @@
 package com.freshcart.security.oauth;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class CustomerOAuth2User implements OAuth2User {
     private String clientName;
@@ -36,7 +36,28 @@ public class CustomerOAuth2User implements OAuth2User {
     }
 
     public String getFullName() {
-        return fullName != null ? fullName : oauth2User.getAttribute("name");
+        Map<String, Object> attributes = this.getAttributes();
+
+        // Đối với Google
+        if (attributes.get("name") != null) {
+            return (String) attributes.get("name");
+        }
+
+        // Đối với Facebook
+        if (attributes.get("given_name") != null) {
+            String firstName = (String) attributes.get("given_name");
+            String lastName = (String) attributes.get("family_name");
+            return firstName + " " + lastName;
+        }
+
+        // Trường hợp không có tên, dùng email
+        String email = (String) attributes.get("email");
+        if (email != null) {
+            return email.split("@")[0]; // Lấy phần trước @ của email
+        }
+
+        // Trường hợp mặc định
+        return "User";
     }
 
     public String getClientName() {

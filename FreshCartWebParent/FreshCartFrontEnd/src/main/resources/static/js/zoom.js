@@ -1,1 +1,7 @@
-function zoom(f){var t=f.currentTarget;offsetX=f.offsetX||f.touches[0].pageX,f.offsetY?offsetY=f.offsetY:offsetX=f.touches[0].pageX,x=offsetX/t.offsetWidth*100,y=offsetY/t.offsetHeight*100,t.style.backgroundPosition=x+"% "+y+"%"}
+function zoom(event) {
+    let target = event.currentTarget;
+    let rect = target.getBoundingClientRect();
+    let x = (event.clientX - rect.left) / rect.width * 100;
+    let y = (event.clientY - rect.top) / rect.height * 100;
+    target.style.backgroundPosition = `${x}% ${y}%`;
+}

@@ -4,23 +4,53 @@
 <head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 
 <body>
-	<div class="container-fluid text-center">
-		<div th:replace="navigation :: header_menu"></div>
+	<div th:replace="navigation :: header_menu"></div>
 
-		<div>&nbsp;</div>
-
-		<div th:if="${title != null}">
-			<h2>[[${title}]]</h2>
+	<!-- Toast Container -->
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+		<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<i class="feather-icon icon-info me-2"></i>
+				<strong class="me-auto" th:if="${title != null}">[[${title}]]</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body" th:if="${message != null}">
+				[[${message}]]
+			</div>
+			<!-- Progress bar -->
+			<div class="toast-progress">
+				<div class="progress" style="height: 2px;">
+					<div class="progress-bar" role="progressbar" style="width: 100%"></div>
+				</div>
+			</div>
 		</div>
-
-		<div th:if="${message != null}">
-			<h3>[[${message}]]</h3>
-		</div>
-
-		<div>&nbsp;</div>
-
-		<div th:replace="navigation :: footer_menu"></div>
 	</div>
+
+	<div th:replace="navigation :: footer_menu"></div>
+
+	<!-- Toast auto-hide script -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			let toast = document.querySelector('.toast');
+			let progressBar = toast.querySelector('.progress-bar');
+			
+			let width = 100;
+			let timer = setInterval(() => {
+				width -= 2;
+				progressBar.style.width = width + '%';
+				if (width <= 0) {
+					clearInterval(timer);
+					toast.classList.remove('show');
+				}
+			}, 100);
+
+			// Close button handler
+			toast.querySelector('.btn-close').addEventListener('click', () => {
+				clearInterval(timer);
+				toast.classList.remove('show');
+			});
+		});
+	</script>
 </body>
 
 </html>

@@ -4,108 +4,343 @@
 
 <body>
 	<div th:fragment="header_menu">
-		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-			<a class="navbar-brand" th:href="@{/}"> <img
-				th:src="@{${S3_BASE_URI + SITE_LOGO}}" />
-			</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#topNavbar, #searchNavbar">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="topNavbar">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href="">Careers</a></li>
-					<li class="nav-item"><a class="nav-link" href="">Payments</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="">Shipping
-							&amp; Delivery</a></li>
-
-					<th:block sec:authorize="!isAuthenticated()">
-						<li class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a>
-						</li>
-
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/register}">Register</a></li>
-					</th:block>
-
-					<li class="nav-item"><a class="nav-link" href="">Contact</a></li>
-				</ul>
+		<div class="bg-light py-1">
+			<div class="container">
+				 <div class="row">
+				  <div class="col-md-6 col-12 text-center text-md-start"><span>Super Value Deals - Save more with coupons</span></div>
+				  <div class="col-6 text-end d-none d-md-block">
+					 <div class="dropdown selectBox">
+						<a class="dropdown-toggle selectValue text-reset" href="javascript:void(0)" data-bs-toggle="dropdown" aria-expanded="false">
+						   <span class="me-2">
+							  <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+								 <g clip-path="url(#selectedlang)">
+									<path d="M0 0.5H16V12.5H0V0.5Z" fill="#012169"></path>
+									<path d="M1.875 0.5L7.975 5.025L14.05 0.5H16V2.05L10 6.525L16 10.975V12.5H14L8 8.025L2.025 12.5H0V11L5.975 6.55L0 2.1V0.5H1.875Z" fill="white"></path>
+									<path d="M10.6 7.525L16 11.5V12.5L9.225 7.525H10.6ZM6 8.025L6.15 8.9L1.35 12.5H0L6 8.025ZM16 0.5V0.575L9.775 5.275L9.825 4.175L14.75 0.5H16ZM0 0.5L5.975 4.9H4.475L0 1.55V0.5Z" fill="#C8102E"></path>
+									<path d="M6.025 0.5V12.5H10.025V0.5H6.025ZM0 4.5V8.5H16V4.5H0Z" fill="white"></path>
+									<path d="M0 5.325V7.725H16V5.325H0ZM6.825 0.5V12.5H9.225V0.5H6.825Z" fill="#C8102E"></path>
+								 </g>
+								 <defs>
+									<clipPath id="selectedlang">
+									   <rect width="16" height="12" fill="white" transform="translate(0 0.5)"></rect>
+									</clipPath>
+								 </defs>
+							  </svg>
+						   </span>
+						   English
+						</a>
+ 
+						<ul class="dropdown-menu">
+						   <li>
+							  <a class="dropdown-item" href="javascript:void(0)">
+								 <span class="me-2">
+									<svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+									   <g clip-path="url(#selectedlang)">
+										  <path d="M0 0.5H16V12.5H0V0.5Z" fill="#012169"></path>
+										  <path d="M1.875 0.5L7.975 5.025L14.05 0.5H16V2.05L10 6.525L16 10.975V12.5H14L8 8.025L2.025 12.5H0V11L5.975 6.55L0 2.1V0.5H1.875Z" fill="white"></path>
+										  <path d="M10.6 7.525L16 11.5V12.5L9.225 7.525H10.6ZM6 8.025L6.15 8.9L1.35 12.5H0L6 8.025ZM16 0.5V0.575L9.775 5.275L9.825 4.175L14.75 0.5H16ZM0 0.5L5.975 4.9H4.475L0 1.55V0.5Z" fill="#C8102E"></path>
+										  <path d="M6.025 0.5V12.5H10.025V0.5H6.025ZM0 4.5V8.5H16V4.5H0Z" fill="white"></path>
+										  <path d="M0 5.325V7.725H16V5.325H0ZM6.825 0.5V12.5H9.225V0.5H6.825Z" fill="#C8102E"></path>
+									   </g>
+									   <defs>
+										  <clipPath id="selectedlang">
+											 <rect width="16" height="12" fill="white" transform="translate(0 0.5)"></rect>
+										  </clipPath>
+									   </defs>
+									</svg>
+								 </span>
+								 English
+							  </a>
+						   </li>
+						   <li>
+							  <a class="dropdown-item" href="javascript:void(0)">
+								 <span class="me-2">
+									<svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+									   <g clip-path="url(#clip0_5543_19751)">
+										  <path d="M0 8.5H16V12.5H0V8.5Z" fill="#FFCE00"></path>
+										  <path d="M0 0.5H16V4.5H0V0.5Z" fill="black"></path>
+										  <path d="M0 4.5H16V8.5H0V4.5Z" fill="#DD0000"></path>
+									   </g>
+									   <defs>
+										  <clipPath id="clip0_5543_19751">
+											 <rect width="16" height="12" fill="white" transform="translate(0 0.5)"></rect>
+										  </clipPath>
+									   </defs>
+									</svg>
+								 </span>
+								 Deutsch
+							  </a>
+						   </li>
+						</ul>
+					 </div>
+				  </div>
+			   </div>
 			</div>
-
-		</nav>
+		 </div>
 	</div>
 
-	<div th:fragment="search_nav" class="row">
-		<div class="col-md">
+	<div th:fragment="search_nav">
+		<div class="py-5">
+			<div class="container">
+				<div class="row w-100 align-items-center gx-lg-2 gx-0">
+					<!-- Logo -->
+					<div class="col-xxl-2 col-lg-3 col-md-6 col-5">
+						<a class="navbar-brand d-none d-lg-block" th:href="@{/}">
+							<img th:src="@{${S3_BASE_URI + SITE_LOGO}}" alt="FreshCart" />
+						</a>
+						<div class="d-flex justify-content-between w-100 d-lg-none">
+							<a class="navbar-brand" th:href="@{/}">
+								<img th:src="@{${S3_BASE_URI + SITE_LOGO}}" alt="FreshCart" />
+							</a>
+						</div>
+					</div>
 
-			<th:block sec:authorize="isAuthenticated()">
-				<form th:action="@{/logout}" method="post" th:hidden="true"
-					name="logoutForm">
-					<input type="submit" value="Logout" />
-				</form>
-			</th:block>
+					<!-- Search bar -->
+					<div class="col-xxl-5 col-lg-5 d-none d-lg-block">
+						<form th:action="@{/search}" method="get">
+							<div class="input-group">
+								<input type="search" name="keyword" class="form-control rounded"
+									   th:value="${searchKeyword}"
+									   placeholder="Search for products" required />
+								<span class="input-group-append">
+									<button class="btn bg-white border border-start-0 ms-n10 rounded-0 rounded-end" type="submit">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" 
+											 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+											 class="feather feather-search">
+											<circle cx="11" cy="11" r="8"></circle>
+											<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+										</svg>
+									</button>
+								</span>
+							</div>
+						</form>
+					</div>
 
-			<nav class="navbar navbar-expand-sm bg-light">
-				<div class="collapse navbar-collapse" id="searchNavbar">
-					<form class="form-inline" th:action="@{/search}" method="get">
-						<input type="search" name="keyword" class="form-control mr-sm-2"
-							th:value="${searchKeyword}" placeholder="keyword" required /> <input
-							type="submit" value="Search" class="btn btn-outline-success" />
-					</form>
-					<ul class="navbar-nav">
-						<th:block sec:authorize="isAuthenticated()">
-							<li class="nav-item"><b><a class="nav-link"
-									th:href="@{/account_details}"
-									sec:authentication="principal.fullName"></a></b></li>
+					<!-- Spacer sau search bar -->
+					<div class="col-xxl-2 col-lg-2 d-none d-lg-block"></div>
 
-							<li class="nav-item"><a class="nav-link"
-								th:href="@{/address_book}">Address Book</a></li>
+					<!-- Icons section -->
+					<div class="col-lg-2 text-end">
+						<div class="list-inline">
+							<!-- User Account -->
+							<div class="list-inline-item me-4">
+								<th:block sec:authorize="!isAuthenticated()">
+									<a th:href="@{/login}" class="text-muted">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+											 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+											 class="feather feather-user">
+											<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+											<circle cx="12" cy="7" r="4"></circle>
+										</svg>
+									</a>
+								</th:block>
+								<th:block sec:authorize="isAuthenticated()">
+									<div class="nav-item dropdown">
+										<a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											<div class="avatar-circle-sm">
+												<span class="avatar-initials" 
+													  th:with="name=${#authentication.principal.fullName}"
+													  th:text="${#strings.length(name) >= 2 ? #strings.substring(name,0,2) : name}">
+												</span>
+											</div>
+										</a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" th:href="@{/account_details}">Account</a></li>
+											<li><a class="dropdown-item" th:href="@{/orders}">Orders</a></li>
+											<li><a class="dropdown-item" th:href="@{/address_book}">Address</a></li>
+											<li><a class="dropdown-item" th:href="@{/reviews}">Reviews</a></li>
+											<li><hr class="dropdown-divider"></li>
+											<li><a class="dropdown-item text-danger" href="javascript: document.logoutForm.submit()">Logout</a></li>
+										</ul>
+									</div>
+								</th:block>
+							</div>
 
-							<li class="nav-item"><a class="nav-link" href="">Questions</a>
-							</li>
+							<!-- Shopping Cart -->
+							<div class="list-inline-item me-4">
+								<a class="text-muted position-relative" th:href="@{/cart}">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+										 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+										 class="feather feather-shopping-bag">
+										<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+										<line x1="3" y1="6" x2="21" y2="6"></line>
+										<path d="M16 10a4 4 0 0 1-8 0"></path>
+									</svg>
+									<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" 
+										  th:text="${#session.getAttribute('totalCartItems') != null ? #session.getAttribute('totalCartItems') : 0}">
+									</span>
+								</a>
+							</div>
 
-							<li class="nav-item"><a class="nav-link"
-								th:href="@{/reviews}">Reviews</a></li>
-
-							<li class="nav-item"><a class="nav-link"
-								th:href="@{/orders}">Orders</a></li>
-
-							<li class="nav-item"><a
-								class="nav-link fas fa-shopping-cart fa-2x" th:href="@{/cart}"></a>
-							</li>
-
-							<li class="nav-item"><a class="nav-link"
-								href="javascript: document.logoutForm.submit()">Logout</a></li>
-						</th:block>
-					</ul>
+							<!-- Theme switcher -->
+							<div class="list-inline-item">
+								<a href="#" class="text-muted" id="themeSwitcher">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+										 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+										 class="feather feather-moon">
+										<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+									</svg>
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
-			</nav>
+			</div>
 		</div>
+
+		<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+			<input type="submit" value="Logout" />
+		</form>
 	</div>
 
 	<div th:fragment="footer_menu">
-		<div>
-			<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-				<button class="navbar-toggler" type="button" data-toggle="collapse"
-					data-target="#bottomNavbar">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="bottomNavbar">
-					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="">About Us</a>
-						</li>
-						<li class="nav-item"><a class="nav-link" href="">Privacy
-								Notice</a></li>
-						<li class="nav-item"><a class="nav-link" href="">Returns
-								&amp; Refunds</a></li>
-					</ul>
+		<footer class="footer">
+			<!-- Main footer content -->
+			<div class="container py-5">
+				<div class="row justify-content-between">
+					<!-- Brand Description - Left Side -->
+					<div class="col-lg-3">
+						<h2 class="h5 mb-3">FreshCart</h2>
+						<p class="text-muted">With a wide selection of fresh produce, pantry staples, and household essentials, we've got everything you need just a click away.</p>
+						<!-- Social Media Icons -->
+						<div class="d-flex gap-3 mt-4 mb-4">
+							<a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+							<a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
+							<a href="#" class="text-dark"><i class="bi bi-telegram"></i></a>
+							<a href="#" class="text-dark"><i class="bi bi-whatsapp"></i></a>
+						</div>
+					</div>
+
+					<!-- Footer Links - Right Side -->
+					<div class="col-lg-8">
+						<div class="row">
+							<!-- Categories Column -->
+							<div class="col-md-3">
+								<h5 class="mb-4">Sales</h5>
+								<ul class="list-unstyled">
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Weekly sale</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Special price</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Easter is coming</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Italian dinner</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Fresh fruits</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Exotic fruits</a></li>
+								</ul>
+							</div>
+
+							<!-- Company Column -->
+							<div class="col-md-3">
+								<h5 class="mb-4">Company</h5>
+								<ul class="list-unstyled">
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Blog and news</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">About us</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">FAQ page</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Contact us</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Careers</a></li>
+								</ul>
+							</div>
+
+							<!-- Account Column -->
+							<div class="col-md-3">
+								<h5 class="mb-4">Account</h5>
+								<ul class="list-unstyled">
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Your account</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Shipping & policies</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Refunds & replacements</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Order tracking</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Delivery info</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Taxes & fees</a></li>
+								</ul>
+							</div>
+
+							<!-- Customer Service Column -->
+							<div class="col-md-3">
+								<h5 class="mb-4">Customer service</h5>
+								<ul class="list-unstyled">
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Payment methods</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Money back guarantee</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Refunds & replacements</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Order tracking</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Delivery info</a></li>
+									<li class="mb-3"><a href="#" class="text-muted text-decoration-none">Shipping</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
-			</nav>
-		</div>
-		<div th:fragment="footer" class="text-center m-3">
-			<p>[[${COPYRIGHT}]]</p>
-		</div>
+			</div>
+
+			<!-- Payment Partners Section -->
+			<div class="border-top py-4">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-5 text-lg-start text-center mb-2 mb-lg-0">
+							<ul class="list-inline mb-0">
+								<li class="list-inline-item text-dark">Payment Partners</li>
+								<li class="list-inline-item">
+									<a href="#!"><img th:src="@{/images/payment/amazonpay.svg}" alt=""></a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!"><img th:src="@{/images/payment/american-express.svg}" alt=""></a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!"><img th:src="@{/images/payment/mastercard.svg}" alt=""></a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!"><img th:src="@{/images/payment/paypal.svg}" alt=""></a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!"><img th:src="@{/images/payment/visa.svg}" alt=""></a>
+								</li>
+							</ul>
+						</div>
+						<div class="col-lg-7 mt-4 mt-md-0">
+							<ul class="list-inline mb-0 text-lg-end text-center">
+								<li class="list-inline-item mb-2 mb-md-0 text-dark">Get deliveries with FreshCart</li>
+								<li class="list-inline-item ms-4">
+									<a href="#!"> <img th:src="@{/images/appbutton/appstore-btn.svg}" alt="" style="width: 140px;"></a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!"> <img th:src="@{/images/appbutton/googleplay-btn.svg}" alt="" style="width: 140px;"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Copyright Section -->
+			<div class="border-top py-4">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-md-6">
+							<span class="small text-muted">[[${COPYRIGHT}]]</span>
+						</div>
+						<div class="col-md-6">
+							<ul class="list-inline text-md-end mb-0 small mt-3 mt-md-0">
+								<li class="list-inline-item text-muted">Follow us on</li>
+								<li class="list-inline-item me-1">
+									<a href="#!" class="btn btn-xs btn-social btn-icon">
+										<i class="bi bi-facebook"></i>
+									</a>
+								</li>
+								<li class="list-inline-item me-1">
+									<a href="#!" class="btn btn-xs btn-social btn-icon">
+										<i class="bi bi-twitter"></i>
+									</a>
+								</li>
+								<li class="list-inline-item">
+									<a href="#!" class="btn btn-xs btn-social btn-icon">
+										<i class="bi bi-instagram"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
 	</div>
+
 </body>
 
 </html>

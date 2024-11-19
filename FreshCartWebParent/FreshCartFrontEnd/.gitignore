@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+# Mở file .gitignore và thêm các dòng sau
+.env
+application-dev.yml
+application-prod.yml

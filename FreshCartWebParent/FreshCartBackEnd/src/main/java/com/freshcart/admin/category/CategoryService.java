@@ -1,15 +1,7 @@
 package com.freshcart.admin.category;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.transaction.Transactional;
-
+import com.freshcart.common.entity.Category;
+import com.freshcart.common.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.freshcart.common.entity.Category;
-import com.freshcart.common.exception.CategoryNotFoundException;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -75,7 +67,7 @@ public class CategoryService {
             Set<Category> children = sortSubCategories(rootCategory.getChildren(), sortDir);
 
             for (Category subCategory : children) {
-                String name = "--" + subCategory.getName();
+                String name = subCategory.getName();
                 hierarchicalCategories.add(Category.copyFull(subCategory, name));
 
                 listSubHierarchicalCategories(hierarchicalCategories, subCategory, 1, sortDir);
@@ -92,9 +84,6 @@ public class CategoryService {
 
         for (Category subCategory : children) {
             String name = "";
-            for (int i = 0; i < newSubLevel; i++) {
-                name += "--";
-            }
             name += subCategory.getName();
 
             hierarchicalCategories.add(Category.copyFull(subCategory, name));
@@ -126,7 +115,7 @@ public class CategoryService {
             Set<Category> children = sortSubCategories(category.getChildren());
 
             for (Category subCategory : children) {
-                String name = "--" + subCategory.getName();
+                String name = subCategory.getName();
                 categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 
                 listSubCategoriesUsedInForm(categoriesUsedInForm, subCategory, 1);
@@ -142,12 +131,7 @@ public class CategoryService {
         Set<Category> children = sortSubCategories(parent.getChildren());
 
         for (Category subCategory : children) {
-            String name = "";
-            for (int i = 0; i < newSubLevel; i++) {
-                name += "--";
-            }
-            name += subCategory.getName();
-
+            String name = subCategory.getName();
             categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 
             listSubCategoriesUsedInForm(categoriesUsedInForm, subCategory, newSubLevel);

@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Formula;
+
 
 import com.freshcart.common.entity.storage.ImportDetail;
 import com.freshcart.common.Constants;
@@ -48,7 +50,7 @@ public class Product extends IdBasedEntity {
     private boolean enabled;
 
     @Column(name = "in_stock")
-    private Integer inStock;
+    private int inStock;
 
     private float cost;
 
@@ -89,6 +91,9 @@ public class Product extends IdBasedEntity {
     private boolean customerCanReview;
     @Transient
     private boolean reviewedByCustomer;
+
+    @Formula("price * (1 - discount_percent/100)")
+    private float finalPrice;
 
     public Product(Integer id) {
         this.id = id;
@@ -164,11 +169,10 @@ public class Product extends IdBasedEntity {
         this.enabled = enabled;
     }
 
-    public Integer getInStock() {
-        return inStock;
-    }
 
-    public void setInStock(Integer inStock) {
+    public int getInStock() { return inStock; }
+
+    public void setInStock(int inStock) {
         this.inStock = inStock;
     }
 
@@ -358,5 +362,8 @@ public class Product extends IdBasedEntity {
         this.reviewedByCustomer = reviewedByCustomer;
     }
 
+    public float getFinalPrice() {
+        return finalPrice;
+    }
 
 }

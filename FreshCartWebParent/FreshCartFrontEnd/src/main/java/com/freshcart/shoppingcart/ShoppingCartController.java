@@ -33,6 +33,9 @@ public class ShoppingCartController {
         Customer customer = controllerHelper.getAuthenticatedCustomer(request);
         List<CartItem> cartItems = cartService.listCartItems(customer);
 
+        Integer numberOfProducts = cartService.getNumberOfProducts(customer);
+        request.getSession().setAttribute("totalCartItems", numberOfProducts);
+
         float estimatedTotal = 0.0F;
 
         for (CartItem item : cartItems) {

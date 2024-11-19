@@ -2,7 +2,6 @@ package com.freshcart.shoppingcart;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.freshcart.MessageServiceFrontend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +19,6 @@ public class ShoppingCartRestController {
     private ShoppingCartService cartService;
     @Autowired
     private CustomerService customerService;
-    @Autowired
-    private MessageServiceFrontend messageService;
 
     @PostMapping("/cart/add/{productId}/{quantity}")
     public String addProductToCart(@PathVariable("productId") Integer productId,
@@ -31,9 +28,12 @@ public class ShoppingCartRestController {
             Customer customer = getAuthenticatedCustomer(request);
             Integer updatedQuantity = cartService.addProduct(productId, quantity, customer);
 
-            return updatedQuantity + " item(s) of this product were added to your shopping cart.";
+            Integer numberOfProducts = cartService.getNumberOfProducts(customer);
+            request.getSession().setAttribute("totalCartItems", numberOfProducts);
+
+            return String.format("%d_%d", updatedQuantity, numberOfProducts);
         } catch (CustomerNotFoundException ex) {
-           return messageService.getMessage("MUST_LOGIN_PRODUCT");
+            return "You must login to add this product to cart.";
         } catch (ShoppingCartException ex) {
             return ex.getMessage();
         }
@@ -69,6 +69,9 @@ public class ShoppingCartRestController {
         try {
             Customer customer = getAuthenticatedCustomer(request);
             cartService.removeProduct(productId, customer);
+
+            Integer numberOfProducts = cartService.getNumberOfProducts(customer);
+            request.getSession().setAttribute("totalCartItems", numberOfProducts);
 
             return "The product has been removed from your shopping cart.";
 

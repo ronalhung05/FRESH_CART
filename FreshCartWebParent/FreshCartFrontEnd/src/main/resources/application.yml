@@ -3,13 +3,25 @@ server:
   servlet:
     context-path: /FreshCart
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+      use-suffix-pattern: false
+    view:
+      suffix: ''  # Loại bỏ suffix mặc định
+    thymeleaf:
+      cache: false
+      suffix: .html
+      mode: HTML
+      servlet:
+        content-type: text/html
   datasource:
     url: jdbc:mysql://localhost:3306/freshcartdb
     username: root
     password: 123456
     #hikari:
-      #minimum-idle: 1
-      #maximum-pool-size: 2
+    #minimum-idle: 1
+    #maximum-pool-size: 2
   jpa:
     hibernate:
       ddl-auto: none
@@ -18,20 +30,21 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     show-sql: false
-    
+
+
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: 182557182495-4ojqb7gpdf0cee6i97md5b3tns5sbc1e.apps.googleusercontent.com
-            client-secret: zpJMafs7JAf4fNVLZirNcRnO
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
-            - email
-            - profile
+              - email
+              - profile
           facebook:
             client-id: 385247526176612
             client-secret: 690eed41082352ee7b0e1de7b72975d9
             scope:
-            - email
-            - public_profile
+              - email
+              - public_profile

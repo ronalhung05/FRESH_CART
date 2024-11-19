@@ -1,27 +1,34 @@
-$(document).ready(function() {
-	$(".linkMinus").on("click", function(evt) {
-		evt.preventDefault();
-		productId = $(this).attr("pid");
-		quantityInput = $("#quantity" + productId);
-		newQuantity = parseInt(quantityInput.val()) - 1;
+$(document).ready(function () {
+    // Xử lý nút giảm
+    $(".input-group").on("click", ".button-minus", function (evt) {
+        evt.preventDefault();
+        console.log("Button plus clicked");
+        let quantityField = $(this).siblings('.quantity-field');
+        let currentValue = parseInt(quantityField.val());
+        if (currentValue > parseInt(quantityField.attr('min'))) {
+            quantityField.val(currentValue - 1);
+        } else {
+            showWarningMessage('Minimum quantity is ' + quantityField.attr('min'));
+        }
+    });
 
-		if (newQuantity > 0) {
-			quantityInput.val(newQuantity);
-		} else {
-			showWarningModal('Minimum quantity is 1');
-		}
-	});
+    // Xử lý nút tăng
+    $(".input-group").on("click", ".button-plus", function (evt) {
 
-	$(".linkPlus").on("click", function(evt) {
-		evt.preventDefault();
-		productId = $(this).attr("pid");
-		quantityInput = $("#quantity" + productId);
-		newQuantity = parseInt(quantityInput.val()) + 1;
+        evt.preventDefault();
+        console.log("Button plus clicked");
+        let quantityField = $(this).siblings('.quantity-field');
+        let currentValue = parseInt(quantityField.val());
+        quantityField.val(currentValue + 1);
+    });
 
-		if (newQuantity <= 5) {
-			quantityInput.val(newQuantity);
-		} else {
-			showWarningModal('Maximum quantity is 5');
-		}
-	});
+    // Ngăn người dùng nhập giá trị không hợp lệ
+    $(".quantity-field").on('input', function () {
+        let value = parseInt($(this).val());
+        let min = parseInt($(this).attr('min'));
+        if (isNaN(value) || value < min) {
+            $(this).val(min);
+            showWarningMessage('Minimum quantity is ' + min);
+        }
+    });
 });

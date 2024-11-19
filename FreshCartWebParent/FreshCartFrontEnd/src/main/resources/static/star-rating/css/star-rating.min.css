@@ -1,0 +1,64 @@
+/*!
+ * Custom Star Rating CSS
+ */
+
+.rating-stars {
+    display: inline-flex;
+    align-items: center;
+}
+
+.rating-stars .fas.fa-star {
+    font-size: inherit;
+    margin: 0 2px;
+}
+
+/* Size variants */
+.rating-xl .rating-stars {
+    font-size: 48px;
+}
+
+.rating-lg .rating-stars {
+    font-size: 40px;
+}
+
+.rating-md .rating-stars {
+    font-size: 32px;
+}
+
+.rating-sm .rating-stars {
+    font-size: 24px;
+}
+
+.rating-xs .rating-stars {
+    font-size: 16px;
+}
+
+/* Colors */
+.rating-stars .fas.fa-star[style*="color: #ffc107"] {
+    color: #ffc107 !important; /* Active star color */
+}
+
+.rating-stars .fas.fa-star[style*="color: #e4e5e9"] {
+    color: #e4e5e9 !important; /* Inactive star color */
+}
+
+/* Optional hover effect */
+.rating-stars:not(.is-display-only) .fas.fa-star:hover {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+/* For read-only ratings */
+.is-display-only .rating-stars {
+    cursor: default;
+}
+
+/* Optional animation */
+.rating-animate .rating-stars {
+    transition: all 0.25s ease;
+}
+
+/* Support for RTL */
+.rating-rtl .rating-stars {
+    direction: rtl;
+}
