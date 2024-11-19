@@ -30,21 +30,31 @@
                                 <ul class="nav nav-category list-unstyled" id="categoryCollapseMenu">
                                     <!-- Main category -->
                                     <li class="nav-item">
-                                        <a th:href="@{'/category/' + ${mainCategory.alias}}" 
-                                           class="category-item d-flex justify-content-between align-items-center py-2"
-                                           th:classappend="${mainCategory.alias == category.alias ? 'active' : ''}">
-                                            <span>[[${mainCategory.name}]]</span>
-                                            <i class="bi bi-chevron-up"></i>
-                                        </a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a th:href="@{'/category/' + ${mainCategory.alias}}" 
+                                               class="category-item flex-grow-1 py-2"
+                                               th:classappend="${mainCategory.alias == category.alias ? 'active' : ''}">
+                                                <span>[[${mainCategory.name}]]</span>
+                                            </a>
+                                            <button class="btn btn-link p-0 ms-2 toggle-btn" type="button">
+                                                <i class="bi bi-chevron-up"></i>
+                                            </button>
+                                        </div>
                                         
                                         <!-- Sub categories -->
                                         <ul class="list-unstyled ms-3 collapse show" th:if="${not #lists.isEmpty(mainCategory.children)}">
                                             <li class="nav-item" th:each="subCat : ${mainCategory.children}" th:if="${subCat.enabled}">
-                                                <a th:href="@{'/category/' + ${subCat.alias}}" 
-                                                   class="category-item d-flex justify-content-between align-items-center py-2">
-                                                    <span>[[${subCat.name}]]</span>
-                                                    <i class="bi bi-chevron-down" th:if="${not #lists.isEmpty(subCat.children)}"></i>
-                                                </a>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <a th:href="@{'/category/' + ${subCat.alias}}" 
+                                                       class="category-item flex-grow-1 py-2"
+                                                       th:classappend="${subCat.alias == category.alias ? 'active' : ''}">
+                                                        <span>[[${subCat.name}]]</span>
+                                                    </a>
+                                                    <button class="btn btn-link p-0 ms-2 toggle-btn" type="button" 
+                                                            th:if="${not #lists.isEmpty(subCat.children)}">
+                                                        <i class="bi bi-chevron-down"></i>
+                                                    </button>
+                                                </div>
                                                 
                                                 <!-- Child categories -->
                                                 <ul class="list-unstyled ms-3 collapse" 
@@ -52,7 +62,7 @@
                                                     th:if="${not #lists.isEmpty(subCat.children)}">
                                                     <li class="mb-2" th:each="childCat : ${subCat.children}" th:if="${childCat.enabled}">
                                                         <a th:href="@{'/category/' + ${childCat.alias}}" 
-                                                           class="category-item d-flex justify-content-between align-items-center py-2"
+                                                           class="category-item d-flex py-2"
                                                            th:classappend="${childCat.alias == category.alias ? 'active' : ''}">
                                                             <span>[[${childCat.name}]]</span>
                                                         </a>

@@ -94,7 +94,7 @@ public class ProductController {
             // Xử lý phân trang và sắp xếp
             Sort sortOption = ProductSpecification.getSort(sort);
             Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sortOption);
-            Page<Product> pageProducts = productService.listByPage(spec, pageable);
+            Page<Product> pageProducts = productService.listByPage(spec, pageable, category.getId());
 
             // Add attributes to model
             model.addAttribute("totalPages", pageProducts.getTotalPages());

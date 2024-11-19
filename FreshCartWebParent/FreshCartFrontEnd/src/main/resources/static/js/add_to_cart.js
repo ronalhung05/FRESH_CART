@@ -12,23 +12,23 @@ $(document).ready(function () {
 });
 
 function addToCart(productId) {
-    const quantity = $("#quantity" + productId).val();
-    const path = typeof contextPath !== 'undefined' ? contextPath : $(".buttonAdd2Cart").attr("data-context-path");
-
-    if (!quantity || quantity < 1) {
+    let quantity = $("#quantity" + productId).val();
+    
+    quantity = parseInt(quantity);
+    if (isNaN(quantity) || quantity < 1) {
         showWarningMessage("Please enter a valid quantity");
         return;
     }
 
-    const url = path + "cart/add/" + productId + "/" + quantity;
+    const url = contextPath + "cart/add/" + productId + "/" + quantity;
 
     $.ajax({
         type: "POST",
         url: url,
-        beforeSend: function (xhr) {
+        beforeSend: function(xhr) {
             xhr.setRequestHeader(csrfHeaderName, csrfValue);
         }
-    }).done(function (response) {
+    }).done(function(response) {
         if (response.includes("must login")) {
             showWarningMessage(response);
         } else if (response.includes("error")) {
@@ -38,7 +38,7 @@ function addToCart(productId) {
             showSuccessMessage(updatedQuantity + " item(s) of this product were added to your shopping cart.");
             updateCartBadge(totalItems);
         }
-    }).fail(function () {
+    }).fail(function() {
         showErrorMessage("Error while adding product to shopping cart.");
     });
 }

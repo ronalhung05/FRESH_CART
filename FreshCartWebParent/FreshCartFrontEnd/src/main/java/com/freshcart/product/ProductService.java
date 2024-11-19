@@ -85,7 +85,11 @@ public class ProductService {
         return repo.findAll(spec, pageable);
     }
 
-    public Page<Product> listByPage(Specification<Product> spec, Pageable pageable) {
+    public Page<Product> listByPage(Specification<Product> spec, Pageable pageable, Integer categoryId) {
+        if (pageable.getSort().equals(Sort.by("id"))) {
+            String categoryIDMatch = "-" + String.valueOf(categoryId) + "-";
+            return repo.findAllOrderByMostSold(categoryId, categoryIDMatch, pageable);
+        }
         return repo.findAll(spec, pageable);
     }
 
