@@ -30,7 +30,7 @@ public class OrderTrack extends IdBasedEntity {
     private OrderStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     public String getNotes() {

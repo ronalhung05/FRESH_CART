@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class Address extends AbstractAddressWithCountry {
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @Column(name = "default_address")

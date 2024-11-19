@@ -25,15 +25,15 @@ public class Review extends IdBasedEntity {
 
     private int votes;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Date reviewTime;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @Transient

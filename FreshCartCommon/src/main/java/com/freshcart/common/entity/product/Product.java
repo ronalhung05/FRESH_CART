@@ -49,30 +49,36 @@ public class Product extends IdBasedEntity {
 
     private boolean enabled;
 
-    @Column(name = "in_stock")
+    @Column(name = "in_stock", nullable = false)
     private int inStock;
 
+    @Column(nullable = false)
     private float cost;
 
+    @Column(nullable = false)
     private float price;
 
     @Column(name = "discount_percent")
     private float discountPercent;
 
+    @Column(nullable = false)
     private float length;
+    @Column(nullable = false)
     private float width;
+    @Column(nullable = false)
     private float height;
+    @Column(nullable = false)
     private float weight;
 
     @Column(name = "main_image", nullable = false)
     private String mainImage;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

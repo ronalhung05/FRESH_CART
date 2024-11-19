@@ -1,10 +1,6 @@
 package com.freshcart.common.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.freshcart.common.entity.product.Product;
 
@@ -13,11 +9,11 @@ import com.freshcart.common.entity.product.Product;
 public class CartItem extends IdBasedEntity {
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private int quantity;
