@@ -39,6 +39,7 @@ $(document).ready(function () {
         const productAmount = $("#productAmount").val();
         const productCost = $("#productCost").val();
         const productUnit = $("#productUnit").val();
+        const productImage = $("#productSelect option:selected").data("image-url");
 
         if (selectedProductId && productAmount && productCost) {
             // Check if product is already in the table (to prevent duplicates)
@@ -55,6 +56,7 @@ $(document).ready(function () {
                 <tr data-row-index="${rowIndex}">
                     <td>${selectedProductId}</td>
                     <td>${selectedProductName}</td>
+                    <td><img src="${productImage}" alt="Product Image" style="width: 120px" class="img-fluid"/></td>
                     <td>${productAmount}</td>
                     <td>${productCost}</td>
                     <td>${totalCost.toFixed(2)}</td>
@@ -67,6 +69,10 @@ $(document).ready(function () {
                 </tr>
             `;
             $("#productTableBody").append(newRow);
+
+            // Scroll to the bottom of the table
+            const container = $("#productTableBody").closest("div");
+            container.animate({ scrollTop: container.prop("scrollHeight") }, 500);
 
             // Add hidden inputs for form submission
             const hiddenInputs = `
