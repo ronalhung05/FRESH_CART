@@ -18,7 +18,7 @@ public class MessageServiceFrontend {
 
     private void loadMessagesFromCSV() {
         try {
-            ClassPathResource resource = new ClassPathResource("message/message.csv");
+            ClassPathResource resource = new ClassPathResource("message/message-frontend.csv");
             try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(resource.getInputStream()))) {
                 String line;

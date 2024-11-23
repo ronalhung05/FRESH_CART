@@ -1,9 +1,6 @@
 NOT_FULL_FILL,Please Fill
 NOT_FIND_PRODUCT_ALIAS,Could not find any product with alias
 NOT_FIND_PRODUCT_ID,Could not find any product with id
-ERROR_CHECKOUT, Check out error!
-MUST_LOGIN_VOTE,You must login to vote the review!
-MUST_LOGIN_PRODUCT,You must login to add this product to cart!
 SETTING_GENERAL_SAVE_SUCCESS,General settings have been saved.
 SETTING_MAIL_SERVER_SAVE_SUCCESS,Mail server settings have been saved
 SETTING_MAIL_TEMPLATE_SAVE_SUCCESS,Mail template settings have been saved

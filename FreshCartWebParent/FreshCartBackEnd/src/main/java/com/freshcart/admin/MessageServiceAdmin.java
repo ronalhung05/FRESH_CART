@@ -15,7 +15,7 @@ public class MessageServiceAdmin {
     // the path file location
     public MessageServiceAdmin() {
         String currentDir = System.getProperty("user.dir");
-        String modifiedPath = currentDir + File.separator + "FreshCartWebParent" + File.separator + "message" + File.separator + "message.csv";
+        String modifiedPath = currentDir + File.separator + "FreshCartWebParent" + File.separator + "message" + File.separator + "message_backend.csv";
         //replace by message/message.csv
 
         //System.out.println("Modified file path: " + modifiedPath); // Debugging output

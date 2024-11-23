@@ -3,6 +3,7 @@
 
 <head>
     <head th:replace="fragments :: page_head(${pageTitle}, 'tag')"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
 </head>
 
 <body>
@@ -77,17 +78,15 @@
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Product:</label>
                     <div class="col-sm-9">
-                        <select class="form-control" id="productSelect">
-                            <option value="" selected disabled hidden>Please select a product</option>
-                            <th:block th:each="product : ${listProducts}">
-                                <option
-                                        th:value="${product.id}"
-                                        th:data-image-url="@{${product.mainImagePath}}"
-                                        th:text="${product.name}">
-                                </option>
-                            </th:block>
-                        </select>
-
+                        <input type="text" id="productSearch" class="form-control" placeholder="Type to search..." list="productList" />
+                        <!-- Datalist for displaying the dropdown options -->
+                        <datalist id="productList">
+                            <option th:each="product : ${listProducts}"
+                                    th:value="${product.id}"
+                                    th:data-image-url="${product.mainImagePath}"
+                                    th:text="${product.name}">
+                            </option>
+                        </datalist>
                     </div>
                 </div>
 
@@ -124,6 +123,6 @@
     </div>
 </div>
 <script th:src="@{/js/common_form.js}"></script>
-<script th:src="@{/js/import_form.js}"></script>
+<script th:src="@{/js/import_form_old.js}"></script>
 </body>
 </html>

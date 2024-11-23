@@ -1,15 +1,5 @@
 $(document).ready(function () {
     let rowIndex = 0; // Initialize row index
-    const originalProductMap = {}; // Map to store original product list with order
-
-    // Save original product list on page load into a map
-    $("#productSelect option").each(function (index) {
-        originalProductMap[$(this).val()] = {
-            id: $(this).val(),
-            name: $(this).text(),
-            order: index // Keep track of the original order
-        };
-    });
 
     // Open modal on button click
     $("#addProductBtn").on("click", function () {
@@ -34,20 +24,28 @@ $(document).ready(function () {
 
     // Save new product logic
     $("#saveProductBtn").on("click", function () {
-        const selectedProductId = $("#productSelect").val();
-        const selectedProductName = $("#productSelect option:selected").text();
+        const selectedProductId = $("#productSearch").val();
+        const selectedOption = $(`#productList option[value="${selectedProductId}"]`);
+
+        // Check if the selected product exists in the datalist
+        if (selectedOption.length === 0) {
+            alert("Please select a valid product from the list");
+            return;
+        }
+
+        // Check the product in the added list but want to add again
+        if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
+            alert("This product is already added to the list. Please delete it to edit or add.");
+            return;
+        }
+
+        const selectedProductName = selectedOption.text();
+        const productImage = selectedOption.data("image-url");
         const productAmount = $("#productAmount").val();
         const productCost = $("#productCost").val();
         const productUnit = $("#productUnit").val();
-        const productImage = $("#productSelect option:selected").data("image-url");
 
         if (selectedProductId && productAmount && productCost) {
-            // Check if product is already in the table (to prevent duplicates)
-            if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
-                alert("This product is already added. Please delete it first if you want to add it again.");
-                return;
-            }
-
             // Calculate total cost
             const totalCost = parseFloat(productAmount) * parseFloat(productCost);
 
@@ -56,18 +54,21 @@ $(document).ready(function () {
                 <tr data-row-index="${rowIndex}">
                     <td>${selectedProductId}</td>
                     <td>${selectedProductName}</td>
-                    <td><img src="${productImage}" alt="Product Image" style="width: 120px" class="img-fluid"/></td>
+                    <td><img src="${productImage}" alt="${productImage}" style="width: 120px" class="img-fluid"/></td>
                     <td>${productAmount}</td>
                     <td>${productCost}</td>
                     <td>${totalCost.toFixed(2)}</td>
                     <td>${productUnit}</td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-row-index="${rowIndex}" 
+                        <a href="javascript:void(0);"
+                        class="fas fa-trash fa-2x icon-dark link-delete" 
+                        data-row-index="${rowIndex}" 
                         data-product-id="${selectedProductId}" 
-                        data-product-name="${selectedProductName}">Delete</button>
+                        data-product-name="${selectedProductName}"></a>
                     </td>
                 </tr>
             `;
+
             $("#productTableBody").append(newRow);
 
             // Scroll to the bottom of the table
@@ -82,17 +83,14 @@ $(document).ready(function () {
                     <input type="hidden" name="productCosts" value="${productCost}" />
                 </div>
             `;
-            $("#hiddenInputsContainer").append(hiddenInputs);
 
-            // Remove the selected option from the dropdown
-            $(`#productSelect option[value="${selectedProductId}"]`).remove();
+            $("#hiddenInputsContainer").append(hiddenInputs);
 
             // Increment row index
             rowIndex++;
 
             // Close modal and reset modal form inputs
             $("#addProductModal").modal('hide');
-            $("#productSelect").val('');
             $("#productAmount").val(1);
             $("#productCost").val(1.0);
         } else {
@@ -101,36 +99,14 @@ $(document).ready(function () {
     });
 
     // Delete product logic with reinsertion in correct position using map
-    $("#productTableBody").on("click", ".delete-btn", function () {
+    $("#productTableBody").on("click", ".link-delete", function () {
         const indexToDelete = $(this).data("row-index");
-        const productIdToReAdd = $(this).data("product-id");
 
         // Remove the table row with the matching index
         $(`tr[data-row-index="${indexToDelete}"]`).remove();
 
         // Remove associated hidden inputs
         $(`#hiddenInputs-${indexToDelete}`).remove();
-
-        // Use the originalProductMap to find the original order and reinsert
-        if (originalProductMap[productIdToReAdd]) {
-            const productToReAdd = originalProductMap[productIdToReAdd];
-            const newOption = `<option value="${productToReAdd.id}">${productToReAdd.name}</option>`;
-
-            // Insert at the correct position based on the original order
-            const options = $("#productSelect option");
-            let inserted = false;
-            for (let i = 0; i < options.length; i++) {
-                if (originalProductMap[$(options[i]).val()].order > productToReAdd.order) {
-                    $(options[i]).before(newOption);
-                    inserted = true;
-                    break;
-                }
-            }
-            if (!inserted) {
-                // If not inserted, add at the end
-                $("#productSelect").append(newOption);
-            }
-        }
     });
 
     // Cancel button logic
