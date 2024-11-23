@@ -4,6 +4,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,25 +14,27 @@ public class MessageServiceFrontend {
 
     // the path file location
     public MessageServiceFrontend() {
-        String currentDir = System.getProperty("user.dir");
-        String modifiedPath = currentDir + File.separator + "FreshCartWebParent" + File.separator + "message" + File.separator + "message_frontend.csv";
-        //replace by message/message.csv
-        //System.out.println("Modified file path: " + modifiedPath); // Debugging output
-        loadMessagesFromCSV(modifiedPath);
+        String resourcePath = "message/message_frontend.csv"; // Relative path inside resources
+        loadMessagesFromCSV(resourcePath);
     }
 
     private void loadMessagesFromCSV(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",", 2); // 2 parts (key message and message value)
-                if (parts.length >= 2) {
-                    String key = parts[0].trim();
-                    String message = parts[1].trim();
-                    messages.put(key, message);
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath)) {
+            if (inputStream == null) {
+                throw new RuntimeException("File not found: " + filePath);
+            }
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split(",", 2); // 2 parts (key message and message value)
+                    if (parts.length >= 2) {
+                        String key = parts[0].trim();
+                        String message = parts[1].trim();
+                        messages.put(key, message);
+                    }
                 }
             }
-        } catch (IOException e) { // don't have file -> showing error at run time
+        } catch (IOException e) {
             String errorMessage = "Error while accessing the CSV file at " + filePath + ": " + e.getMessage();
             System.err.println(errorMessage);
             throw new RuntimeException(errorMessage, e);
