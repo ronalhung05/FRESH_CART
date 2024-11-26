@@ -1,6 +1,7 @@
 package com.freshcart.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,11 +12,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import com.freshcart.security.oauth.CustomerOAuth2UserService;
 import com.freshcart.security.oauth.OAuth2LoginSuccessHandler;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +28,10 @@ public class WebSecurityConfig {
     @Autowired private CustomerOAuth2UserService oAuth2UserService;
     @Autowired private OAuth2LoginSuccessHandler oauth2LoginHandler;
     @Autowired private DatabaseLoginSuccessHandler databaseLoginHandler;
+
+    @Qualifier("dataSource")
+    @Autowired
+    private DataSource dataSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,15 +50,21 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public ReCaptchaValidationFilter reCaptchaValidationFilter() {
+        return new ReCaptchaValidationFilter();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/account_details", "/update_account_details", 
-                           "/orders/**", "/cart", "/address_book/**", 
+                .antMatchers("/account_details", "/update_account_details",
+                           "/orders/**", "/cart", "/address_book/**",
                            "/checkout", "/place_order", "/reviews/**",
-                           "/process_paypal_order", "/write_review/**", 
+                           "/process_paypal_order", "/write_review/**",
                            "/post_review").authenticated()
                 .anyRequest().permitAll()
                 .and()
+                .addFilterBefore(reCaptchaValidationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                     .loginPage("/login")
                     .usernameParameter("email")
@@ -73,7 +87,7 @@ public class WebSecurityConfig {
                 .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-                
+
         return http.build();
     }
 
@@ -89,4 +103,6 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+
 }
