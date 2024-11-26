@@ -11,6 +11,7 @@
 			<a
 				th:class="'fas ' + ${iconName} + ' fa-2x icon-dark linkUpdateStatus'"
 				th:id="'link' + ${statusName} + ${order.id}"
+				th:data-current-status="${order.status}"
 				th:orderId="${order.id}" th:status="${statusName}"
 				th:href="@{'/orders_shipper/update/' + ${order.id} + '/' + ${statusName}}"></a>
 		</th:block>
