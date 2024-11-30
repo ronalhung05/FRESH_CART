@@ -32,7 +32,7 @@ import java.util.List;
 
 @Controller
 public class ImportController {
-    private String defaultRedirectURL = "redirect:/imports/page/1?sortField=transactionTime&sortDir=desc";
+    private String defaultRedirectURL = "redirect:/imports/page/1?sortField=id&sortDir=asc";
     @Autowired
     private ImportService importService;
     @Autowired
@@ -52,11 +52,9 @@ public class ImportController {
     @GetMapping("/imports/page/{pageNum}")
     public String listByPage(
             @PagingAndSortingParam(listName = "listImports", moduleURL = "/imports") PagingAndSortingHelper helper,
-            @PathVariable(name = "pageNum") int pageNum,
-            HttpServletRequest request
+            @PathVariable(name = "pageNum") int pageNum
     ) {
         importService.listByPage(pageNum, helper);
-        loadCurrencySettingImport(request);
         return "storage/import";
     }
     private void loadCurrencySettingImport(HttpServletRequest request) {
@@ -93,6 +91,7 @@ public class ImportController {
         model.addAttribute("user",user);
         model.addAttribute("listProducts",listProducts);
         model.addAttribute("pageTitle", "Create New Import");
+        model.addAttribute("moduleURL", "/imports/new");
 
         return "storage/import_form";
     }

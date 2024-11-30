@@ -10,6 +10,22 @@ $(document).ready(function() {
 
 		showImageThumbnail(this);
 	});
+
+	// Generic password toggle function
+	$(".password-toggler").click(function() {
+		// Find the closest password input field
+		var passwordField = $(this).closest('.password-field').find('input[type="password"], input[type="text"]');
+		var icon = $(this);
+		
+		// Toggle password visibility
+		if (passwordField.attr('type') === 'password') {
+			passwordField.attr('type', 'text');
+			icon.removeClass('bi-eye-slash').addClass('bi-eye');
+		} else {
+			passwordField.attr('type', 'password');
+			icon.removeClass('bi-eye').addClass('bi-eye-slash');
+		}
+	});
 });
 
 function showImageThumbnail(fileInput) {
@@ -41,12 +57,4 @@ function showModalDialog(title, message) {
 	$("#modalTitle").text(title);
 	$("#modalBody").text(message);
 	$("#modalDialog").modal();
-}
-
-function showErrorModal(message) {
-	showModalDialog("Error", message);
-}
-
-function showWarningModal(message) {
-	showModalDialog("Warning", message);
 }

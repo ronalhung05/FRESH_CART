@@ -1,90 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('Shipping Rates - Shopme Admin', 'none')">
-</head>
+<head th:replace="fragments :: page_head('Shipping Rates - FreshCart Admin', 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Shipping Rates</h2>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
+        
+        <!-- main -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <!-- header -->
+                <div class="row mb-8">
+                    <div class="col-md-12">
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>Shipping Rates</h2>
+                            </div>
+                            <div>
+                                <a th:href="@{/shipping_rates/new}" class="btn btn-primary">Add Shipping Rate</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<div class="card h-100 card-lg">
-			<div class="d-flex justify-content-between align-items-center mb-3">
-				<div th:replace="fragments :: search_form_and_message"></div>
+                <!-- Search and Table -->
+                <div class="row">
+                    <div class="col-xl-12 col-12 mb-5">
+                        <div class="card h-100 card-lg">
+                            <!-- Search Form -->
+                            <div class="p-4">
+                                <div th:replace="fragments :: search_form_and_message" />
+                            </div>
 
-				<a th:href="@{/shipping_rates/new}" class="btn btn-primary d-flex align-items-center" style="height: 38px; background-color: #008800; margin-right: 35px;">
-					<i class="fas fa-plus-square" style="font-size: 20px; color: white;"></i>
-				</a>
-			</div>
+                            <!-- Table -->
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th th:replace="fragments :: column_link('id', 'ID', 'none')" />
+                                                <th th:replace="fragments :: column_link('country', 'Country', 'none')" />
+                                                <th th:replace="fragments :: column_link('state', 'State', 'none')" />
+                                                <th th:replace="fragments :: column_link('rate', 'Rate', 'none')" />
+                                                <th th:replace="fragments :: column_link('days', 'Days', 'none')" />
+                                                <th th:replace="fragments :: column_link('codSupported', 'COD Supported', 'none')" />
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="rate : ${shippingRates}">
+                                                <td>[[${rate.id}]]</td>
+                                                <td>[[${rate.country.name}]]</td>
+                                                <td>[[${rate.state}]]</td>
+                                                <td>[[${rate.rate}]]</td>
+                                                <td>[[${rate.days}]]</td>
+                                                <td>
+                                                    <div th:replace="shipping_rates/shipping_rates_fragment :: cod_support" />
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-light btn-icon-text" 
+                                                       th:href="@{'/shipping_rates/edit/' + ${rate.id}}"
+                                                       data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                        <i class="bi bi-pencil fs-5"></i>
+                                                    </a>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:replace="fragments :: pagination('shipping rates')"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
-			<div class="card">
-				<div class="card-body p-0">
-					<div class="table-responsive">
-						<table class="table table-centered table-hover">
-							<thead class="bg-light">
-							<tr>
-								<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
-								<th th:replace="fragments :: column_link('country', 'Country', 'none')" />
-								<th th:replace="fragments :: column_link('state', 'State', 'none')" />
-								<th th:replace="fragments :: column_link('rate', 'Rate', 'none')" />
-								<th th:replace="fragments :: column_link('days', 'Days', 'none')" />
-								<th th:replace="fragments :: column_link('codSupported', 'COD Supported', 'none')" />
-								<th></th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr th:each="rate : ${shippingRates}">
-								<td>[[${rate.id}]]</td>
-								<td>[[${rate.country.name}]]</td>
-								<td>[[${rate.state}]]</td>
-								<td>[[${rate.rate}]]</td>
-								<td>[[${rate.days}]]</td>
-								<td>
-									<div th:replace="shipping_rates/shipping_rates_fragment :: cod_support" />
-								</td>
-								<td>
-									<div class="dropdown">
-										<a class="fas fa-ellipsis-v icon-green" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" title="Options"></a>
-										<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-											<li>
-												<div th:replace="fragments :: edit('shipping rate', '/shipping_rates/edit/' + ${rate.id})" />
-											</li>
-											<li>
-												<div th:replace="fragments :: delete('shipping rate', ${rate.id}, '/shipping_rates/delete/' + ${rate.id}, true)" />
-											</li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+    <div th:replace="modal_fragments :: confirm_modal" />
+    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: common-js"></div>
 
-			<div th:replace="fragments :: pagination('shipping rates')"></div>
-		</div>
+    <script type="text/javascript">
+        moduleURL = "[[@{/shipping_rates}]]";
 
-		<div th:replace="modal_fragments :: confirm_modal" />
-		<div th:replace="fragments :: footer"></div>
+        $(document).ready(function() {
+            var message = "[[${message}]]";
+            if (message) {
+                showSuccessMessage(message);
+            }
 
-	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/shipping_rates}]]";
-
-		$(document).ready(function () {
-			$(".link-delete").on("click", function (e) {
-				e.preventDefault();
-				showDeleteConfirmModal($(this), 'shipping rate');
-			});
-		});
-	</script>
+            $(".link-delete").on("click", function(e) {
+                e.preventDefault();
+                showDeleteConfirmModal($(this), 'shipping rate');
+            });
+        });
+    </script>
 </body>
-
 </html>

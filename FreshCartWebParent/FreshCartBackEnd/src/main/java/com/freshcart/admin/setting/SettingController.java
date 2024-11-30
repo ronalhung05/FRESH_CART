@@ -34,11 +34,12 @@ public class SettingController {
     @Autowired
     private MessageServiceAdmin messageService;
     @GetMapping("/settings")
-    public String listAll(Model model) {
+    public String listAll(@RequestParam(name = "tab", defaultValue = "general") String tab, Model model) {
         List<Setting> listSettings = service.listAllSettings();
         List<Currency> listCurrencies = currencyRepo.findAllByOrderByNameAsc();
 
         model.addAttribute("listCurrencies", listCurrencies);
+        model.addAttribute("currentTab", tab);
 
         for (Setting setting : listSettings) {
             model.addAttribute(setting.getKey(), setting.getValue());
@@ -62,7 +63,7 @@ public class SettingController {
 
         ra.addFlashAttribute("message", messageService.getMessage("SETTING_GENERAL_SAVE_SUCCESS"));
 
-        return "redirect:/settings";
+        return "redirect:/settings?tab=general";
     }
 
     private void saveSiteLogo(MultipartFile multipartFile, GeneralSettingBag settingBag) throws IOException {
@@ -105,7 +106,7 @@ public class SettingController {
 
         ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_SERVER_SAVE_SUCCESS"));
 
-        return "redirect:/settings#mailServer";
+        return "redirect:/settings?tab=mailServer";
     }
 
     @PostMapping("/settings/save_mail_templates")
@@ -115,7 +116,7 @@ public class SettingController {
 
         ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_TEMPLATE_SAVE_SUCCESS"));
 
-        return "redirect:/settings#mailTemplates";
+        return "redirect:/settings?tab=mailTemplates";
     }
 
     @PostMapping("/settings/save_payment")
@@ -125,6 +126,6 @@ public class SettingController {
 
         ra.addFlashAttribute("message", messageService.getMessage("SETTING_PAYMENT_SAVE_SUCCESS"));
 
-        return "redirect:/settings#payment";
+        return "redirect:/settings?tab=payment";
     }
 }

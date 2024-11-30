@@ -3,53 +3,49 @@ var productDetailCount;
 $(document).ready(function() {
 	productDetailCount = $(".hiddenProductId").length;
 
-	$("#products").on("click", "#linkAddProduct", function(e) {
+	$("#linkAddProduct").on("click", function(e) {
 		e.preventDefault();
-		link = $(this);
-		url = link.attr("href");
-
+		let url = contextPath + "orders/search_product";
+		
+		let modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+		
 		$("#addProductModal").on("shown.bs.modal", function() {
 			$(this).find("iframe").attr("src", url);
 		});
-
-		$("#addProductModal").modal();
-	})
+		
+		modal.show();
+	});
 });
 
 $(document).on("input", ".cost-input, .price-input, .ship-input, .tax-input", function () {
-	validateInput(this, /^\d*\.?\d*$/, "Vui lòng chỉ nhập số!");
+	validateInput(this, /^\d*\.?\d*$/, "Please enter numbers only!");
 });
 
 $(document).on("input", ".firstName-input, .lastName-input", function () {
-	validateInput(this, /^[a-zA-Z\s]*$/, "Vui lòng chỉ nhập chữ!", 50);
+	validateInput(this, /^[a-zA-Z\s]*$/, "Please enter letters only!", 50);
 });
 
 $(document).on("input", ".phone-input", function () {
-	validateInput(this, /^\d*\.?\d*$/, "Vui lòng chỉ nhập số!", 11);
+	validateInput(this, /^\d*\.?\d*$/, "Please enter numbers only!", 11);
 });
 
-// Hàm kiểm tra input với regex và thông báo lỗi
 function validateInput(input, regex, errorMessage, maxLength = null) {
 	const value = input.value;
 
-	// Nếu giá trị không khớp với regex, hiển thị lỗi
 	if (!regex.test(value)) {
-		input.value = value.slice(0, -1); // Loại bỏ ký tự không hợp lệ
+		input.value = value.slice(0, -1);
 		showErrorMessage(input, errorMessage);
 	} else if (maxLength !== null && value.length > maxLength) {
-		// Nếu độ dài vượt quá giới hạn, cắt bớt ký tự thừa
 		input.value = value.slice(0, maxLength);
-		showErrorMessage(input, `Chỉ được nhập tối đa ${maxLength} ký tự.`);
+		showErrorMessage(input, `Maximum ${maxLength} characters allowed.`);
 	} else {
 		clearErrorMessage(input);
 	}
 }
 
-// Hiển thị thông báo lỗi
 function showErrorMessage(input, message) {
 	let errorContainer = $(input).next(".error-message");
 
-	// Nếu chưa tồn tại, tạo phần tử hiển thị lỗi
 	if (errorContainer.length === 0) {
 		errorContainer = $("<div class='error-message alert alert-danger p-1 mt-1'></div>")
 			.hide()
@@ -59,7 +55,6 @@ function showErrorMessage(input, message) {
 	errorContainer.text(message).fadeIn(200);
 }
 
-// Xóa thông báo lỗi
 function clearErrorMessage(input) {
 	$(input).next(".error-message").fadeOut(200, function () {
 		$(this).remove();
@@ -96,7 +91,8 @@ function getShippingCost(productId) {
 		shippingCost = 0.0;
 		getProductInfo(productId, shippingCost);
 	}).always(function() {
-		$("#addProductModal").modal("hide");
+		let modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
+		modal.hide();
 	});
 }
 
@@ -105,7 +101,7 @@ function getProductInfo(productId, shippingCost) {
 	$.get(requestURL, function(productJson) {
 		console.log(productJson);
 		productName = productJson.name;
-		mainImagePath = contextPath.substring(0, contextPath.length - 1) + productJson.imagePath;
+		mainImagePath = productJson.imagePath;
 		productCost = $.number(productJson.cost, 2);
 		productPrice = $.number(productJson.price, 2);
 		inStock = productJson.inStock;
@@ -127,88 +123,71 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
 	quantityId = "quantity" + nextCount;
 	priceId = "price" + nextCount;
 	subtotalId = "subtotal" + nextCount;
-	mainImagePath = mainImagePath.replace("/FreshCartAdmin", "");
 
 	htmlCode = `
         <tr id="${rowId}">
             <input type="hidden" name="detailId" value="0" />
             <input type="hidden" name="productId" value="${productId}" class="hiddenProductId" />
 
-            <td class="product-column">
-                <div class="product-container">
-                    <img src="${mainImagePath}" class="img-fluid product-image" style="width: 60px; height: 60px;" />
-                    <div class="ms-2">
-                        <b class="product-name">${productName}</b>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img src="${mainImagePath}" alt="" class="icon-shape icon-xl">
+                    <div class="ms-3">
+                        <h5 class="mb-0">${productName}</h5>
                     </div>
                 </div>
             </td>
-
-            <td class="unit-cost-column">
-                <input type="number" required class="form-control w-auto cost-input"
-                       name="productDetailCost"
-                       rowNumber="${nextCount}"
-                       value="${productCost}"
-                       step="0.01" />
-            </td>
-
-            <td class="quantity-column">
-                <input type="number" required class="form-control w-auto quantity-input"
-                       name="quantity"
-                       id="${quantityId}"
-                       rowNumber="${nextCount}"
-                       value="1"
-                       max="${inStock}"
-                       min="1" />
-            </td>
-
-            <td class="price-column">
-                <input type="number" required class="form-control w-auto price-input"
-                       name="productPrice"
-                       id="${priceId}"
-                       rowNumber="${nextCount}"
-                       value="${productPrice}"
-                       step="0.01" />
-            </td>
-
-            <td class="total-column">
-                <input type="text" readonly class="form-control w-auto subtotal-output"
-                       name="productSubtotal"
-                       id="${subtotalId}"
-                       value="${(productPrice * 1).toFixed(2)}" />
-            </td>
-
-            <td class="shipping-cost-column">
-                <input type="number" required class="form-control w-auto ship-input"
-                       name="productShipCost"
-                       value="${shippingCost}"
-                       step="0.01" />
-            </td>
-
             <td>
-                <a href="#" class="fas fa-trash icon-dark linkRemove" rowNumber="${nextCount}">
+                <input type="text" class="form-control w-auto cost-input" name="productDetailCost"
+                       value="${productCost}" rowNumber="${nextCount}"
+                       min="0" step="any" required />
+            </td>
+            <td>
+                <div class="input-group input-spinner">
+                    <input type="number" class="form-control w-auto quantity-input" name="quantity"
+                           id="${quantityId}" value="1"
+                           max="${inStock}"
+                           rowNumber="${nextCount}" min="1" step="1" required />
+                </div>
+            </td>
+            <td>
+                <input type="text" class="form-control w-auto price-input" name="productPrice"
+                       id="${priceId}"
+                       rowNumber="${nextCount}" value="${productPrice}"
+                       min="0" step="any" required/>
+            </td>
+            <td>
+                <input type="text" class="form-control w-auto subtotal-output" name="productSubtotal"
+                       id="${subtotalId}" value="${productPrice}" readonly />
+            </td>
+            <td>
+                <input type="text" class="form-control w-auto ship-input" name="productShipCost"
+                       value="${shippingCost}"
+                       min="0" step="any" required/>
+            </td>
+            <td>
+                <a href="#" class="text-muted linkRemove" rowNumber="${nextCount}">
+                    <i class="feather-icon icon-trash-2"></i>
                 </a>
             </td>
         </tr>
     `;
 
-	return htmlCode;
+    return htmlCode;
 }
-
-
-
 
 function isProductAlreadyAdded(productId) {
 	productExists = false;
-
+	
 	$(".hiddenProductId").each(function(e) {
 		aProductId = $(this).val();
-
+		
 		if (aProductId == productId) {
 			productExists = true;
 			return;
 		}
 	});
-
+	
 	return productExists;
 }
 

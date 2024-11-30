@@ -2,72 +2,88 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" th:remove="tag">
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Order ID:</label>
-			<div class="col-sm-10">
-				<input type="text" readonly class="form-control"
-					th:value="${order.id}">
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Customer:</label>
-			<div class="col-sm-10">
-				<input type="text" readonly class="form-control"
-					th:value="${order.customer.fullName}">
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Product Cost:</label>
-			<div class="col-sm-10">
-				<input type="text" th:field="*{productCost}" required readonly
-					class="form-control" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Subtotal:</label>
-			<div class="col-sm-10">
-				<input type="text" th:field="*{subtotal}" required readonly
-					class="form-control" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Shipping Cost:</label>
-			<div class="col-sm-10">
-				<input type="text" th:field="*{shippingCost}" required readonly
-					class="form-control" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Tax:</label>
-			<div class="col-sm-10">
-				<input type="text" th:field="*{tax}" required class="form-control tax-input" />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Total:</label>
-			<div class="col-sm-10">
-				<input type="text" th:field="*{total}" required readonly class="form-control"  />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Payment Method:</label>
-			<div class="col-sm-10">
-				<select th:field="*{paymentMethod}" class="form-control" required
-					style="max-width: 150px">
-					<option
-						th:each="pm : ${T(com.freshcart.common.entity.order.PaymentMethod).values()}"
-						th:value="${pm}" th:text="${pm}" />
-				</select>
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Status:</label>
-			<div class="col-sm-10">
-				<!-- Trường nhập liệu readonly -->
-				<input type="text" id="overviewStatus" name="status" th:field="*{status}"
-					   class="form-control" style="max-width: 150px" readonly />
-			</div>
-		</div>
+<div th:fragment="content" th:remove="tag">
+    <div class="row g-3">
+        <!-- Order ID -->
+        <div class="col-md-6">
+            <label class="form-label">Order ID</label>
+            <input type="text" readonly class="form-control bg-light"
+                   th:value="${order.id}">
+        </div>
 
-	</div>
+        <!-- Customer -->
+        <div class="col-md-6">
+            <label class="form-label">Customer</label>
+            <input type="text" readonly class="form-control bg-light"
+                   th:value="${order.customer.fullName}">
+        </div>
+
+        <!-- Product Cost -->
+        <div class="col-md-6">
+            <label class="form-label">Product Cost</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" th:field="*{productCost}" required readonly
+                       class="form-control bg-light" />
+            </div>
+        </div>
+
+        <!-- Subtotal -->
+        <div class="col-md-6">
+            <label class="form-label">Subtotal</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" th:field="*{subtotal}" required readonly
+                       class="form-control bg-light" />
+            </div>
+        </div>
+
+        <!-- Shipping Cost -->
+        <div class="col-md-6">
+            <label class="form-label">Shipping Cost</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" th:field="*{shippingCost}" required readonly
+                       class="form-control bg-light" />
+            </div>
+        </div>
+
+        <!-- Tax -->
+        <div class="col-md-6">
+            <label class="form-label">Tax</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" th:field="*{tax}" required 
+                       class="form-control tax-input" />
+            </div>
+        </div>
+
+        <!-- Total -->
+        <div class="col-md-6">
+            <label class="form-label">Total</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" th:field="*{total}" required readonly
+                       class="form-control bg-light" />
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="col-md-6">
+            <label class="form-label">Payment Method</label>
+            <select th:field="*{paymentMethod}" class="form-select" required>
+                <option th:each="pm : ${T(com.freshcart.common.entity.order.PaymentMethod).values()}"
+                        th:value="${pm}" th:text="${pm}" />
+            </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <input type="text" id="overviewStatus" name="status" th:field="*{status}"
+                   class="form-control bg-light" readonly />
+        </div>
+    </div>
+</div>
+</body>
+</html>

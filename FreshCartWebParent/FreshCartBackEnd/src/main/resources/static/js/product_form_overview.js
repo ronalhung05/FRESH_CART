@@ -1,18 +1,13 @@
-dropdownBrands = $("#brand");
-dropdownCategories = $("#category");
+dropdownBrands = $("select[name='brand']");
+dropdownCategories = $("select[name='category']");
 
 $(document).ready(function() {
-
-	$("#shortDescription").richText();
-	$("#fullDescription").richText();
-
 	dropdownBrands.change(function() {
 		dropdownCategories.empty();
 		getCategories();
 	});
 
 	getCategoriesForNewForm();
-
 });
 
 function getCategoriesForNewForm() {
@@ -20,20 +15,27 @@ function getCategoriesForNewForm() {
 	editMode = false;
 
 	if (catIdField.length) {
-		editMode = true;
+		 editMode = true;
 	}
 
-	if (!editMode) getCategories();
+	if (!editMode) {
+		dropdownCategories.empty();
+		getCategories();
+	}
 }
 
 function getCategories() {
 	brandId = dropdownBrands.val();
+	if (!brandId) return;
+
 	url = brandModuleURL + "/" + brandId + "/categories";
 
 	$.get(url, function(responseJson) {
 		$.each(responseJson, function(index, category) {
 			$("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
 		});
+	}).fail(function() {
+		showErrorMessage("Error loading categories for selected brand");
 	});
 }
 
@@ -49,13 +51,12 @@ function checkUnique(form) {
 		if (response == "OK") {
 			form.submit();
 		} else if (response == "Duplicate") {
-			showWarningModal("There is another product having the name " + productName);
+			showWarningMessage("There is another product having the name " + productName);
 		} else {
-			showErrorModal("Unknown response from server");
+			showErrorMessage("Unknown response from server");
 		}
-
 	}).fail(function() {
-		showErrorModal("Could not connect to the server");
+		showErrorMessage("Could not connect to the server");
 	});
 
 	return false;

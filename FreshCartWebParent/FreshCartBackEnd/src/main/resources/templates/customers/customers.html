@@ -1,27 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Customers - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Customers - FreshCart Admin', 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Customers</h2>
+  <div th:replace="navigation :: top_nav"></div>
+  <div class="main-wrapper">
+    <div th:replace="navigation :: menu"></div>
+    
+    <!-- main content -->
+    <main class="main-content-wrapper bg-white">
+      <div class="container">
+        <!-- header -->
+        <div class="row mb-8">
+          <div class="col-md-12">
+            <div class="d-md-flex justify-content-between align-items-center">
+              <div>
+                <h2>Customers</h2>
+                
+              </div>
+            </div>
+          </div>
+        </div>
 
-			<a th:href="@{/customers/export/csv}"
-				class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
-		</div>
+        <!-- Search and Table -->
+        <div class="row">
+          <div class="col-xl-12 col-12 mb-5">
+            <div class="card h-100 card-lg">
+              <!-- Search Form -->
+              <div class="p-4">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div th:replace="fragments :: search_form_and_message" />
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <a th:href="@{/customers/export/csv}" class="btn btn-secondary">
+                      <i class="fas fa-file-csv"></i> Export to CSV
+                    </a>
+                    <a th:href="@{/customers/export/excel}" class="btn btn-secondary ms-2">
+                      <i class="fas fa-file-excel"></i> Export to Excel
+                    </a>
+                  </div>
+                </div>
+              </div>
 
-		<div th:replace="fragments :: search_form_and_message" />
-
-		<div class="full-details">
-			<table
-				class="table table-bordered table-striped table-hover table-responsive-xl">
-				<thead class="thead-dark">
-					<tr>
-						<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
+              <!-- Table -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
+                    <thead class="bg-light">
+                      <tr>
+                        <th th:replace="fragments :: column_link('id', 'ID', 'none')" />
 						<th
 							th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
 						<th
@@ -43,93 +72,73 @@
 						<th
 							th:replace="fragments :: column_link('country', 'Country', 'none')" />
 						<th
-							th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="customer : ${listCustomers}">
-						<td>[[${customer.id}]]</td>
-						<td>[[${customer.firstName}]]</td>
-						<td>[[${customer.lastName}]]</td>
-						<td class="hideable-column">[[${customer.email}]]</td>
-						<td class="hideable-column">[[${customer.city}]]</td>
-						<td class="hideable-column">[[${customer.state}]]</td>
-						<td>[[${customer.country.name}]]</td>
-						<td>
-							<div
-								th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
-						</td>
-						<td><a class="fas fa-file-alt fa-2x icon-green link-detail"
-							th:href="@{'/customers/detail/' + ${customer.id}}"
-							title="View details of this customer"></a> &nbsp;
-							<div
-								th:replace="fragments :: edit('customer', '/customers/edit/' + ${customer.id})" />
-							&nbsp;
-							<div
-								th:replace="fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+							th:replace="fragments :: column_link('enabled', 'Status', 'none')" />
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="customer : ${listCustomers}">
+                        <td>[[${customer.id}]]</td>
+                        <td>[[${customer.firstName}]]</td>
+                        <td>[[${customer.lastName}]]</td>
+                        <td>[[${customer.email}]]</td>
+                        <td>[[${customer.city}]]</td>
+                        <td>[[${customer.state}]]</td>
+                        <td>[[${customer.country.name}]]</td>
+                        <td>
+                          <div th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
+                        </td>
+                        <td>
+                          <a class="btn btn-light btn-icon-text link-detail-customer" th:href="@{'/customers/detail/' + ${customer.id}}" 
+                             data-bs-toggle="tooltip" data-bs-placement="top" title="View details">
+                            <i class="bi bi-eye fs-5"></i>
+                          </a>
+                          <a class="btn btn-light btn-icon-text" th:href="@{'/customers/edit/' + ${customer.id}}"
+                             data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div th:replace="fragments :: pagination('customers')"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-		<div class="less-details">
-			<div th:each="customer : ${listCustomers}" class="row m-1">
-				<div class="col-4">
-					<span><b>[[${customer.fullName}]]</b></span>
-				</div>
-				<div class="col-8">
-					<div class="mb-1">
-						<span>[[${customer.country.name}]]</span>
-					</div>
-					<div>
-						<div
-							th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})" />
-						&nbsp; <a class="fas fa-file-alt fa-2x icon-green link-detail"
-							th:href="@{'/customers/detail/' + ${customer.id}}"
-							title="View details of this customer"></a>
-						&nbsp;
-						<div th:replace="fragments :: edit('customer', '/customers/edit/' + ${customer.id})" />
-						&nbsp;
-						<div
-							th:replace="fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)" />
-					</div>
-				</div>
-				<div>&nbsp;</div>
-			</div>
-		</div>
+  <div class="modal fade" id="detailModal" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <!-- Modal content will be loaded here -->
+    </div>
+  </div>
 
-		<div th:replace="fragments :: pagination('customers')"></div>
+  <div th:replace="fragments :: footer"></div>
+  <div th:replace="fragments :: common-js"></div>
 
-		<div th:replace="modal_fragments :: confirm_modal" />
+  <script type="text/javascript">
+    moduleURL = "[[@{/customers}]]";
 
-		<div class="modal fade" id="detailModal">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content"></div>
-			</div>
-		</div>
+    $(document).ready(function() {
+      var message = "[[${message}]]";
+      if (message) {
+        showSuccessMessage(message);
+      }
 
-		<div th:replace="fragments :: footer"></div>
-
-	</div>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/customers}]]";
-
-		$(document).ready(function () {
-			$(".link-delete").on("click", function (e) {
-				e.preventDefault();
-				showDeleteConfirmModal($(this), 'customer');
-			});
-
-			$(".link-detail").on("click", function (e) {
-				e.preventDefault();
-				linkDetailURL = $(this).attr("href");
-				$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
-			});
-		});
-	</script>
+      $(".link-detail-customer").on("click", function (e) {
+        e.preventDefault();
+        let linkDetailURL = $(this).attr("href");
+        $("#detailModal").modal("show")
+            .find(".modal-dialog")
+            .load(linkDetailURL, function() {
+                // Callback sau khi load content xong
+            });
+      });
+    });
+  </script>
 </body>
-
 </html>

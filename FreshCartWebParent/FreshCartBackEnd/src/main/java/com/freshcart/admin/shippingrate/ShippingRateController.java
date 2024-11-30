@@ -42,6 +42,7 @@ public class ShippingRateController {
         model.addAttribute("rate", new ShippingRate());
         model.addAttribute("listCountries", listCountries);
         model.addAttribute("pageTitle", "New Rate");
+        model.addAttribute("moduleURL", "/shipping_rates/new");
 
         return "shipping_rates/shipping_rate_form";
     }

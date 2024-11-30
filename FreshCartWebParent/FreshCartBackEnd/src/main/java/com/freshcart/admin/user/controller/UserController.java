@@ -66,6 +66,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");
+        model.addAttribute("moduleURL", "/users/new");
 
         return "users/user_form";
     }
@@ -84,7 +85,9 @@ public class UserController {
             AmazonS3Util.removeFolder(uploadDir);
             AmazonS3Util.uploadFile(uploadDir, fileName, multipartFile.getInputStream());
         } else {
+            System.out.println("User: " + user);
             if (user.getPhotos().isEmpty()) user.setPhotos(null);
+
             service.save(user);
         }
         redirectAttributes.addFlashAttribute("message", messageService.getMessage("USER_SAVE_SUCCESS"));

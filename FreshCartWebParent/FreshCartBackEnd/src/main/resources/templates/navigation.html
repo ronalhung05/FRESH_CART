@@ -1,119 +1,402 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="">
 
 <body>
-	<div th:fragment="menu">
-		<form th:action="@{/logout}" method="post" th:hidden="true"
-			name="logoutForm">
-			<input type="submit" />
-		</form>
-		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-			<a class="navbar-brand" th:href="@{/}"> <img
-				th:src="@{/images/ShopmeAdminSmall.png}" />
-			</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#topNavbar">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="topNavbar">
-				<ul class="navbar-nav">
+    <!-- Top Navigation Bar Fragment -->
+    <div th:fragment="top_nav">
+        <nav class="navbar navbar-expand-lg navbar-glass">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <!-- Left side - Mobile menu toggle -->
+                    <div class="d-flex align-items-center">
+                        <a class="text-inherit d-block d-xl-none me-4" data-bs-toggle="offcanvas" href="#offcanvasExample">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-text-indent-right" viewBox="0 0 16 16">
+                                <path d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm10.646 2.146a.5.5 0 0 1 .708.708L11.707 8l1.647 1.646a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2zM2 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </a>
+                    </div>
 
-					<th:block sec:authorize="hasAuthority('Admin')">
-						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" data-toggle="dropdown"
-							th:href="@{/users}">Users</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" th:href="@{/users/new}">Create New</a>
-								<a class="dropdown-item" th:href="@{/users}">View All</a>
-							</div></li>
-					</th:block>
+                    <!-- Right side - User Profile -->
+                    <div class="ms-auto">
+                        <ul class="list-unstyled d-flex align-items-center mb-0">
+                            <!-- User Profile -->
+                            <li class="dropdown">
+                                <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img id="thumbnail" 
+                                         th:src="@{${#authentication.principal.user.photosImagePath}}" 
+                                         alt="Photos preview"
+                                         class="avatar avatar-md rounded-circle" />
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end p-0">
+                                    <div class="lh-1 px-5 py-4 border-bottom">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <h5 class="mb-0 h6 me-3" sec:authentication="principal.fullname"></h5>
+                                            <span class="badge bg-light-info text-dark-info text-nowrap" 
+                                                  th:text="${#strings.replace(#strings.replace(#authentication.principal.user.roles, '[', ''), ']', '')}">
+                                            </span>
+                                        </div>
+                                        <small class="text-muted mt-2" sec:authentication="principal.username"></small>
+                                    </div>
 
-					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
-						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" data-toggle="dropdown"
-							th:href="@{/categories}">Categories</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" th:href="@{/categories/new}">Create
-									New</a> <a class="dropdown-item" th:href="@{/categories}">View
-									All</a>
-							</div></li>
-						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" data-toggle="dropdown"
-							th:href="@{/brands}">Brands</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" th:href="@{/brands/new}">Create New</a>
-								<a class="dropdown-item" th:href="@{/brands}">View All</a>
-							</div></li>
-					</th:block>
+                                    <ul class="list-unstyled px-2 py-3">
+                                        <li>
+                                            <a class="dropdown-item" th:href="@{/}">
+                                                <i class="bi bi-house me-2"></i>Home
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" th:href="@{/account}">
+                                                <i class="bi bi-person me-2"></i>Profile
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasAuthority('Admin')">
+                                            <a class="dropdown-item" th:href="@{/settings}">
+                                                <i class="bi bi-gear me-2"></i>Settings
+                                            </a>
+                                        </li>
+                                    </ul>
 
-					<th:block
-						sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
-						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" data-toggle="dropdown"
-							th:href="@{/products}">Products</a>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" th:href="@{/products/new}"
-									sec:authorize="hasAnyAuthority('Admin', 'Editor')">Create
-									New</a> <a class="dropdown-item" th:href="@{/products}">View
-									All</a> <a class="dropdown-item"
-									sec:authorize="hasAuthority('Admin')" th:href="@{/reviews}">Reviews</a>
-							</div></li>
-					</th:block>
+                                    <div class="border-top px-5 py-3">
+                                        <a href="javascript:document.logoutForm.submit()" class="text-danger">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Log Out
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
 
-					<th:block sec:authorize="hasAuthority('Assistant')">
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/reviews}">Reviews</a></li>
-					</th:block>
+    <!-- Existing side menu fragment -->
+    <div th:fragment="menu">
+        <form th:action="@{/logout}" method="post" th:hidden="true"
+            name="logoutForm">
+            <input type="submit" />
+        </form>
 
-					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/customers}">Customers</a></li>
+        <!-- Main Navigation -->
+        <nav class="navbar-vertical-nav d-none d-xl-block">
+            <div class="navbar-vertical">
+                <div class="px-4 py-5">
+                    <a th:href="@{/}" class="navbar-brand">
+                        <img th:src="@{/images/ShopmeAdminSmall.png}" alt="">
+                    </a>
+                </div>
 
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/shipping_rates}">Shipping Rates</a></li>
-					</th:block>
+                <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
+                    <ul class="navbar-nav flex-column" id="sideNavbar">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/}" th:classappend="${moduleURL == '/' ? 'active' : ''}">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-house"></i></span>
+                                    <span class="nav-link-text">Dashboard</span>
+                                </div>
+                            </a>
+                        </li>
 
-					<th:block
-						sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper')">
-						<li class="nav-item"><a class="nav-link" th:href="@{/orders}">Orders</a>
-						</li>
-					</th:block>
+                        <li class="nav-item mt-6 mb-3">
+                            <span class="nav-label">Store Managements</span>
+                        </li>
 
-					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/reports}">Sales Report</a></li>
-					</th:block>
+                        <!-- Users Menu -->
+                        <th:block sec:authorize="hasAuthority('Admin')">
+                            <li class="nav-item">
+                                <a class="nav-link" 
+                                   th:classappend="${moduleURL != null && (moduleURL == '/users' || moduleURL == '/users/new') ? 'show' : 'collapsed'}"
+                                   href="#" 
+                                   data-bs-toggle="collapse" 
+                                   data-bs-target="#navUsers">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-people"></i></span>
+                                        <span class="nav-link-text">Users</span>
+                                    </div>
+                                </a>
+                                <div id="navUsers" 
+                                     class="collapse" 
+                                     th:classappend="${moduleURL != null && (moduleURL == '/users' || moduleURL == '/users/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" 
+                                               th:href="@{/users/new}" 
+                                               th:classappend="${moduleURL == '/users/new' ? 'active' : ''}">Add User</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" 
+                                               th:href="@{/users}" 
+                                               th:classappend="${moduleURL == '/users' ? 'active' : ''}">Users List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </th:block>
 
-					<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
-						<li class="nav-item"><a class="nav-link"
-							th:href="@{/imports}">Storage</a></li>
-					</th:block>
+                        <!-- Categories Menu -->
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <li class="nav-item">
+                                <a class="nav-link" 
+                                   th:classappend="${moduleURL != null && (moduleURL == '/categories' || moduleURL == '/categories/new') ? 'show' : 'collapsed'}"
+                                   href="#" 
+                                   data-bs-toggle="collapse" 
+                                   data-bs-target="#navCategories">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-list-task"></i></span>
+                                        <span class="nav-link-text">Categories</span>
+                                    </div>
+                                </a>
+                                <div id="navCategories" 
+                                     class="collapse"
+                                     th:classappend="${moduleURL != null && (moduleURL == '/categories' || moduleURL == '/categories/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/categories/new}" 
+                                               th:classappend="${moduleURL == '/categories/new' ? 'active' : ''}">Add Category</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/categories}" 
+                                               th:classappend="${moduleURL == '/categories' ? 'active' : ''}">Categories List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-					<li class="nav-item dropdown" sec:authorize="hasAuthority('Admin')">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown"
-						th:href="@{/settings}">Settings</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" th:href="@{/settings#general}">General</a>
-							<a class="dropdown-item" th:href="@{/settings#countries}">Countries</a>
-							<a class="dropdown-item" th:href="@{/settings#states}">States</a>
-							<a class="dropdown-item" th:href="@{/settings#mailServer}">Mail
-								Server</a> <a class="dropdown-item"
-								th:href="@{/settings#mailTemplate}">Mail Templates</a> <a
-								class="dropdown-item" th:href="@{/settings#payment}">Payment</a>
-						</div>
-					</li>
-					<li><span class="fas fa-user fa-2x icon-silver"></span></li>
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" data-toggle="dropdown"
-						th:href="@{/account}" sec:authentication="principal.fullname"></a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" id="logoutLink" href="">Logout</a>
-						</div></li>
-				</ul>
-			</div>
+                            <!-- Brands Menu -->
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   th:classappend="${moduleURL != null && (moduleURL == '/brands' || moduleURL == '/brands/new') ? 'show' : 'collapsed'}"
+                                   href="#" 
+                                   data-bs-toggle="collapse" 
+                                   data-bs-target="#navBrands">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-shop"></i></span>
+                                        <span class="nav-link-text">Brands</span>
+                                    </div>
+                                </a>
+                                <div id="navBrands" 
+                                     class="collapse"
+                                     th:classappend="${moduleURL != null && (moduleURL == '/brands' || moduleURL == '/brands/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/brands/new}"
+                                               th:classappend="${moduleURL == '/brands/new' ? 'active' : ''}">Add Brand</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/brands}"
+                                               th:classappend="${moduleURL == '/brands' ? 'active' : ''}">Brands List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </th:block>
 
-		</nav>
-	</div>
+                        <!-- Products Menu -->
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   th:classappend="${moduleURL != null && (moduleURL == '/products' || moduleURL == '/products/new') ? 'show' : 'collapsed'}"
+                                   href="#" 
+                                   data-bs-toggle="collapse" 
+                                   data-bs-target="#navProducts">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-cart"></i></span>
+                                        <span class="nav-link-text">Products</span>
+                                    </div>
+                                </a>
+                                <div id="navProducts" 
+                                     class="collapse"
+                                     th:classappend="${moduleURL != null && (moduleURL == '/products' || moduleURL == '/products/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                                            <a class="nav-link" th:href="@{/products/new}"
+                                               th:classappend="${moduleURL == '/products/new' ? 'active' : ''}">Add Product</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/products}"
+                                               th:classappend="${moduleURL == '/products' ? 'active' : ''}">Products List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   th:classappend="${moduleURL != null && (moduleURL == '/shipping_rates' || moduleURL == '/shipping_rates/new') ? 'show' : 'collapsed'}"
+                                   href="#"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#navShippingRates">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-truck"></i></span>
+                                        <span class="nav-link-text">Shipping Rates</span>
+                                    </div>
+                                </a>
+                                <div id="navShippingRates"
+                                     class="collapse"
+                                     th:classappend="${moduleURL != null && (moduleURL == '/shipping_rates' || moduleURL == '/shipping_rates/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                               th:href="@{/shipping_rates/new}"
+                                               th:classappend="${moduleURL == '/shipping_rates/new' ? 'active' : ''}">Add Shipping Rate</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                               th:href="@{/shipping_rates}"
+                                               th:classappend="${moduleURL == '/shipping_rates' ? 'active' : ''}">Shipping Rates List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/customers}" th:classappend="${moduleURL == '/customers' ? 'active' : ''}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-people"></i></span>
+                                        <span class="nav-link-text">Customers</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </th:block>
+                        
+
+                        <!-- Single Items -->
+                        <th:block sec:authorize="hasAnyAuthority('Admin','Assistant')">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/reviews}" th:classappend="${moduleURL == '/reviews' ? 'active' : ''}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-star"></i></span>
+                                        <span class="nav-link-text">Reviews</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </th:block>
+
+
+
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper')">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/orders}" th:classappend="${moduleURL == '/orders' ? 'active' : ''}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-bag"></i></span>
+                                        <span class="nav-link-text">Orders</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/reports}" th:classappend="${moduleURL == '/reports' ? 'active' : ''}">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-graph-up"></i></span>
+                                        <span class="nav-link-text">Sales Report</span>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   th:classappend="${moduleURL != null && (moduleURL == '/imports' || moduleURL == '/imports/new') ? 'show' : 'collapsed'}"
+                                   href="#" 
+                                   data-bs-toggle="collapse" 
+                                   data-bs-target="#navStorage">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-icon"><i class="bi bi-box"></i></span>
+                                        <span class="nav-link-text">Storage</span>
+                                    </div>
+                                </a>
+                                <div id="navStorage" 
+                                     class="collapse"
+                                     th:classappend="${moduleURL != null && (moduleURL == '/imports' || moduleURL == '/imports/new') ? 'show' : ''}"
+                                     data-bs-parent="#sideNavbar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" 
+                                               th:href="@{/imports/new}"
+                                               th:classappend="${moduleURL == '/imports/new' ? 'active' : ''}">Add Import</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" 
+                                               th:href="@{/imports}"
+                                               th:classappend="${moduleURL == '/imports' ? 'active' : ''}">Storage List</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </th:block>
+
+                        <!-- Settings Menu -->
+                        <li class="nav-item" sec:authorize="hasAuthority('Admin')">
+                            <a class="nav-link"
+                               th:classappend="${moduleURL != null && moduleURL.startsWith('/settings') ? 'show' : 'collapsed'}"
+                               href="#" 
+                               data-bs-toggle="collapse" 
+                               data-bs-target="#navSettings">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon"><i class="bi bi-gear"></i></span>
+                                    <span class="nav-link-text">Settings</span>
+                                </div>
+                            </a>
+                            <div id="navSettings" 
+                                 class="collapse"
+                                 th:classappend="${moduleURL != null && moduleURL.startsWith('/settings') ? 'show' : ''}"
+                                 data-bs-parent="#sideNavbar">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='general')}"
+                                           th:classappend="${param.tab == null || param.tab[0] == 'general' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">General</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='countries')}"
+                                           th:classappend="${param.tab != null && param.tab[0] == 'countries' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">Countries</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='states')}"
+                                           th:classappend="${param.tab != null && param.tab[0] == 'states' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">States</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='mailServer')}"
+                                           th:classappend="${param.tab != null && param.tab[0] == 'mailServer' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">Mail Server</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='mailTemplates')}"
+                                           th:classappend="${param.tab != null && param.tab[0] == 'mailTemplates' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">Mail Templates</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" th:href="@{/settings(tab='payment')}"
+                                           th:classappend="${param.tab != null && param.tab[0] == 'payment' ? 'active' : ''}"
+                                           onclick="event.stopPropagation();">Payment</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <!-- User Profile -->
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation Toggle -->
+        <nav class="navbar-vertical-nav offcanvas offcanvas-start navbar-offcanvac" tabindex="-1" id="offcanvasExample">
+            <!-- Same content as above but for mobile -->
+        </nav>
+    </div>
+
+    <div th:replace="fragments :: common-js"></div>
 </body>
 
 </html>

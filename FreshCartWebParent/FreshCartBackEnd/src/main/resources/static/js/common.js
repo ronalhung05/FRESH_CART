@@ -35,3 +35,8 @@ function customizeTabs() {
 		window.location.hash = e.target.hash;
 	})
 }
+
+function updateStatusWithURL(checkbox) {
+	const url = checkbox.getAttribute("entityURL");
+	updateStatus(url);
+}

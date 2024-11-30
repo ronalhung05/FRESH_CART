@@ -1,120 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-	<style>
-		.table-centered {
-			width: 100%;
-			table-layout: fixed;
-		}
-
-		.product-column {
-			width: 150px;
-		}
-
-		.product-container {
-			display: flex;
-			align-items: center;
-			max-width: 130px;
-		}
-
-		.product-image {
-			width: 25px;
-			height: 25px;
-			flex-shrink: 0;
-		}
-
-		.product-name {
-			max-width: 100px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			margin-left: 5px;
-		}
-
-		.unit-cost-column,
-		.quantity-column,
-		.price-column,
-		.total-column,
-		.shipping-cost-column {
-			width: 60px;
-		}
-
-		.table-responsive {
-			overflow-x: auto;
-		}
-	</style>
-</head>
-
 <body>
 <div th:fragment="content" th:remove="tag">
-	<div id="productList" class="table-responsive">
-		<table class="table mb-0 text-nowrap table-centered">
-			<thead class="bg-light">
-			<tr>
-				<th class="product-column">Products</th>
-				<th class="unit-cost-column">Unit Cost</th>
-				<th class="quantity-column">Quantity</th>
-				<th class="price-column">Price</th>
-				<th class="total-column">Total</th>
-				<th class="shipping-cost-column">Shipping Cost</th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody>
-			<th:block th:each="detail, status : ${order.orderDetails}">
-				<tr th:with="product = ${detail.product}" th:id="'row' + ${status.count}">
-					<input type="hidden" name="detailId" th:value="${detail.id}" />
-					<input type="hidden" name="productId" th:value="${product.id}" class="hiddenProductId" />
+    <div id="productList">
+        <div class="table-responsive">
+            <table class="table text-nowrap table-centered">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Products</th>
+                        <th>Unit Cost</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Shipping Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="detail, status : ${order.orderDetails}">
+                        <tr th:with="product = ${detail.product}" th:id="'row' + ${status.count}">
+                            <input type="hidden" name="detailId" th:value="${detail.id}" />
+                            <input type="hidden" name="productId" th:value="${product.id}" class="hiddenProductId" />
 
-					<td class="product-column">
-						<div class="product-container">
-							<img th:src="@{${product.mainImagePath}}" class="product-image" style="width: 60px; height: 60px;"/>
-							<div>
-								<b class="product-name">[[${product.name}]]</b>
-							</div>
-						</div>
-					</td>
-					<td class="unit-cost-column">
-						<input type="text" class="form-control w-auto cost-input" name="productDetailCost"
-							   th:value="${detail.productCost}" th:rowNumber="${status.count}"
-							   min="0" step="any" required />
-					</td>
-
-					<td class="quantity-column">
-						<input type="number" class="form-control w-auto quantity-input" name="quantity"
-							   th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
-							   th:attr="max=${product.inStock} + ${detail.quantity}"
-							   th:rowNumber="${status.count}" min="1" step="1" required />
-					</td>
-
-					<td class="price-column">
-						<input type="text" class="form-control w-auto price-input" name="productPrice"
-							   th:id="'price' + ${status.count}"
-							   th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
-							   min="0" step="any" required/>
-					</td>
-
-					<td class="total-column">
-						<input type="text" class="form-control w-auto subtotal-output" name="productSubtotal"
-							   th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" min="0" step="0.01" readonly />
-					</td>
-					<td class="shipping-cost-column">
-						<input type="text" class="form-control w-auto ship-input" name="productShipCost"
-							   th:value="${detail.shippingCost}"
-							   min="0" step="any" required/>
-					</td>
-					<td>
-						<a href="#" class="fas fa-trash icon-dark linkRemove" th:rowNumber="${status.count}">
-						</a>
-					</td>
-				</tr>
-			</th:block>
-			</tbody>
-		</table>
-	</div>
-	<a th:href="@{/orders/search_product}" id="linkAddProduct" class="btn btn-success mt-3">Add a Product</a>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img th:src="@{${product.mainImagePath}}" alt="" class="icon-shape icon-xl">
+                                    <div class="ms-3">
+                                        <h5 class="mb-0">[[${product.name}]]</h5>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-auto cost-input" name="productDetailCost"
+                                       th:value="${detail.productCost}" th:rowNumber="${status.count}"
+                                       min="0" step="any" required />
+                            </td>
+                            <td>
+                                <div class="input-group input-spinner">
+                                    <input type="number" class="form-control w-auto quantity-input" name="quantity"
+                                           th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
+                                           th:attr="max=${product.inStock} + ${detail.quantity}"
+                                           th:rowNumber="${status.count}" min="1" step="1" required />
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-auto price-input" name="productPrice"
+                                       th:id="'price' + ${status.count}"
+                                       th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
+                                       min="0" step="any" required/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-auto subtotal-output" name="productSubtotal"
+                                       th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" readonly />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control w-auto ship-input" name="productShipCost"
+                                       th:value="${detail.shippingCost}"
+                                       min="0" step="any" required/>
+                            </td>
+                            <td>
+                                <a href="#" class="text-muted linkRemove" th:rowNumber="${status.count}">
+                                    <i class="feather-icon icon-trash-2"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" id="linkAddProduct" class="btn btn-primary mt-3">
+            <i class="bi bi-plus"></i> Add Product
+        </button>
+    </div>
 </div>
 </body>
-
 </html>

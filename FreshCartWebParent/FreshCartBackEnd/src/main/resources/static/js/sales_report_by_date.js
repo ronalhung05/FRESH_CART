@@ -65,7 +65,7 @@ function customizeChartForSalesReportByDate(period) {
 		},
 		vAxes: {
 			0: { title: 'Sales Amount', format: 'currency' },
-			1: { title: 'Number of Orders', viewWindow: { min: 0, max: Math.ceil(totalItems * 1.1) } } // Adjust max based on your data
+			1: { title: 'Number of Orders', viewWindow: { min: 0, max: 100 } } // Adjust max based on your data
 		}
 	};
 
