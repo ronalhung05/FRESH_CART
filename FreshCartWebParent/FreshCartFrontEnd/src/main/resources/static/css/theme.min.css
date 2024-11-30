@@ -306,6 +306,7 @@ div.zoom img {
 	--fc-form-invalid-border-color: #e98383;
 	color-scheme: dark;
 }
+
 *,
 :after,
 :before {
@@ -27127,4 +27128,30 @@ footer .social-icons a:hover {
 /* Copyright section */
 .border-top {
 	border-color: #dee2e6 !important;
+}
+/* Product price block styling */
+.price-block {
+	width: 120px;
+	min-height: 42px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.price-block .text-danger,
+.price-block .text-dark {
+	white-space: nowrap;
+}
+
+.price-block .text-decoration-line-through {
+	white-space: nowrap;
+}
+
+/* Product card price and button alignment */
+.card-product .card-body .d-flex.justify-content-between {
+	align-items: center;
+}
+
+.card-product .btn {
+	white-space: nowrap;
 }

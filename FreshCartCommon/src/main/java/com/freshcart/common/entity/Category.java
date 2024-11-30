@@ -3,14 +3,7 @@ package com.freshcart.common.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.freshcart.common.Constants;
 
@@ -32,7 +25,7 @@ public class Category extends IdBasedEntity {
     @Column(name = "all_parent_ids", length = 256, nullable = true)
     private String allParentIDs;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
 

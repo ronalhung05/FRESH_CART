@@ -32,25 +32,35 @@ public class Order extends AbstractAddress {
     @Column(nullable = false, length = 45)
     private String country;
 
+    @Column(nullable = false, updatable = false)
     private Date orderTime;
 
+    @Column(nullable = false)
     private float shippingCost;
+    @Column(nullable = false)
     private float productCost;
+    @Column(nullable = false)
     private float subtotal;
+    @Column(nullable = false)
     private float tax;
+    @Column(nullable = false)
     private float total;
 
+    @Column(nullable = false)
     private int deliverDays;
+
     private Date deliverDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

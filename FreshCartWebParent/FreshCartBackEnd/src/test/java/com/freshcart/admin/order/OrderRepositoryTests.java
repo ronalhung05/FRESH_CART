@@ -210,17 +210,26 @@ public class OrderRepositoryTests {
     @Test
     public void testFindByOrderTimeBetween() throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date startTime = dateFormatter.parse("2021-08-01");
-        Date endTime = dateFormatter.parse("2021-08-31");
+        Date startTime = dateFormatter.parse("2024-11-15");
+        Date endTime = dateFormatter.parse("2024-11-19");
 
         List<Order> listOrders = repo.findByOrderTimeBetween(startTime, endTime);
 
         assertThat(listOrders.size()).isGreaterThan(0);
 
+        float totalCost = 0;
+        float totalShipping = 0;
+        float total = 0;
         for (Order order : listOrders) {
             System.out.printf("%s | %s | %.2f | %.2f | %.2f \n",
                     order.getId(), order.getOrderTime(), order.getProductCost(),
                     order.getSubtotal(), order.getTotal());
+            totalCost += order.getProductCost();
+            total += order.getSubtotal();
+            totalShipping += order.getShippingCost();
         }
+        System.out.println(totalCost);
+        System.out.println(totalShipping);
+        System.out.println(total);
     }
 }

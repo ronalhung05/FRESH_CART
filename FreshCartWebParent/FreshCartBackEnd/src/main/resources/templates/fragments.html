@@ -49,15 +49,19 @@
 	</div>
 
 	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
-		<a class="fas fa-edit me-2 icon-green" th:href="@{${editURL}}"
-			th:title="'Edit this ' + ${entityName}"></a>
+		<a class="dropdown-item" th:href="@{${editURL}}"
+			th:title="'Edit this ' + ${entityName}">
+			<i class="fas fa-edit me-2"></i> Edit
+		</a>
 	</div>
 
 	<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
 		<th:block th:if="${visible}">
-			<a class="fas fa-trash fa-2x icon-dark link-delete"
+			<a class="dropdown-item link-delete"
 			   th:href="@{${deleteURL}}" th:entityId="${entityId}"
-			   th:title="'Delete this ' + ${entityName}"></a>
+			   th:title="'Delete this ' + ${entityName}">
+				<i class="fas fa-trash-alt me-2"></i> Delete
+			</a>
 		</th:block>
 	</div>
 
@@ -144,7 +148,5 @@
 		<input type="text" readonly class="form-control"
 			th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
 	</div>
-
 </body>
-
 </html>

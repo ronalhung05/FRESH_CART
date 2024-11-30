@@ -33,6 +33,7 @@ public class ReviewRepositoryTests {
         Page<Review> page = repo.findByCustomer(customerId, pageable);
         long totalElements = page.getTotalElements();
 
+        System.out.println(totalElements);
         assertThat(totalElements).isGreaterThan(1);
     }
 

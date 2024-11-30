@@ -20,14 +20,35 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,
 
     public Product findByAlias(String alias);
 
-    @Query(value = "SELECT * FROM products WHERE enabled = true AND "
-            + "MATCH(name, short_description, full_description) AGAINST (?1)",
-            nativeQuery = true)
-    public Page<Product> search(String keyword, Pageable pageable);
-
     @Query("Update Product p SET p.averageRating = COALESCE((SELECT AVG(r.rating) FROM Review r WHERE r.product.id = ?1), 0),"
             + " p.reviewCount = (SELECT COUNT(r.id) FROM Review r WHERE r.product.id =?1) "
             + "WHERE p.id = ?1")
     @Modifying
     public void updateReviewCountAndAverageRating(Integer productId);
+
+    // Lấy sản phẩm mới nhất
+    @Query("SELECT p FROM Product p WHERE p.enabled = true ORDER BY p.createdTime DESC")
+    Page<Product> findNewProducts(Pageable pageable);
+    
+    // Lấy sản phẩm khuyến mãi
+    @Query("SELECT p FROM Product p WHERE p.enabled = true AND p.discountPercent > 0 ORDER BY p.discountPercent DESC")
+    Page<Product> findSpecialOffers(Pageable pageable);
+
+    // Find Best Selling Products
+    @Query("SELECT p FROM Product p JOIN OrderDetail od ON p.id = od.product.id " +
+           "JOIN Order o ON od.order.id = o.id " +
+           "WHERE p.enabled = true AND o.status = 'DELIVERED' " +
+           "GROUP BY p.id " +
+           "ORDER BY SUM(od.quantity) DESC")
+    Page<Product> findBestSellingProducts(Pageable pageable);
+
+    @Query("SELECT p FROM Product p " +
+           "LEFT JOIN OrderDetail od ON p.id = od.product.id " +
+           "LEFT JOIN od.order o " +
+           "WHERE p.enabled = true " +
+           "AND (p.category.id = ?1 OR p.category.allParentIDs LIKE %?2%) " +
+           "GROUP BY p " +
+           "ORDER BY COALESCE(SUM(CASE WHEN o.status = 'DELIVERED' THEN od.quantity ELSE 0 END), 0) DESC")
+    Page<Product> findAllOrderByMostSold(Integer categoryId, String categoryIDMatch, Pageable pageable);
+
 }

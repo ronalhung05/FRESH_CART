@@ -53,25 +53,34 @@
 		suffixCurrencySymbol = currencySymbolPosition == 'After price' ? currencySymbol : '';
 
 		$(document).ready(function () {
+			let isChartDrawn = {
+				date: false,
+				category: false,
+				product: false
+			};
+
 			google.charts.load('current', {'packages': ['corechart', 'table']});
 			google.charts.setOnLoadCallback(function() {
-				// Load data for the default tab (Sales by Order)
+				// Load data for the default tab (Sales by "Date")
 				loadSalesReportByDate('last_7_days');
-
-				// Preload data for other tabs in the background
-				loadSalesReportByDateForCategory('last_7_days');
-				loadSalesReportByDateForProduct('last_7_days');
+				isChartDrawn.date = true;
 			});
 
-			// Handle tab switching to reload data if needed
 			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-				var targetTab = $(e.target).attr('href');
-				if (targetTab === '#category') {
-					loadSalesReportByDateForCategory('last_7_days');
-				} else if (targetTab === '#product') {
-					loadSalesReportByDateForProduct('last_7_days');
+				const targetTab = $(e.target).attr('href');
+
+				if (targetTab === '#category' && !isChartDrawn.category) {
+					loadSalesReportByDateForCategory('last_7_days'); // Gọi đúng hàm
+					isChartDrawn.category = true;
+				} else if (targetTab === '#product' && !isChartDrawn.product) {
+					loadSalesReportByDateForProduct('last_7_days'); // Gọi đúng hàm
+					isChartDrawn.product = true;
+				} else if (targetTab === '#date' && !isChartDrawn.date) {
+					loadSalesReportByDate('last_7_days'); // Gọi đúng hàm
+					isChartDrawn.date = true;
 				}
 			});
+
 		});
 
 

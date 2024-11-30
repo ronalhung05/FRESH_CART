@@ -95,7 +95,7 @@ function setSalesAmount(period, reportType, labelTotalItems) {
 	$("#textTotalItems" + reportType).text(totalItems);
 }
 
-function formatChartData(data, columnIndex1, columnIndex2) {
+function formatChartData(data, startIndex, endIndex) {
 	var formatter = new google.visualization.NumberFormat({
 		prefix: prefixCurrencySymbol,
 		suffix: suffixCurrencySymbol,
@@ -104,6 +104,7 @@ function formatChartData(data, columnIndex1, columnIndex2) {
 		fractionDigits: decimalDigits
 	});
 
-	formatter.format(data, columnIndex1);
-	formatter.format(data, columnIndex2);
+	for (var i = startIndex; i <= endIndex; i++) {
+		formatter.format(data, i);
+	}
 }

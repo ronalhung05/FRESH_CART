@@ -19,7 +19,7 @@ public class ProductDetail extends IdBasedEntity {
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public ProductDetail() {

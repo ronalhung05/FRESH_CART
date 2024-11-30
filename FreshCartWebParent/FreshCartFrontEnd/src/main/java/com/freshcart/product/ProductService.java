@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -75,12 +76,41 @@ public class ProductService {
     }
 
     public Page<Product> search(String keyword, int pageNum) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Page.empty();
+        }
+        
         Pageable pageable = PageRequest.of(pageNum - 1, SEARCH_RESULTS_PER_PAGE);
-        return repo.search(keyword, pageable);
-
-    }
-
-    public Page<Product> listByPage(Specification<Product> spec, Pageable pageable) {
+        Specification<Product> spec = ProductSpecification.searchProduct(keyword);
         return repo.findAll(spec, pageable);
     }
+
+    public Page<Product> listByPage(Specification<Product> spec, Pageable pageable, Integer categoryId) {
+        if (pageable.getSort().equals(Sort.by("id"))) {
+            String categoryIDMatch = "-" + String.valueOf(categoryId) + "-";
+            return repo.findAllOrderByMostSold(categoryId, categoryIDMatch, pageable);
+        }
+        return repo.findAll(spec, pageable);
+    }
+
+    public List<Product> listNewProducts() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> page = repo.findNewProducts(pageable);
+        List<Product> products = page.getContent();
+        System.out.println("Number of new products: " + products.size());
+        return products;
+    }
+    
+    public List<Product> listSpecialOffers() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Product> page = repo.findSpecialOffers(pageable);
+        return page.getContent();
+    }
+
+     public List<Product> listBestSellingProducts(int limit) {
+         Sort sort = Sort.by("id").ascending();
+         Pageable pageable = PageRequest.of(0, limit, sort);
+         Page<Product> page = repo.findBestSellingProducts(pageable);
+         return page.getContent();
+     }
 }

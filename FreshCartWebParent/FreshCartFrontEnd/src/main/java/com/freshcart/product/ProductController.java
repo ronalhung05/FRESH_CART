@@ -94,7 +94,7 @@ public class ProductController {
             // Xử lý phân trang và sắp xếp
             Sort sortOption = ProductSpecification.getSort(sort);
             Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sortOption);
-            Page<Product> pageProducts = productService.listByPage(spec, pageable);
+            Page<Product> pageProducts = productService.listByPage(spec, pageable, category.getId());
 
             // Add attributes to model
             model.addAttribute("totalPages", pageProducts.getTotalPages());
@@ -153,35 +153,40 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String searchFirstPage(String keyword, Model model) {
+    public String searchFirstPage(@RequestParam(required = false) String keyword, Model model) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return "redirect:/";
+        }
         return searchByPage(keyword, 1, model);
     }
 
     @GetMapping("/search/page/{pageNum}")
-    public String searchByPage(String keyword,
+    public String searchByPage(@RequestParam(required = false) String keyword,
                                @PathVariable("pageNum") int pageNum,
                                Model model) {
-        Page<Product> pageProducts = productService.search(keyword, pageNum);
-        List<Product> listResult = pageProducts.getContent();
-
-        long startCount = (pageNum - 1) * ProductService.SEARCH_RESULTS_PER_PAGE + 1;
-        long endCount = startCount + ProductService.SEARCH_RESULTS_PER_PAGE - 1;
-        if (endCount > pageProducts.getTotalElements()) {
-            endCount = pageProducts.getTotalElements();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return "redirect:/";
         }
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", pageProducts.getTotalPages());
-        model.addAttribute("startCount", startCount);
-        model.addAttribute("endCount", endCount);
-        model.addAttribute("totalItems", pageProducts.getTotalElements());
-        model.addAttribute("pageTitle", keyword + " - Search Result");
+        try {
+            keyword = keyword.trim();
+            Page<Product> pageProducts = productService.search(keyword, pageNum);
+            List<Product> listProducts = pageProducts.getContent();
 
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("searchKeyword", keyword);
-        model.addAttribute("listResult", listResult);
+            model.addAttribute("currentPage", pageNum);
+            model.addAttribute("totalPages", pageProducts.getTotalPages());
+            model.addAttribute("totalItems", pageProducts.getTotalElements());
+            model.addAttribute("pageTitle", keyword + " - Search Result");
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("searchKeyword", keyword);
+            model.addAttribute("listProducts", listProducts);
 
-        return "product/search_result";
+            return "product/search_result";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "An error occurred while searching");
+            return "product/search_result";
+        }
     }
 
     private String normalizeUrl(String url) {

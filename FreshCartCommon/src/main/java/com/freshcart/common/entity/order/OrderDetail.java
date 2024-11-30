@@ -1,9 +1,6 @@
 package com.freshcart.common.entity.order;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.IdBasedEntity;
@@ -12,18 +9,23 @@ import com.freshcart.common.entity.product.Product;
 @Entity
 @Table(name = "order_details")
 public class OrderDetail extends IdBasedEntity {
+    @Column(nullable = false)
     private int quantity;
+    @Column(nullable = false)
     private float productCost;
+    @Column(nullable = false)
     private float shippingCost;
+    @Column(nullable = false)
     private float unitPrice;
+    @Column(nullable = false)
     private float subtotal;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     public OrderDetail() {

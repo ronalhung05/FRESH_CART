@@ -17,7 +17,7 @@ public class ShippingRate extends IdBasedEntity {
     private boolean codSupported;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
     @Column(nullable = false, length = 45)
