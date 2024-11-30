@@ -4,91 +4,126 @@
 <head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu">Static Menu</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
 
+        <!-- main content -->
+        <main class="main-content-wrapper">
+            <div class="container">
+                <!-- header -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>[[${pageTitle}]]</h2>
+                                <div class="d-flex">
+                                    <a th:href="@{/orders}" class="text-inherit">Orders</a>
+                                    <span class="mx-2">/</span>
+                                    <span class="text-muted">[[${pageTitle}]]</span>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" form="orderForm" class="btn btn-primary me-2">Save</button>
+                                <button type="button" id="buttonCancel" class="btn btn-light">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<form th:action="@{/order/save}" th:object="${order}" method="post"
-			onsubmit="return processFormBeforeSubmit();">
+                <div th:if="${stockErrors != null}" class="alert alert-danger">
+                    <h5>Stock Error List:</h5>
+                    <ul>
+                        <li th:each="error : ${stockErrors.values()}" th:text="${error}"></li>
+                    </ul>
+                </div>
 
-			<div>
-				<div class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 20px;">
-					<h2>Manage Orders | [[${pageTitle}]]</h2>
-					<div class="d-flex justify-content-end" style="margin-right: 10px;">
-						<input type="submit" value="Save" class="btn btn-primary m-1" style="background-color: green; color: white;"/>
-						<input type="button" value="Cancel" class="btn btn-secondary m-1" id="buttonCancel" />
-					</div>
-				</div>
-			</div>
+                <form th:action="@{/order/save}" th:object="${order}" method="post" id="orderForm"
+                      onsubmit="return processFormBeforeSubmit();">
+                    <input type="hidden" th:field="*{id}" />
 
-			<div th:if="${stockErrors != null}" class="alert alert-danger">
-				<h5>Danh sách lỗi tồn kho:</h5>
-				<ul>
-					<li th:each="error : ${stockErrors.values()}" th:text="${error}"></li>
-				</ul>
-			</div>
+                    <!-- Navigation Tabs -->
+                    <ul class="nav nav-pills nav-lb-tab mb-4" id="orderTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#overview" type="button" role="tab">Overview</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="products-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#products" type="button" role="tab">Products</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#shipping" type="button" role="tab">Shipping</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="track-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#track" type="button" role="tab">Track</button>
+                        </li>
+                    </ul>
 
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="orderTabsContent">
+                        <div class="tab-pane fade show active p-4" id="overview" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:replace="orders/order_form_overview :: content"></div>
+                                </div>
+                            </div>
+                        </div>
 
-			<input type="hidden" th:field="*{id}" />
-			<div>
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
-					<li class="nav-item"><a class="nav-link active"
-						id="overview-tab" data-toggle="tab" href="#overview" role="tab">Overview</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" id="products-tab"
-						data-toggle="tab" href="#products" role="tab">Products</a></li>
-					<li class="nav-item"><a class="nav-link" id="shipping-tab"
-						data-toggle="tab" href="#shipping" role="tab">Shipping</a></li>
-					<li class="nav-item"><a class="nav-link" id="track-tab"
-						data-toggle="tab" href="#track" role="tab">Track</a></li>
-				</ul>
-				<div class="tab-content" id="myTabContent">
-					<div class="tab-pane fade show active p-3" id="overview"
-						role="tabpanel">
-						<div th:replace="orders/order_form_overview :: content"></div>
-					</div>
+                        <div class="tab-pane fade p-4" id="products" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:replace="orders/order_form_products :: content"></div>
+                                </div>
+                            </div>
+                        </div>
 
-					<div class="tab-pane fade p-3" id="products" role="tabpanel">
-						<div th:replace="orders/order_form_products :: content"></div>
-					</div>
+                        <div class="tab-pane fade p-4" id="shipping" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:replace="orders/order_form_shipping :: content"></div>
+                                </div>
+                            </div>
+                        </div>
 
-					<div class="tab-pane fade p-3" id="shipping" role="tabpanel">
-						<div th:replace="orders/order_form_shipping :: content"></div>
-					</div>
+                        <div class="tab-pane fade p-4" id="track" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div th:replace="orders/order_form_tracks :: content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
 
-					<div class="tab-pane fade p-3" id="track" role="tabpanel">
-						<div th:replace="orders/order_form_tracks:: content"></div>
-					</div>
-				</div>
-			</div>
-		</form>
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+    <div th:replace="orders/add_product_modal :: content"></div>
+    <div th:replace="fragments :: footer"></div>
 
-		<div th:replace="modal_fragments :: modal_dialog"></div>
-		<div th:replace="orders/add_product_modal :: content"></div>
+    <script type="text/javascript">
+        contextPath = "[[@{/}]]";
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
 
-		<div th:replace="fragments :: footer">Static footer</div>
-	</div>
+        $(document).ready(function() {
+            $('#buttonCancel').click(function() {
+                window.location = "[[@{/orders}]]";
+            });
+        });
+    </script>
 
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
-
-		$(document).ready(function () {
-			$('#buttonCancel').click(function () {
-				window.location = "[[@{/orders}]]";
-			});
-
-		});
-	</script>
-
-	<script th:src="@{/js/common_form.js}"></script>
-	<script th:src="@{/js/common_form_country_state.js}"></script>
-	<script th:src="@{/js/jquery.number.min.js}"></script>
-	<script th:src="@{/js/order_form_overview_products.js}"></script>
-	<script th:src="@{/js/order_form_add_product.js}"></script>
-	<script th:src="@{/js/order_form_remove_product.js}"></script>
-	<script th:src="@{/js/order_form_tracks.js}"></script>
+    <div th:replace="fragments :: common-js"></div>
+    <script th:src="@{/js/common_form.js}"></script>
+    <script th:src="@{/js/common_form_country_state.js}"></script>
+    <script th:src="@{/js/jquery.number.min.js}"></script>
+    <script th:src="@{/js/order_form_overview_products.js}"></script>
+    <script th:src="@{/js/order_form_add_product.js}"></script>
+    <script th:src="@{/js/order_form_remove_product.js}"></script>
+    <script th:src="@{/js/order_form_tracks.js}"></script>
 </body>
-
 </html>

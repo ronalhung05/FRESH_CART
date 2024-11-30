@@ -50,6 +50,7 @@ public class BrandController {
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("brand", new Brand());
         model.addAttribute("pageTitle", "Create New Brand");
+        model.addAttribute("moduleURL", "/brands/new");
 
         return "brands/brand_form";
     }

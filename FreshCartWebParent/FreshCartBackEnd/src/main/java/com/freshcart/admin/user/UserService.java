@@ -17,7 +17,7 @@ import com.freshcart.common.entity.User;
 @Service
 @Transactional
 public class UserService {
-    public static final int USERS_PER_PAGE = 4;
+    public static final int USERS_PER_PAGE = 8;
 
     @Autowired
     private UserRepository userRepo;

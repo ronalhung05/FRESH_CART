@@ -3,14 +3,14 @@
 
 <body>
 	<div th:fragment="cod_support" th:remove="tag">
-		<a th:if="${rate.codSupported}"
-			class="fas fa-hand-holding-usd fa-2x icon-green"
-			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/false'}"
-			title="Disable COD support for this destination"></a> <a
-			th:unless="${rate.codSupported}"
-			class="fas fa-hand-holding-usd fa-2x icon-dark"
-			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/true'}"
-			title="Enable COD support for this destination"></a>
+		<div class="form-check form-switch">
+			<input class="form-check-input" 
+				   type="checkbox"
+				   role="switch"
+				   th:checked="${rate.codSupported}"
+				   th:onclick="'location.href=\'' + @{'/shipping_rates/cod/' + ${rate.id} + '/enabled/' + ${!rate.codSupported}} + '\''"
+				   style="cursor: pointer"/>
+		</div>
 	</div>
 </body>
 

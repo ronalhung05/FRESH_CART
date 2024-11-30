@@ -19,7 +19,7 @@ function loadSalesReportByDateForProduct(period) {
 	$.get(requestURL, function(responseJSON) {
 		prepareChartDataForSalesReportByProduct(responseJSON);
 		customizeChartForSalesReportByProduct();
-		formatChartData(data, 2, 4);
+		formatChartData(data, 2, 3);
 		drawChartForSalesReportByProduct(period);
 		setSalesAmount(period, '_product', "Total Products");
 	});

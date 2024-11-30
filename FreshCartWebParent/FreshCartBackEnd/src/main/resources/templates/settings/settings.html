@@ -1,88 +1,155 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-<head
-	th:replace="fragments :: page_head('Settings - Shopme Admin', 'tag')" />
-<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
-<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
-</head>
+<head th:replace="fragments :: page_head('Settings - FreshCart Admin', 'tag')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Site Settings</h2>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
+        
+        <!-- main content -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <!-- header -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h2>Site Settings</h2>
+                        <div class="d-flex">
+                            <a th:href="@{/}" class="text-inherit">Dashboard</a>
+                            <span class="mx-2">/</span>
+                            <span class="text-muted">Settings</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div th:if="${message != null}"
+			class="alert alert-success text-center">[[${message}]]</div> -->
 
-		<div th:if="${message != null}"
-			class="alert alert-success text-center">[[${message}]]</div>
+            
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-pills nav-lb-tab mb-4" id="settingTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="general-tab" data-bs-toggle="tab" 
+                                data-bs-target="#general" type="button" role="tab" 
+                                aria-controls="general" aria-selected="true">
+                            General
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="countries-tab" data-bs-toggle="tab"
+                                data-bs-target="#countries" type="button" role="tab"
+                                aria-controls="countries" aria-selected="false">
+                            Countries
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="states-tab" data-bs-toggle="tab"
+                                data-bs-target="#states" type="button" role="tab"
+                                aria-controls="states" aria-selected="false">
+                            States
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mailServer-tab" data-bs-toggle="tab"
+                                data-bs-target="#mailServer" type="button" role="tab"
+                                aria-controls="mailServer" aria-selected="false">
+                            Mail Server
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mailTemplates-tab" data-bs-toggle="tab"
+                                data-bs-target="#mailTemplates" type="button" role="tab"
+                                aria-controls="mailTemplates" aria-selected="false">
+                            Mail Templates
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="payment-tab" data-bs-toggle="tab"
+                                data-bs-target="#payment" type="button" role="tab"
+                                aria-controls="payment" aria-selected="false">
+                            Payment
+                        </button>
+                    </li>
+                </ul>
 
-		<div>
-			<ul class="nav nav-tabs" id="settingTab" role="tablist">
-				<li class="nav-item"><a class="nav-link active"
-					data-toggle="tab" href="#general" role="tab">General</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#countries" role="tab">Countries</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#states" role="tab">States</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#mailServer" role="tab">Mail Server</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#mailTemplates" role="tab">Mail Templates</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#payment" role="tab">Payment</a></li>
-			</ul>
+                <!-- Tab Content -->
+                <div class="tab-content" id="settingTabContent">
+                    <div class="tab-pane active p-3" id="general" role="tabpanel">
+                        <div th:replace="settings/general :: content"></div>
+                    </div>
+                    <div class="tab-pane p-3" id="countries" role="tabpanel">
+                        <div th:replace="settings/countries :: content"></div>
+                    </div>
+                    <div class="tab-pane p-3" id="states" role="tabpanel">
+                        <div th:replace="settings/states :: content"></div>
+                    </div>
+                    <div class="tab-pane p-3" id="mailServer" role="tabpanel">
+                        <div th:replace="settings/mail_server :: content"></div>
+                    </div>
+                    <div class="tab-pane p-3" id="mailTemplates" role="tabpanel">
+                        <div th:replace="settings/mail_templates/mail_templates :: content"></div>
+                    </div>
+                    <div class="tab-pane p-3" id="payment" role="tabpanel">
+                        <div th:replace="settings/payment :: content"></div>
+                    </div>
+                </div>
 
-			<div class="tab-content">
-				<div class="tab-pane active p-3" id="general" role="tabpanel">
-					<div th:replace="settings/general :: content"></div>
-				</div>
-				<div class="tab-pane p-3" id="countries" role="tabpanel">
-					<div th:replace="settings/countries :: content"></div>
-				</div>
-				<div class="tab-pane p-3" id="states" role="tabpanel">
-					<div th:replace="settings/states :: content"></div>
-				</div>
-				<div class="tab-pane p-3" id="mailServer" role="tabpanel">
-					<div th:replace="settings/mail_server :: content"></div>
-				</div>
-				<div class="tab-pane p-3" id="mailTemplates" role="tabpanel">
-					<div th:replace="settings/mail_templates/mail_templates :: content"></div>
-				</div>
-				<div class="tab-pane p-3" id="payment" role="tabpanel">
-					<div th:replace="settings/payment :: content"></div>
-				</div>
-			</div>
-		</div>
+            </div>
+        </main>
+    </div>
 
-		<div class="toast justify-content-center d-flex" role="alert"
-			aria-live="polite" aria-atomic="true" data-delay="3000">
-			<div role="alert" aria-live="assertive" aria-atomic="true">
-				<div class="toast-body">
-					<span id="toastMessage"></span>
-				</div>
-			</div>
-		</div>
+    <div th:replace="fragments :: footer"></div>
+	<div th:replace="fragments :: common-js"></div>
+    <!-- Scripts -->
+    <script type="text/javascript" th:src="@{/js/quill-setup.js}"></script>
+    <script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>
+    <script type="text/javascript" th:src="@{/js/states_setting.js}"></script>
+    <script type="text/javascript">
+        MAX_FILE_SIZE = 102400;
+        contextPath = "[[@{/}]]";
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
+        var moduleURL = "[[@{/settings}]]";
 
-		<div th:replace="fragments :: footer"></div>
+        $(document).ready(function() {
+            var currentTab = /*[[${currentTab}]]*/ 'general';
+            // Activate the correct tab
+            $('button[data-bs-target="#' + currentTab + '"]').tab('show');
+            
+            var message = /*[[${message}]]*/ '';
+            if (message && message.trim() !== "") {
+                showSuccessMessage(message);
+            }
+        });
+        
+    </script>
 
-	</div>
-	<script type="text/javascript">
-		MAX_FILE_SIZE = 102400; // 100KB
-		contextPath = "[[@{/}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            // Get current tab from URL parameter
+            var currentTab = /*[[${param.tab}]]*/ 'general';
+            currentTab = Array.isArray(currentTab) ? currentTab[0] : 'general';
+            
+            // Activate the correct tab
+            $('#' + currentTab + '-tab').tab('show');
+            
+            var message = /*[[${message}]]*/ '';
+            if (message && message.trim() !== "") {
+                showSuccessMessage(message);
+            }
+            
+            // Prevent dropdown from closing when clicking inside
+            $('#navSettings').on('click', function(e) {
+                e.stopPropagation();
+            });
 
-		$(document).ready(function () {
-			$("#customerVerificationContent").richText();
-			$("#orderConfirmationContent").richText({height: 400});
-		});
+            // Keep dropdown open when tab is active
+            if (window.location.href.includes('/settings')) {
+                $('#navSettings').addClass('show');
+                $('#navSettings').parent().find('.nav-link').removeClass('collapsed').addClass('show');
+            }
+        });
+    </script>
 
-	</script>
-	<script th:src="@{/js/common_form.js}"></script>
-	<script th:src="@{/js/countries_setting.js}"></script>
-	<script th:src="@{/js/states_setting.js}"></script>
 </body>
-
 </html>

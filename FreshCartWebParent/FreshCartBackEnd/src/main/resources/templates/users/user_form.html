@@ -1,127 +1,244 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
+<head>
+    <head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
+</head>
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Users | [[${pageTitle}]]</h2>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
+        <!-- main wrapper -->
+            
+            <!-- main content -->
+            <main class="main-content-wrapper bg-white">
+                <div class="container">
+                    <!-- header -->
+                    <div class="row mb-8">
+                        <div class="col-md-12">
+                            <div class="d-md-flex justify-content-between align-items-center">
+                                <div>
+                                    <h2>[[${pageTitle}]]</h2>
+                                    <div class="d-flex">
+                                        <a th:href="@{/users}" class="text-inherit">Users</a>
+                                        <span class="mx-2">/</span>
+                                        <span class="text-muted">[[${pageTitle}]]</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-		<form th:action="@{/users/save}" method="post"
-			style="max-width: 700px; margin: 0 auto"
-			enctype="multipart/form-data" th:object="${user}"
-			onsubmit="return checkEmailUnique(this);">
-			<input type="hidden" th:field="*{id}" />
-			<div class="border border-secondary rounded p-3">
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">E-mail:</label>
-					<div class="col-sm-8">
-						<input type="email" class="form-control" th:field="*{email}"
-							required minlength="8" maxlength="128"  th:attr="readonly=${pageTitle != 'Create New User'} ? 'readonly' : null"/>
-					</div>
-				</div>
+                    <!-- form -->
+                    <form th:action="@{/users/save}" method="post" enctype="multipart/form-data" 
+                          th:object="${user}" onsubmit="return checkEmailUnique(this);"
+                          class="card shadow-sm border-0">
+                        <input type="hidden" th:field="*{id}" />
+                        
+                        <div class="card-body p-6">
+                            <!-- Upload Photo Section -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center gap-3">
+                                    <input type="hidden" th:field="*{photos}" />
+                                    <div class="icon-shape icon-xxl border rounded-3 bg-light">
+                                        <img id="thumbnail" th:src="@{${user.photosImagePath}}"
+                                             class="img-fluid rounded-3" 
+                                             alt="User photo"/>
+                                    </div>
+                                    <div>
+                                        <label class="btn btn-light">
+                                            Upload Photo
+                                            <input type="file" id="fileImage" name="image" 
+                                                   accept="image/png, image/jpeg, image/gif"
+                                                   class="d-none"/>
+                                        </label>
+                                        <div class="text-muted small mt-1">JPG, GIF or PNG. 1MB Max.</div>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">First Name:</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" th:field="*{firstName}"
-							required minlength="2" maxlength="45" />
-					</div>
-				</div>
+                            <!-- User Information -->
+                            <h5 class="mb-4">User Information</h5>
+                            <div class="row">
+                                <!-- Email & First Name -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Email <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control" th:field="*{email}"
+                                        required minlength="8" maxlength="128"
+                                        th:readonly="${pageTitle != 'Create New User'}"
+                                        placeholder="Enter email" />
+                                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Last Name:</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" th:field="*{lastName}"
-							required minlength="2" maxlength="45" />
-					</div>
-				</div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        First Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" th:field="*{firstName}"
+                                        required minlength="2" maxlength="45"
+                                        placeholder="Enter first name" />
+                                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Password:</label>
-					<div class="col-sm-8">
-						<input th:if="${user.id == null}" type="password"
-							class="form-control" th:field="*{password}" required
-							minlength="8" maxlength="20" /> <input
-							th:if="${user.id != null}" type="password" class="form-control"
-							th:field="*{password}" minlength="8" maxlength="20" />
-					</div>
-				</div>
+                                <!-- Last Name & Password -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Last Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" th:field="*{lastName}"
+                                        required minlength="2" maxlength="45"
+                                        placeholder="Enter last name" />
+                                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Roles:</label>
-					<div class="col-sm-8">
-						<th:block th:each="role : ${listRoles}">
-							<input type="checkbox" th:field="*{roles}" th:text="${role.name}"
-								th:value="${role.id}" class="m-2" />
-							- <small>[[${role.description}]]</small>
-							<br />
-						</th:block>
-					</div>
-				</div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Password <span class="text-danger" th:if="${user.id == null}">*</span>
+                                    </label>
+                                    <div class="position-relative">
+                                        <input th:if="${user.id == null}" type="password"
+                                            class="form-control" th:field="*{password}" required
+                                            minlength="8" maxlength="20" placeholder="Enter password" />
+                                        <input th:if="${user.id != null}" type="password"
+                                            class="form-control" th:field="*{password}"
+                                            minlength="8" maxlength="20" placeholder="Leave blank to keep current password" />
+                                        <span class="password-toggler position-absolute top-50 end-0 translate-middle-y me-3">
+                                            <i class="bi bi-eye"></i>
+                                        </span>
+                                    </div>
+                                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Enabled:</label>
-					<div class="col-sm-8">
-						<input type="checkbox" th:field="*{enabled}" />
-					</div>
-				</div>
+                                <!-- Roles & Status -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Roles <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select" 
+                                            multiple 
+                                            th:field="*{roles}" 
+                                            id="rolesSelect" 
+                                            required>
+                                        <th:block th:each="role : ${listRoles}">
+                                            <option th:value="${role.id}" th:text="${role.name}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Photos:</label>
-					<div class="col-sm-8">
-						<input type="hidden" th:field="*{photos}" /> <input type="file"
-							id="fileImage" name="image" accept="image/png, image/jpeg"
-							class="mb-2" /> <img id="thumbnail" alt="Photos preview"
-							th:src="@{${user.photosImagePath}}" class="img-fluid" />
-					</div>
-				</div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label d-block">Status</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" th:field="*{enabled}">
+                                        <label class="form-check-label">Enable this user</label>
+                                    </div>
+                                </div>
 
-				<div class="text-center">
-					<input type="submit" value="Save" class="btn btn-primary m-3" /> <input
-						type="button" value="Cancel" class="btn btn-secondary"
-						id="buttonCancel" />
-				</div>
-			</div>
-		</form>
+                                <!-- Buttons -->
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a type="button" th:href="@{/users}" class="btn btn-secondary ms-2">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </main>
 
-		<div th:replace="modal_fragments :: modal_dialog"></div>
 
-		<div th:replace="fragments :: footer"></div>
+        
+    </div>
+	<div th:replace="modal_fragments :: modal_dialog"></div>
+    <div th:replace="fragments :: footer"></div>
+	<div th:replace="fragments :: common-js"></div>
 
-	</div>
-	<script type="text/javascript">
-		MAX_FILE_SIZE = 102400; // 100KB
+    <!-- Scripts -->
+    <script th:src="@{/libs/choices.js/public/assets/scripts/choices.min.js}"></script>
+    <script type="text/javascript">
+        MAX_FILE_SIZE = 102400; // 100KB
+        moduleURL = "[[@{/users}]]";
 
-		moduleURL = "[[@{/users}]]";
+        document.addEventListener('DOMContentLoaded', function() {
+            const element = document.querySelector('#rolesSelect');
+            
+            // Decode HTML entities trong options trước khi khởi tạo Choices
+            element.querySelectorAll('option').forEach(option => {
+                option.textContent = decodeHTMLEntities(option.textContent);
+            });
 
-		function checkEmailUnique(form) {
-			url = "[[@{/users/check_email}]]";
-			userEmail = $("#email").val();
-			userId = $("#id").val();
-			csrfValue = $("input[name='_csrf']").val();
+            const choices = new Choices(element, {
+                removeItemButton: true,
+                searchEnabled: true,
+                searchPlaceholderValue: 'Search roles...',
+                placeholder: true,
+                placeholderValue: 'Select roles',
+                classNames: {
+                    containerOuter: 'choices',
+                    containerInner: 'choices__inner',
+                    input: 'choices__input',
+                    inputCloned: 'choices__input--cloned',
+                    list: 'choices__list',
+                    listItems: 'choices__list--multiple',
+                    listSingle: 'choices__list--single',
+                    listDropdown: 'choices__list--dropdown',
+                    item: 'choices__item',
+                    itemSelectable: 'choices__item--selectable',
+                    itemDisabled: 'choices__item--disabled',
+                    itemChoice: 'choices__item--choice',
+                    placeholder: 'choices__placeholder',
+                    group: 'choices__group',
+                    groupHeading: 'choices__heading',
+                    button: 'choices__button'
+                }
+            });
+        });
 
-			params = {id: userId, email: userEmail, _csrf: csrfValue};
+        // Hàm để decode HTML entities
+        function decodeHTMLEntities(text) {
+            const textArea = document.createElement('textarea');
+            textArea.innerHTML = text;
+            return textArea.value;
+        }
 
-			$.post(url, params, function (response) {
-				if (response == "OK") {
-					form.submit();
-				} else if (response == "Duplicated") {
-					showWarningModal("There is another user having the email " + userEmail);
-				} else {
-					showErrorModal("Unknown response from server");
-				}
-			}).fail(function () {
-				showErrorModal("Could not connect to the server");
-			});
+        // Password toggle
+        document.querySelector('.password-toggler').addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
 
-			return false;
-		}
-	</script>
-	<script th:src="@{/js/common_form.js}"></script>
+		
+
+        function checkEmailUnique(form) {
+            url = "[[@{/users/check_email}]]";
+            userEmail = $("#email").val();
+            userId = $("#id").val();
+            csrfValue = $("input[name='_csrf']").val();
+
+            params = {id: userId, email: userEmail, _csrf: csrfValue};
+
+            $.post(url, params, function (response) {
+                if (response == "OK") {
+                    form.submit();
+                } else if (response == "Duplicated") {
+                    showWarningMessage("There is another user having the email " + userEmail);
+                } else {
+                    showErrorMessage("Unknown response from server");
+                }
+            }).fail(function () {
+                showErrorMessage("Could not connect to the server");
+            });
+
+            return false;
+        }
+    </script>
+</div>
 </body>
-
 </html>
