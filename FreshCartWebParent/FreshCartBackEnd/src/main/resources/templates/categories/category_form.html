@@ -4,117 +4,149 @@
 <head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Categories | [[${pageTitle}]]</h2>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
 
-		<form th:action="@{/categories/save}" method="post"
-			style="max-width: 500px; margin: 0 auto"
-			enctype="multipart/form-data" onsubmit="return checkUnique(this)"
-			th:object="${category}">
-			<input type="hidden" th:field="*{id}" />
-			<div class="border border-secondary rounded p-3">
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Category Name:</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" th:field="*{name}"
-							required minlength="3" maxlength="128" />
-					</div>
-				</div>
+        <!-- main -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <!-- header row -->
+                <div class="row mb-8">
+                    <div class="col-md-12">
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>[[${pageTitle}]]</h2>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="@{/}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="@{/categories}" class="text-inherit">Categories</a></li>
+                                        <li class="breadcrumb-item active">[[${pageTitle}]]</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <div>
+                                <a th:href="@{/categories}" class="btn btn-light">Back to Categories</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Alias:</label>
-					<div class="col-sm-8">
-						<input type="text" class="form-control" th:field="*{alias}"
-							required minlength="3" maxlength="64" />
-					</div>
-				</div>
+                <form th:action="@{/categories/save}" method="post" enctype="multipart/form-data" 
+                      onsubmit="return checkUnique(this)" th:object="${category}">
+                    <input type="hidden" th:field="*{id}" />
+                    
+                    <div class="row">
+                        <div class="col-lg-12 col-12">
+                            <!-- card -->
+                            <div class="card mb-6 shadow border-0">
+                                <!-- card body -->
+                                <div class="card-body p-6">
+                                    <h4 class="mb-5 h5">Category Image</h4>
+                                    <div class="mb-4 d-flex">
+                                        <div class="position-relative">
+                                            <input type="hidden" th:field="*{image}" />
+                                            <img class="image icon-shape icon-xxxl bg-light rounded-4" 
+                                                 id="thumbnail" th:src="@{${category.imagePath}}" alt="Image preview"/>
+                                            <div class="file-upload position-absolute end-0 top-0 mt-n2 me-n1">
+                                                <input type="file" class="file-input" id="fileImage" name="fileImage" 
+                                                       accept="image/png, image/jpeg" th:required="${category.imagePath == null}"/>
+                                                <span class="icon-shape icon-sm rounded-circle bg-white">
+                                                    <i class="bi bi-pencil-fill text-muted"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Parent Category:</label>
-					<div class="col-sm-8">
-						<select class="form-control" th:field="*{parent}">
-							<option value="0">[No Parent]</option>
+                                    <h4 class="mb-4 h5 mt-5">Category Information</h4>
+                                    <div class="row">
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Category Name</label>
+                                            <input type="text" class="form-control" th:field="*{name}" 
+                                                   required minlength="3" maxlength="128" placeholder="Category Name"/>
+                                        </div>
 
-							<th:block th:each="cat : ${listCategories}">
-								<option th:value="${cat.id}">[[${cat.name}]]</option>
-							</th:block>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Alias</label>
+                                            <input type="text" class="form-control" th:field="*{alias}" 
+                                                   required minlength="3" maxlength="64" placeholder="Alias"/>
+                                        </div>
 
-						</select>
-					</div>
-				</div>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Parent Category</label>
+                                            <select class="form-select" th:field="*{parent}">
+                                                <option value="0">[No Parent]</option>
+                                                <th:block th:each="cat : ${listCategories}">
+                                                    <option th:value="${cat.id}">[[${cat.name}]]</option>
+                                                </th:block>
+                                            </select>
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Image:</label>
-					<div class="col-sm-8">
-						<input type="hidden" th:field="*{image}" /> <input type="file"
-							id="fileImage" name="fileImage" accept="image/png, image/jpeg"
-							th:required="${category.imagePath == null}" class="mb-2" />
+                                        <div class="mb-3 col-lg-12">
+                                            <label class="form-label">Status</label><br/>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:field="*{enabled}" 
+                                                       id="enabled" value="true" checked/>
+                                                <label class="form-check-label" for="enabled">Active</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:field="*{enabled}" 
+                                                       id="disabled" value="false"/>
+                                                <label class="form-check-label" for="disabled">Disabled</label>
+                                            </div>
+                                        </div>
 
-						<div class="mt-2">
-							<img id="thumbnail" alt="Image preview"
-								th:src="@{${category.imagePath}}" class="img-fluid" />
-						</div>
-					</div>
-				</div>
+                                        <div class="col-lg-12">
+                                            <input type="submit" value="Save" class="btn btn-primary"/>
+                                            <input type="button" value="Cancel" class="btn btn-secondary ms-2" id="buttonCancel"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
 
-				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Enabled:</label>
-					<div class="col-sm-8">
-						<input type="checkbox" th:field="*{enabled}" />
-					</div>
-				</div>
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: common-js"></div>
 
-				<div class="text-center">
-					<input type="submit" value="Save" class="btn btn-primary m-3" /> <input
-						type="button" value="Cancel" class="btn btn-secondary"
-						id="buttonCancel" />
-				</div>
-			</div>
-		</form>
+    <script type="text/javascript">
+        MAX_FILE_SIZE = 102400; // 100KB
+        moduleURL = "[[@{/categories}]]";
+        
+        function checkUnique(form) {
+            catId = $("#id").val();
+            catName = $("#name").val();
+            catAlias = $("#alias").val();
 
-		<div th:replace="modal_fragments :: modal_dialog"></div>
+            csrfValue = $("input[name='_csrf']").val();
 
-		<div th:replace="fragments :: footer"></div>
+            url = "[[@{/categories/check_unique}]]";
 
-	</div>
-	<script type="text/javascript">
-		MAX_FILE_SIZE = 102400; // 100KB
-		moduleURL = "[[@{/categories}]]";
+            params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
 
-		function checkUnique(form) {
-			catId = $("#id").val();
-			catName = $("#name").val();
-			catAlias = $("#alias").val();
+            $.post(url, params, function (response) {
+                if (response == "OK") {
+                    form.submit();
+                } else if (response == "DuplicateName") {
+                    showWarningModal("There is another category having same name " + catName);
+                } else if (response == "DuplicateAlias") {
+                    showWarningModal("There is another category having same alias " + catAlias);
+                } else {
+                    showErrorModal("Unknown response from server");
+                }
 
-			csrfValue = $("input[name='_csrf']").val();
+            }).fail(function () {
+                showErrorModal("Could not connect to the server");
+            });
 
-			url = "[[@{/categories/check_unique}]]";
-
-			params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
-
-			$.post(url, params, function (response) {
-				if (response == "OK") {
-					form.submit();
-				} else if (response == "DuplicateName") {
-					showWarningModal("There is another category having same name " + catName);
-				} else if (response == "DuplicateAlias") {
-					showWarningModal("There is another category having same alias " + catAlias);
-				} else {
-					showErrorModal("Unknown response from server");
-				}
-
-			}).fail(function () {
-				showErrorModal("Could not connect to the server");
-			});
-
-			return false;
-		}
-
-	</script>
-	<script th:src="@{/js/common_form.js}"></script>
+            return false;
+        }
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
 </body>
-
 </html>

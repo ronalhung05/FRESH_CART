@@ -3,124 +3,134 @@
 
 <body>
 	<div th:fragment="content" th:remove="tag">
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Product Name:</label>
-			<div class="col-sm-10">
-				<th:block th:if="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control" th:field="*{name}"
-						readonly="readonly" />
-				</th:block>
+		<div class="card shadow-sm border-0">
+			<div class="card-body">
+				<h5 class="mb-4">Product Information</h5>
+				
+				<div class="row g-4">
+					<!-- Title -->
+					<div class="col-md-6">
+						<label class="form-label">Title  <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" th:field="*{name}" 
+							required minlength="3" maxlength="256"
+							placeholder="Product Name"
+							th:readonly="${isReadOnlyForSalesperson}" />
+					</div>
 
-				<th:block th:unless="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control" th:field="*{name}" required
-						minlength="3" maxlength="256" />
-				</th:block>
-			</div>
-		</div>
-
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Alias:</label>
-			<div class="col-sm-10">
-				<th:block th:if="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control" th:field="*{alias}"
-						placeholder="Default is product name (spaces are replaced by dashes)"
-						readonly="readonly" />
-				</th:block>
-
-				<th:block th:unless="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control" th:field="*{alias}"
-						placeholder="Default is product name (spaces are replaced by dashes)"
-						minlength="3" maxlength="256" />
-				</th:block>
-			</div>
-		</div>
-
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Brand:</label>
-			<div class="col-sm-10">
-				<th:block th:unless="${isReadOnlyForSalesperson}">
-					<select th:field="*{brand}" class="form-control" required>
-						<th:block th:each="brand : ${listBrands}">
-							<option th:value="${brand.id}">[[${brand.name}]]</option>
-						</th:block>
-					</select>
-				</th:block>
-
-				<th:block th:if="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control"
-						th:value="${product.brand.name}" readonly />
-				</th:block>
-
-			</div>
-		</div>
-
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Category:</label>
-			<div class="col-sm-10">
-				<th:block th:unless="${isReadOnlyForSalesperson}">
-					<th:block th:if="${product.category != null}">
-						<select th:field="*{category}" class="form-control" required>
-							<th:block th:each="cat : ${product.brand.categories}">
-								<option th:value="${cat.id}">[[${cat.name}]]</option>
+					<!-- Product Category -->
+					<div class="col-md-6">
+						<label class="form-label">Product Category <span class="text-danger">*</span></label>
+						<th:block th:unless="${isReadOnlyForSalesperson}">
+							<!-- When product has category -->
+							<th:block th:if="${product.category != null}">
+								<select th:field="*{category}" class="form-select" required>
+									<th:block th:each="cat : ${product.brand.categories}">
+										<option th:value="${cat.id}">[[${cat.name}]]</option>
+									</th:block>
+								</select>
 							</th:block>
-						</select>
-					</th:block>
 
-					<th:block th:if="${product.category == null}">
-						<select th:field="*{category}" class="form-control" required>
-						</select>
-					</th:block>
-				</th:block>
+							<!-- When product has no category -->
+							<th:block th:if="${product.category == null}">
+								<select th:field="*{category}" class="form-select" required>
+								</select>
+							</th:block>
+						</th:block>
 
-				<th:block th:if="${isReadOnlyForSalesperson}">
-					<input type="text" class="form-control"
-						th:value="${product.category.name}" readonly />
-				</th:block>
-			</div>
-		</div>
+						<!-- For read-only view -->
+						<th:block th:if="${isReadOnlyForSalesperson}">
+							<input type="text" class="form-control" 
+								   th:value="${product.category != null ? product.category.name : ''}" 
+								   readonly />
+						</th:block>
+					</div>
 
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Enabled:</label>
-			<div class="col-sm-10">
-				<th:block th:if="${isReadOnlyForSalesperson}">
-					<th:block th:if="${product.category != null}">
-						<input type="checkbox" th:field="*{enabled}" disabled="disabled" />
-					</th:block>
-				</th:block>
+					<!-- Alias -->
+					<div class="col-md-6">
+						<label class="form-label">Alias <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" th:field="*{alias}"
+							placeholder="Default is product name (spaces are replaced by dashes)"
+							minlength="3" maxlength="256"
+							th:readonly="${isReadOnlyForSalesperson}" />
+					</div>
 
-				<th:block th:unless="${isReadOnlyForSalesperson}">
-					<input type="checkbox" th:field="*{enabled}" />
-				</th:block>
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">In-Stock:</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control" th:value="*{inStock}" readonly/>
-			</div>
-		</div>
+					<!-- Brand -->
+					<div class="col-md-6">
+						<label class="form-label">Brand <span class="text-danger">*</span>	</label>
+						<th:block th:unless="${isReadOnlyForSalesperson}">
+							<select th:field="*{brand}" class="form-select" required>
+								<th:block th:each="brand : ${listBrands}">
+									<option th:value="${brand.id}">[[${brand.name}]]</option>
+								</th:block>
+							</select>
+						</th:block>
+						<th:block th:if="${isReadOnlyForSalesperson}">
+							<input type="text" class="form-control" th:value="${product.brand.name}" readonly />
+						</th:block>
+					</div>
 
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Cost:</label>
-			<div class="col-sm-10">
-				<input type="number" step="0.01" class="form-control"
-					th:field="*{cost}" />
-			</div>
-		</div>
+					<!-- Cost -->
+					<div class="col-md-6">
+						<label class="form-label">Cost <span class="text-danger">*</span></label>
+						<div class="input-group">
+							<span class="input-group-text bg-light">$</span>
+							<input type="number" 
+								   class="form-control" 
+								   th:field="*{cost}"
+								   placeholder="Enter cost" 
+								   step="0.01"
+								   min="0" />
+						</div>
+					</div>
 
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Price:</label>
-			<div class="col-sm-10">
-				<input type="number" step="0.01" class="form-control"
-					th:field="*{price}" />
-			</div>
-		</div>
+					<!-- Price -->
+					<div class="col-md-6">
+						<label class="form-label">Price <span class="text-danger">*</span>	</label>
+						<div class="input-group">
+							<span class="input-group-text bg-light">$</span>
+							<input type="number" 
+								   class="form-control" 
+								   th:field="*{price}"
+								   placeholder="Enter price" 
+								   step="0.01"
+								   min="0" />
+						</div>
+					</div>
 
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Discount:</label>
-			<div class="col-sm-10">
-				<input type="number" step="0.01" class="form-control"
-					th:field="*{discountPercent}" />
+					<!-- Sale Price -->
+					<div class="col-md-6">
+							<label class="form-label">Sale Price  <span class="text-danger">*</span></label>
+						<div class="input-group">
+							<span class="input-group-text bg-light">$</span>
+							<input type="number" 
+								   class="form-control" 
+								   th:field="*{discountPercent}"
+								   placeholder="Enter sale price" 
+								   step="0.01"
+								   min="0" />
+						</div>
+					</div>
+
+					<!-- Status -->
+					<div class="col-md-6">
+						<label class="form-label">Status</label>
+						<div class="form-check form-switch">
+							<input class="form-check-input" type="checkbox" th:field="*{enabled}">
+							<label class="form-check-label">Enable this product</label>
+						</div>
+					</div>
+
+					<!-- In Stock -->
+					<div class="col-md-6">
+						<label class="form-label">In Stock</label>
+						<input type="text" 
+							   class="form-control" 
+							   th:value="*{inStock}" 
+							   readonly 
+							   disabled
+							   style="background-color: #e9ecef;" />
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

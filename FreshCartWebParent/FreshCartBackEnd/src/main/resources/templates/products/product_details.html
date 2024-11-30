@@ -3,29 +3,67 @@
 
 <body>
 	<div th:fragment="content" id="divProductDetails">
-		<th:block th:each="detail, status : ${product.details}">
-			<div class="form-inline" th:id="'divDetail' + ${status.index}">
-				<input type="hidden" name="detailIDs" th:value="${detail.id}" /> <label
-					class="m-3">Name:</label> <input type="text"
-					class="form-control w-25" name="detailNames" maxlength="255"
-					th:value="${detail.name}" /> <label class="m-3">Value:</label> <input
-					type="text" class="form-control w-25" name="detailValues"
-					maxlength="255" th:value="${detail.value}" /> <a
-					name="linkRemoveDetail"
-					class="btn fas fa-times-circle fa-2x icon-dark"
-					title="Remove this detail"></a>
-			</div>
-		</th:block>
+		<div class="card shadow-sm border-0">
+			<div class="card-body">
+				<!-- Existing Details -->
+				<th:block th:each="detail, status : ${product.details}">
+					<div class="card mb-3" th:id="'divDetail' + ${status.index}">
+						<div class="card-body">
+							<div class="row align-items-center">
+								<input type="hidden" name="detailIDs" th:value="${detail.id}" />
+								
+								<div class="col-md-5">
+									<label class="form-label">Name:</label>
+									<input type="text" class="form-control" name="detailNames" 
+										   maxlength="255" th:value="${detail.name}" />
+								</div>
 
-		<div class="form-inline"
-			th:id="'divDetail' + ${#lists.size(product.details)}">
-			<input type="hidden" name="detailIDs" value="0" /> <label
-				class="m-3">Name:</label> <input type="text"
-				class="form-control w-25" name="detailNames" maxlength="255" /> <label
-				class="m-3">Value:</label> <input type="text"
-				class="form-control w-25" name="detailValues" maxlength="255" />
+								<div class="col-md-5">
+									<label class="form-label">Value:</label>
+									<input type="text" class="form-control" name="detailValues"
+										   maxlength="255" th:value="${detail.value}" />
+								</div>
+
+								<div class="col-md-2 text-end">
+									<a name="linkRemoveDetail" class="btn btn-outline-danger"
+									   title="Remove this detail">
+										<i class="bi bi-trash"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</th:block>
+
+				<!-- Empty Detail Section -->
+				<div class="card mb-3" th:id="'divDetail' + ${#lists.size(product.details)}">
+					<div class="card-body">
+						<div class="row align-items-center">
+							<input type="hidden" name="detailIDs" value="0" />
+							
+							<div class="col-md-5">
+								<label class="form-label">Name:</label>
+								<input type="text" class="form-control" name="detailNames" 
+									   maxlength="255" placeholder="Enter detail name" />
+							</div>
+
+							<div class="col-md-5">
+								<label class="form-label">Value:</label>
+								<input type="text" class="form-control" name="detailValues"
+									   maxlength="255" placeholder="Enter detail value" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Add More Details Button -->
+				<div class="text-center mt-3">
+					<button type="button" class="btn btn-primary" onclick="addNextDetailSection()">
+						<i class="bi bi-plus-circle me-2"></i>Add More Details
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
-
 </html>

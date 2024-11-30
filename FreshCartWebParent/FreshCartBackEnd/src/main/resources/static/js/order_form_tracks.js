@@ -46,9 +46,7 @@ function updateOverviewStatus() {
 		}
 	});
 
-	if (!latestStatus) {
-		$("#overviewStatus").val("NEW"); //New readonly
-	} else {
+	if (latestStatus) {
 		$("#overviewStatus").val(latestStatus);
 	}
 }
@@ -78,57 +76,34 @@ function generateTrackRowCode() {
 	var trackNoteId = "trackNote" + nextCount;
 	var currentDateTime = formatCurrentDateTime();
 
-	// Thu thập các trạng thái đã được sử dụng
-	var usedStatuses = [];
-	$("#trackList tbody tr").each(function () {
-		var status = $(this).find("select[name='trackStatus']").val();
-		if (status) {
-			usedStatuses.push(status);
-		}
-	});
-
-	// Tạo danh sách các trạng thái chưa sử dụng
-	var allStatuses = [
-		{ value: "CANCELLED", description: "Order has been cancelled" },
-		{ value: "PROCESSING", description: "Order is being processed" },
-		{ value: "PACKAGED", description: "Order has been packaged" },
-		{ value: "PICKED", description: "Order has been picked" },
-		{ value: "SHIPPING", description: "Order is in shipping" },
-		{ value: "DELIVERED", description: "Order has been delivered" },
-		{ value: "RETURN_REQUESTED", description: "Return has been requested" },
-		{ value: "RETURNED", description: "Order has been returned" },
-		{ value: "PAID", description: "Customer has paid this order" },
-		{ value: "REFUNDED", description: "Order has been refunded" }
-	];
-
-	var availableStatuses = allStatuses.filter(function (status) {
-		return !usedStatuses.includes(status.value);
-	});
-
-	// Tạo HTML cho dropdown
-	var statusOptionsHtml = availableStatuses.map(function (status) {
-		return `<option value="${status.value}" defaultDescription="${status.description}">${status.value}</option>`;
-	}).join("");
-
-	var htmlCode = `
-        <tr id="${rowId}">
-            <input type="hidden" name="trackId" value="0" class="hiddenTrackId" />
-            <td>
-                <input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" />
-            </td>
-            <td>
-                <select name="trackStatus" class="form-control dropDownStatus" required style="max-width: 300px" rowNumber="${nextCount}">
-                    ${statusOptionsHtml}
-                </select>
-            </td>
-            <td>
-                <textarea rows="1" class="form-control" name="trackNotes" id="${trackNoteId}" required style="width: 100%;"></textarea>
-            </td>
-            <td>
-                <a class="fas fa-trash icon-dark linkRemoveTrack" href="" rowNumber="${nextCount}" title="Delete"></a> Delete
-            </td>
-        </tr>
-    `;
+	htmlCode = `
+		<tr id="${rowId}">
+			<input type="hidden" name="trackId" value="0" class="hiddenTrackId" />
+			<td>
+				<input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" />
+			</td>
+			<td>
+				<select name="trackStatus" class="form-control dropDownStatus" required style="max-width: 300px" rowNumber="${nextCount}">
+					<option value="CANCELLED" defaultDescription="Order has been cancelled">CANCELLED</option>
+					<option value="PROCESSING" defaultDescription="Order is being processed">PROCESSING</option>
+					<option value="PACKAGED" defaultDescription="Order has been packaged">PACKAGED</option>
+					<option value="PICKED" defaultDescription="Order has been picked">PICKED</option>
+					<option value="SHIPPING" defaultDescription="Order is in shipping">SHIPPING</option>
+					<option value="DELIVERED" defaultDescription="Order has been delivered">DELIVERED</option>
+					<option value="RETURN_REQUESTED" defaultDescription="Return has been requested">RETURN_REQUESTED</option>
+					<option value="RETURNED" defaultDescription="Order has been returned">RETURNED</option>
+					<option value="PAID" defaultDescription="Customer has paid this order">PAID</option>
+					<option value="REFUNDED" defaultDescription="Order has been refunded">REFUNDED</option>
+				</select>
+			</td>
+			<td>
+				<textarea rows="1" class="form-control" name="trackNotes" id="${trackNoteId}" required style="width: 100%;"></textarea>
+			</td>
+			<td>
+				<a class="fas fa-trash icon-dark linkRemoveTrack" href="" rowNumber="${nextCount}" title="Delete"></a> Delete
+			</td>
+		</tr>
+	`;
 
 	return htmlCode;
 }

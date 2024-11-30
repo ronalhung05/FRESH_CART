@@ -3,17 +3,24 @@
 
 <body>
 	<div th:fragment="content" th:remove="tag">
-		<div class="m-2">
-			<label>Short Description:</label>
-			<textarea class="form-control" th:field="*{shortDescription}"
-				rows="5" required></textarea>
+		<div class="card shadow-sm border-0">
+			<div class="card-body">
+				<!-- Short Description -->
+				<div class="mb-4">
+					<label class="form-label">Short Description:</label>
+					<div id="shortDescriptionEditor"></div>
+					<input type="hidden" th:field="*{shortDescription}" id="shortDescriptionInput" />
+				</div>
+
+				<!-- Full Description -->
+				<div class="mb-4">
+					<label class="form-label">Full Description:</label>
+					<div id="fullDescriptionEditor"></div>
+					<input type="hidden" th:field="*{fullDescription}" id="fullDescriptionInput" />
+				</div>
+			</div>
 		</div>
 
-		<div class="m-2">
-			<label>Full Description:</label>
-			<textarea class="form-control" th:field="*{fullDescription}"
-				rows="10" required></textarea>
-		</div>
 	</div>
 </body>
 

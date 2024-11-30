@@ -2,62 +2,92 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="content(reportType)" th:remove="tag">
-	<div th:with="buttonClass = 'button-sales-by' + ${reportType}">
-		<button period="last_7_days" class="btn btn-primary m-1" th:classappend="${buttonClass}">Last 7 days</button>
-		<button period="last_28_days" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 28 days</button>
-		<button period="last_6_months" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 6 Months</button>
-		<button period="last_year" class="btn btn-light m-1" th:classappend="${buttonClass}">Last Year</button>
-		<button class="btn btn-light m-1" th:classappend="${buttonClass}">Custom Date Range</button>
-	</div>
+    <!-- Summary Cards -->
+    
 
-	<form>
-		<div th:id="'divCustomDateRange' + ${reportType}" class="d-none">
-			From date: <input type="date" th:id="'startDate' + ${reportType}"> &nbsp;
-			To date: <input type="date" th:id="'endDate' + ${reportType}"> &nbsp;
-			<button type="button" class="btn btn-secondary" th:id="'buttonViewReportByDateRange' + ${reportType}">View
-			</button>
-		</div>
-	</form>
+    <!-- Existing buttons and chart -->
+    <div th:with="buttonClass = 'button-sales-by' + ${reportType}">
+        <button period="last_7_days" class="btn btn-primary m-1" th:classappend="${buttonClass}">Last 7 days</button>
+        <button period="last_28_days" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 28 days</button>
+        <button period="last_6_months" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 6 Months</button>
+        <button period="last_year" class="btn btn-light m-1" th:classappend="${buttonClass}">Last Year</button>
+        <button class="btn btn-light m-1" th:classappend="${buttonClass}">Custom Date Range</button>
+    </div>
 
-	<div th:id="'chart_sales_by' + ${reportType}" class="justify-content-center mt-3"></div>
+    <form>
+        <div th:id="'divCustomDateRange' + ${reportType}" class="d-none">
+            From date: <input type="date" th:id="'startDate' + ${reportType}"> &nbsp;
+            To date: <input type="date" th:id="'endDate' + ${reportType}"> &nbsp;
+            <button type="button" class="btn btn-secondary" th:id="'buttonViewReportByDateRange' + ${reportType}">View</button>
+        </div>
+    </form>
 
-	<div class="row justify-content-center">
-		<div class="col-2-sm">
-			<div class="card">
-				<div class="card-header"><b>Total Revenue</b></div>
-				<div class="card-body">
-					<span class="h3" th:id="'textTotalRevenue' + ${reportType}"></span>
-				</div>
-			</div>
-		</div>
+    <div th:id="'chart_sales_by' + ${reportType}" class="justify-content-center mt-3"></div>
 
-		<div class="col-2-sm">
-			<div class="card">
-				<div class="card-header"><b>Total Profit</b></div>
-				<div class="card-body">
-					<span class="h3" th:id="'textTotalProfit' + ${reportType}"></span>
-				</div>
-			</div>
-		</div>
+	<div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <!-- Total Revenue & Profit Card -->
+        <div class="col">
+            <div class="card h-100 card-lg">
+                <div class="card-body p-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h4 class="mb-0 fs-5">Total Revenue</h4>
+                        </div>
+                        <div class="icon-shape icon-md bg-light-primary text-primary rounded-circle">
+                            <i class="bi bi-graph-up fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="lh-1">
+                        <h1 class="mb-2 fs-3 fw-bold" th:id="'textTotalRevenue' + ${reportType}">$0.00</h1>
+                        <span class="text-muted fs-6">Total earnings</span>
+                    </div>
+                    <hr class="my-4">
+                    <div class="lh-1">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0 fs-5">Total Profit</h4>
+                            <div class="icon-shape icon-md bg-light-success text-success rounded-circle">
+                                <i class="bi bi-wallet2 fs-5"></i>
+                            </div>
+                        </div>
+                        <h1 class="mb-2 fs-3 fw-bold" th:id="'textTotalProfit' + ${reportType}">$0.00</h1>
+                        <span class="text-muted fs-6">Net income</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="col-2-sm">
-			<div class="card">
-				<div class="card-header"><b>Total Shipping Cost</b></div>
-				<div class="card-body">
-					<span class="h3" th:id="'textTotalShippingCost' + ${reportType}"></span>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-2-sm">
-			<div class="card">
-				<div class="card-header"><b><span th:id="'labelTotalItems' + ${reportType}"></span></b></div>
-				<div class="card-body">
-					<span class="h3" th:id="'textTotalItems' + ${reportType}"></span>
-				</div>
-			</div>
-		</div>
-	</div>
+        <!-- Shipping & Items Card -->
+        <div class="col">
+            <div class="card h-100 card-lg">
+                <div class="card-body p-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h4 class="mb-0 fs-5">Shipping Cost</h4>
+                        </div>
+                        <div class="icon-shape icon-md bg-light-warning text-warning rounded-circle">
+                            <i class="bi bi-truck fs-5"></i>
+                        </div>
+                    </div>
+                    <div class="lh-1">
+                        <h1 class="mb-2 fs-3 fw-bold" th:id="'textTotalShippingCost' + ${reportType}">$0.00</h1>
+                        <span class="text-muted fs-6">Delivery fees</span>
+                    </div>
+                    <hr class="my-4">
+                    <div class="lh-1">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0 fs-5">Total Items</h4>
+                            <div class="icon-shape icon-md bg-light-info text-info rounded-circle">
+                                <i class="bi bi-box fs-5"></i>
+                            </div>
+                        </div>
+                        <h1 class="mb-2 fs-3 fw-bold" th:id="'textTotalItems' + ${reportType}">0</h1>
+                        <span class="text-muted fs-6">Products sold</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
+</html>
 </html>

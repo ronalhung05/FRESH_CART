@@ -2,21 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<head th:replace="fragments :: page_head('Home - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Home - FreshCart Admin', 'none')" />
 
 <body>
-	<div class="container-fluid">
+	<div th:replace="navigation :: top_nav"></div>
+
+	<div class="main-wrapper">
 		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Shopme Control Panel</h2>
-			Welcome <a th:href="@{/account}"
-				sec:authentication="principal.fullname"></a> <span
-				sec:authentication="principal.authorities"></span>
-		</div>
+		
+		<!-- main content -->
+		<main class="main-content-wrapper bg-white">
+			<div class="container">
+				<h2>FreshCart Control Panel</h2>
+				<!-- Your dashboard content here -->
+			</div>
+		</main>
 
 		<div th:replace="fragments :: footer"></div>
-
 	</div>
+
+	<div th:replace="fragments :: common-js"></div>
 </body>
 
 </html>

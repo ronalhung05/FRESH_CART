@@ -3,69 +3,76 @@
 
 <body>
 <div th:fragment="content" th:remove="tag">
-	<div id="trackList" class="table-responsive">
-		<table class="table mb-0 text-nowrap table-centered">
-			<thead class="bg-light">
-			<tr>
-				<th style="width: 15%;">Time</th>
-				<th style="width: 15%;">Status</th>
-				<th style="width: 55%;">Notes</th>
-				<th style="width: 15%;">Action</th>
-			</tr>
-			</thead>
-			<tbody>
-			<th:block th:each="track, status : ${order.orderTracks}">
-				<tr th:id="'rowTrack' + ${status.count}"
-					th:with="isTrackWithStatusNew = ${track.status.toString() == 'NEW'}">
-
-					<!-- Hidden input for trackId -->
-					<input type="hidden" name="trackId" th:value="${track.id}" class="hiddenTrackId" />
-
-					<!-- Time Column -->
-					<td>
-						<input type="datetime-local" name="trackDate" style="width: 300px"
-							   th:value="${track.updatedTimeOnForm}" class="form-control"
-							   th:readonly="${isTrackWithStatusNew}"
-							   th:required="${!isTrackWithStatusNew}" />
-					</td>
-
-					<!-- Status Column -->
-					<td>
-						<th:block th:if="${isTrackWithStatusNew}">
-							<!-- Input readonly cho status NEW -->
-							<input type="text" name="trackStatus" th:value="'NEW'" class="form-control" readonly />
-						</th:block>
-						<th:block th:if="${!isTrackWithStatusNew}">
-							<select name="trackStatus" class="form-control dropDownStatus" style="width: 300px;"
-									required th:rowNumber="${status.count}" th:disabled="${isTrackWithStatusNew}">
-								<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
-									<option th:value="${os}" th:text="${os}" th:selected="${os == track.status}" />
-								</th:block>
-							</select>
-						</th:block>
-					</td>
-
-					<!-- Notes Column -->
-					<td>
-								<textarea rows="1" class="form-control" name="trackNotes"
-										  th:id="'trackNote' + ${status.count}" th:readonly="${isTrackWithStatusNew}"
-										  required>[[${track.notes}]]</textarea>
-					</td>
-
-					<!-- Delete Action Column -->
-					<td>
-						<th:block th:if="${!isTrackWithStatusNew}">
-							<a class="fas fa-trash icon-dark linkRemoveTrack" href=""
-							   th:rowNumber="${status.count}" title="Delete"></a>  Delete
-						</th:block>
-					</td>
+	<div id="trackList">
+		<div class="table-responsive">
+			<table class="table text-nowrap table-centered">
+				<thead class="bg-light">
+				<tr>
+					<th>Time</th>
+					<th>Status</th>
+					<th>Notes</th>
+					<th>Action</th>
 				</tr>
-			</th:block>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+				<th:block th:each="track, status : ${order.orderTracks}">
+					<tr th:id="'rowTrack' + ${status.count}"
+						th:with="isTrackWithStatusNew = ${track.status.toString() == 'NEW'}">
 
-		<!-- Add New Track Button -->
-		<button id="linkAddTrack" class="btn btn-success mt-3">Add New Tracking</button>
+						<!-- Hidden input for trackId -->
+						<input type="hidden" name="trackId" th:value="${track.id}" class="hiddenTrackId" />
+
+						<!-- Time Column -->
+						<td>
+							<input type="datetime-local" name="trackDate" class="form-control"
+								   th:value="${track.updatedTimeOnForm}" 
+								   th:readonly="${isTrackWithStatusNew}"
+								   th:required="${!isTrackWithStatusNew}" />
+						</td>
+
+						<!-- Status Column -->
+						<td>
+							<th:block th:if="${isTrackWithStatusNew}">
+								<input type="text" name="trackStatus" th:value="'NEW'" 
+									   class="form-control bg-light" readonly />
+							</th:block>
+							<th:block th:if="${!isTrackWithStatusNew}">
+								<select name="trackStatus" class="form-select dropDownStatus"
+										required th:rowNumber="${status.count}">
+									<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
+										<option th:value="${os}" th:text="${os}" 
+												th:selected="${os == track.status}" />
+									</th:block>
+								</select>
+							</th:block>
+						</td>
+
+						<!-- Notes Column -->
+						<td>
+								<textarea class="form-control" name="trackNotes" rows="2"
+										  th:id="'trackNote' + ${status.count}" 
+										  th:readonly="${isTrackWithStatusNew}"
+										  required>[[${track.notes}]]</textarea>
+						</td>
+
+						<!-- Delete Action Column -->
+						<td>
+							<th:block th:if="${!isTrackWithStatusNew}">
+								<a class="text-danger linkRemoveTrack" href="#" 
+								   th:rowNumber="${status.count}">
+									<i class="feather-icon icon-trash-2"></i>
+								</a>
+							</th:block>
+						</td>
+					</tr>
+				</th:block>
+				</tbody>
+			</table>
+		</div>
+		
+		<button type="button" id="linkAddTrack" class="btn btn-primary mt-3">
+			<i class="bi bi-plus"></i> Add Track Record
+		</button>
 	</div>
 </div>
 </body>

@@ -1,148 +1,168 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Reviews - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Reviews - FreshCart Admin', 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Reviews</h2>
-		</div>
+  <div th:replace="navigation :: top_nav"></div>
+  <div class="main-wrapper">
+    <div th:replace="navigation :: menu"></div>
+    
+    <!-- main content -->
+    <main class="main-content-wrapper bg-white">
+      <div class="container">
+        <!-- header -->
+        <div class="row mb-8">
+          <div class="col-md-12">
+            <div class="d-md-flex justify-content-between align-items-center">
+              <div>
+                <h2>Reviews</h2>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-inherit">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Reviews</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
 
-		<div th:replace="fragments :: search_form_and_message" />
+        <!-- Search and Table -->
+        <div class="row">
+          <div class="col-xl-12 col-12 mb-5">
+            <div class="card h-100 card-lg">
+              <!-- Table -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-centered table-hover text-nowrap table-borderless mb-0" id="reviewsTable">
+                    <thead class="bg-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Customer</th>
+                        <th>Rating</th>
+                        <th>Review Time</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="review : ${listReviews}">
+                        <td>[[${review.id}]]</td>
+                        <td>
+                          <a th:href="@{'/products/detail/' + ${review.product.id}}" class="text-reset link-detail-product">
+                            [[${review.product.shortName}]]
+                          </a>
+                        </td>
+                        <td>
+                          <a th:href="@{'/customers/detail/' + ${review.customer.id}}" class="text-reset link-detail-customer">
+                            [[${review.customer.fullName}]]
+                          </a>
+                        </td>
+                        <td>
+                          <div class="rating-stars">
+                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                              <i class="bi bi-star-fill" 
+                                 th:class="${i <= review.rating ? 'bi bi-star-fill text-warning' : 'bi bi-star text-warning'}"></i>
+                            </th:block>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <span class="text-muted" th:text="${#dates.format(review.reviewTime, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex gap-2">
+                            <a class="btn btn-light btn-icon-text link-detail-review" 
+                               th:href="@{'/reviews/detail/' + ${review.id}}"
+                               data-bs-toggle="tooltip" 
+                               data-bs-placement="top" 
+                               title="View details">
+                              <i class="bi bi-eye"></i>
+                            </a>
+                            <a class="btn btn-light btn-icon-text" 
+                               th:href="@{'/reviews/edit/' + ${review.id}}"
+                               data-bs-toggle="tooltip" 
+                               data-bs-placement="top" 
+                               title="Edit">
+                              <i class="bi bi-pencil"></i>
+                            </a>
+                            <a class="btn btn-light btn-icon-text link-delete" 
+                               th:href="@{'/reviews/delete/' + ${review.id}}"
+                               data-bs-toggle="tooltip" 
+                               data-bs-placement="top" 
+                               title="Delete">
+                              <i class="bi bi-trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Thêm modal vào cuối body, trước các script -->
+  <div class="modal fade" id="detailModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <!-- Modal content will be loaded here -->
+    </div>
+  </div>
 
-		<div class="full-details">
-			<table
-				class="table table-bordered table-striped table-hover table-responsive-xl">
-				<thead class="bg-light">
-					<tr>
-						<th th:replace="fragments :: column_link('id', 'ID', 'none')" />
-						<th
-							th:replace="fragments :: column_link('product', 'Product', 'none')" />
-						<th
-							th:replace="fragments :: column_link('customer', 'Customer', 'none')" />
-						<th
-							th:replace="fragments :: column_link('rating', 'Rating', 'none')" />
-						<th
-							th:replace="fragments :: column_link('reviewTime', 'Review Time', 'none')" />
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="review : ${listReviews}">
-						<td>[[${review.id}]]</td>
-						<td><a
-							th:href="@{'/products/detail/' + ${review.product.id}}"
-							class="link-detail-product"> [[${review.product.shortName}]]
-						</a></td>
-						<td><a
-							th:href="@{'/customers/detail/' + ${review.customer.id}}"
-							class="link-detail-customer"> [[${review.customer.fullName}]]
-						</a></td>
-						<td>[[${review.rating}]] <i class="far fa-star"></i></td>
-						<td>
-							<div th:replace="fragments :: format_time(${review.reviewTime})"></div>
-						</td>
-						<td><a
-							class="fas fa-file-alt fa-2x icon-green link-detail-review"
-							th:href="@{'/reviews/detail/' + ${review.id}}"
-							title="View details of this review"></a> &nbsp;
-							<div
-								th:replace="fragments :: edit('review', '/reviews/edit/' + ${review.id})" />
-							&nbsp;
-							<div
-								th:replace="fragments :: delete('review', ${review.id}, '/reviews/delete/' + ${review.id}, true)" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+  <div th:replace="fragments :: common-js"></div>
+  <div th:replace="fragments :: footer"></div>
 
-		<div class="less-details">
-			<div th:each="review : ${listReviews}" class="row m-1">
-				<div class="col-2">
-					<span>[[${review.id}]]</span>
-				</div>
-				<div class="col-10">
-					<div class="mb-1">
-						<span>[[${review.product.shortName}]]</span>
-					</div>
-					<div>
-						&nbsp; <span>[[${review.rating}]] <i class="far fa-star"></i></span>
-						&nbsp; <a
-							class="fas fa-file-alt fa-2x icon-green link-detail-review"
-							th:href="@{'/reviews/detail/' + ${review.id}}"
-							title="View details of this review"></a> &nbsp;
-						<div
-							th:replace="fragments :: edit('review', '/reviews/edit/' + ${review.id})" />
-						&nbsp;
-						<div
-							th:replace="fragments :: delete('review', ${review.id}, '/reviews/delete/' + ${review.id}, true)" />
-					</div>
-				</div>
-				<div>&nbsp;</div>
-			</div>
-		</div>
+  <div th:replace="modal_fragments :: confirm_modal"></div>
 
-		<div th:replace="fragments :: pagination('reviews')"></div>
+  <script type="text/javascript" th:src="@{/js/common_list.js}"></script>
+  <script type="text/javascript" th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/datatable.js}"></script>
+  <script type="text/javascript">
+    moduleURL = "[[@{/reviews}]]";
 
-		<div th:replace="modal_fragments :: confirm_modal" />
+    $(document).ready(function() {
+      var message = "[[${message}]]";
+      if (message) {
+        showSuccessMessage(message);
+      }
 
-		<div class="modal fade" id="xlargeModal">
-			<div class="modal-dialog modal-xl">
-				<div class="modal-content"></div>
-			</div>
-		</div>
+      handleProductDetailLink();
+      handleCustomerDetailLink();
+      handleReviewDetailLink();
+      
+      initializeDataTable('reviewsTable');
+    });
 
-		<div class="modal fade" id="largeModal">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content"></div>
-			</div>
-		</div>
+    function handleProductDetailLink() {
+      $(".link-detail-product").on("click", function(e) {
+        e.preventDefault();
+        linkDetailURL = $(this).attr("href");
+        $("#detailModal").modal("show").find(".modal-dialog").load(linkDetailURL);
+      });
+    }
 
-		<div th:replace="fragments :: footer"></div>
+    function handleCustomerDetailLink() {
+      $(".link-detail-customer").on("click", function(e) {
+        e.preventDefault();
+        linkDetailURL = $(this).attr("href");
+        $("#detailModal").modal("show").find(".modal-dialog").load(linkDetailURL);
+      });
+    }
 
-	</div>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/reviews}]]";
-
-		$(document).ready(function () {
-			handleDeleteLink();
-			handleProductDetailLink();
-			handleCustomerDetailLink();
-			handleReviewDetailLink();
-		});
-
-		function handleDeleteLink() {
-			$(".link-delete").on("click", function (e) {
-				e.preventDefault();
-				showDeleteConfirmModal($(this), 'review');
-			});
-		}
-
-		function handleDetailLinkClick(cssClass, modalId) {
-			$(cssClass).on("click", function (e) {
-				e.preventDefault();
-				linkDetailURL = $(this).attr("href");
-				$(modalId).modal("show").find(".modal-content").load(linkDetailURL);
-			});
-		}
-
-		function handleProductDetailLink() {
-			handleDetailLinkClick(".link-detail-product", "#xlargeModal");
-		}
-
-		function handleCustomerDetailLink() {
-			handleDetailLinkClick(".link-detail-customer", "#largeModal");
-		}
-
-		function handleReviewDetailLink() {
-			handleDetailLinkClick(".link-detail-review", "#largeModal");
-		}	
-	</script>
+    function handleReviewDetailLink() {
+      $(".link-detail-review").on("click", function(e) {
+        e.preventDefault();
+        linkDetailURL = $(this).attr("href");
+        $("#detailModal").modal("show").find(".modal-dialog").load(linkDetailURL);
+      });
+    }
+  </script>
 </body>
 
 </html>

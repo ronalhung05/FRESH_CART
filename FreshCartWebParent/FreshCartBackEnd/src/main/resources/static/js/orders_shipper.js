@@ -5,17 +5,6 @@ var iconNames = {
 	'RETURNED': 'fa-undo'
 };
 
-const validTransitions = {
-	NEW: "PROCESSING",
-	PROCESSING: "PACKAGED",
-	PACKAGED: "PICKED",
-	PICKED: "SHIPPING",
-	SHIPPING: "DELIVERED",
-	DELIVERED: "RETURN_REQUESTED",
-	RETURN_REQUESTED: "RETURNED"
-};
-
-
 var confirmText;
 var confirmModalDialog;
 var yesButton;
@@ -84,14 +73,6 @@ function updateStatusIconColor(orderId, status) {
 }
 
 function showUpdateConfirmModal(link) {
-	const currentStatus = link.attr("data-current-status"); // Lấy trạng thái hiện tại
-	const nextStatus = link.attr("status"); // Lấy trạng thái muốn chuyển tới
-
-	if (!isValidTransition(currentStatus, nextStatus)) {
-		showMessageModalError(`Invalid status transition from ${currentStatus} to ${nextStatus}`);
-		return; // Dừng lại nếu không hợp lệ
-	}
-
 	noButton.text("NO");
 	yesButton.show();
 
@@ -121,15 +102,4 @@ function showMessageModal(message) {
 	});
 
 	confirmModalDialog.modal("show");
-}
-
-function showMessageModalError(message) {
-	confirmText.text(message);
-	noButton.text("Close").show();
-	yesButton.hide();
-	confirmModalDialog.modal("show");
-}
-
-function isValidTransition(currentStatus, nextStatus) {
-	return validTransitions[currentStatus] === nextStatus;
 }

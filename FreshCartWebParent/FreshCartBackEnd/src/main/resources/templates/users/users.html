@@ -1,123 +1,131 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Users - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Users - Fresh Cart Admin', 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Users</h2>
-			<a th:href="@{/users/new}"
-				class="fas fa-user-plus fa-2x icon-dark mr-2"></a> <a
-				th:href="@{/users/export/csv}"
-				class="fas fa-file-csv fa-2x icon-dark mr-2"></a> <a
-				th:href="@{/users/export/excel}"
-				class="fas fa-file-excel fa-2x icon-dark mr-2"></a> <a
-				th:href="@{/users/export/pdf}"
-				class="fas fa-file-pdf fa-2x icon-dark"></a>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
+        <!-- main -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <div class="row mb-8">
+                    <div class="col-md-12">
+                        <!-- page header -->
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>Users</h2>
+                                
+                            </div>
+                            <!-- button -->
+                            <div>
+                                <a th:href="@{/users/new}" class="btn btn-primary">Add User</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Search, Export buttons and Table -->
+                <div class="row">
+                    <div class="col-xl-12 col-12 mb-5">
+                        <div class="card h-100 card-lg">
+                            <!-- Search Form and Export Buttons -->
+                            <div class="p-4">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div th:replace="fragments :: search_form_and_message" />
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <a th:href="@{/users/export/csv}" class="btn btn-secondary">
+                                            <i class="fas fa-file-csv"></i> Export to CSV
+                                        </a>
+                                        <a th:href="@{/users/export/excel}" class="btn btn-secondary ms-2">
+                                            <i class="fas fa-file-excel"></i> Export to Excel
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
-		<div th:replace="fragments :: search_form_and_message" />
+                            <!-- Table -->
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="hideable-column">
+                                                    <th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
+                                                    </th>
+                                            
+                                                    <th>Photos</th>
+                                            
+                                                    <th class="hideable-column">
+                                                    <th
+                                                        th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
+                                                    </th>
+                                            
+                                                    <th
+                                                        th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
+                                                    <th
+                                                        th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />
+                                            
+                                                    <th>Roles</th>
+                                                    <th
+                                                        th:replace="fragments :: column_link('enabled', 'Status', 'none')" />
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="user : ${listUsers}">
+                                                <td>[[${user.id}]]</td>
+                                                <td>
+                                                    <a th:href="@{'/users/edit/' + ${user.id}}">
+                                                        <img th:src="@{${user.photosImagePath}}" 
+                                                             class="icon-shape icon-md rounded-circle"
+                                                             th:alt="${user.fullName}" />
+                                                    </a>
+                                                </td>
+                                                <td>[[${user.email}]]</td>
+                                                <td>[[${user.firstName}]]</td>
+                                                <td>[[${user.lastName}]]</td>
+                                                <td>[[${user.roles}]]</td>
+                                                <td>
+                                                    <div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
+                                                </td>
+                                                <td>
+                                                    <div th:if="${user.email != loggedUser}" class="dropdown">
+                                                        <a class="btn btn-light btn-icon-text" th:href="@{'/users/edit/' + ${user.id}}" 
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                       <i class="bi bi-pencil fs-5"></i>
+                                                     </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:replace="fragments :: pagination('users')"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
-		<div class="full-details">
-			<table
-				class="table table-bordered table-striped table-hover table-responsive-xl">
-				<thead class="thead-dark">
-					<tr>
-						<th class="hideable-column">
-						<th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
-						</th>
+    <div th:replace="modal_fragments :: confirm_modal" />
+    <div th:replace="fragments :: common-js" />
 
-						<th>Photos</th>
+    <script type="text/javascript">
+        moduleURL = "[[@{/users}]]";
 
-						<th class="hideable-column">
-						<th
-							th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
-						</th>
+        $(document).ready(function() {
+            $(".link-delete").on("click", function(e) {
+                e.preventDefault();
+                showDeleteConfirmModal($(this), 'user');
+            });
+        });
+    </script>
 
-						<th
-							th:replace="fragments :: column_link('firstName', 'First Name', 'none')" />
-						<th
-							th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />
-
-						<th>Roles</th>
-						<th
-							th:replace="fragments :: column_link('enabled', 'Enabled', 'none')" />
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="user : ${listUsers}">
-						<td class="hideable-column">[[${user.id}]]</td>
-						<td>
-							<div th:replace="fragments :: user_photos" />
-						</td>
-						<td class="hideable-column">[[${user.email}]]</td>
-						<td>[[${user.firstName}]]</td>
-						<td>[[${user.lastName}]]</td>
-						<td>[[${user.roles}]]</td>
-						<td>
-							<!-- Conditionally show status -->
-							<div th:if="${user.email != loggedUser}">
-								<div th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
-							</div>
-						</td>
-						<td>
-							<!-- Conditionally show edit and delete options -->
-							<div th:if="${user.email != loggedUser}">
-								<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
-								&nbsp;&nbsp;
-								<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<div class="less-details">
-			<div th:each="user : ${listUsers}" class="row m-1">
-				<div class="col-4">
-					<div th:replace="fragments :: user_photos" />
-				</div>
-				<div class="col-8">
-					<div>[[${user.fullName}]]</div>
-					<div>[[${user.roles}]]</div>
-					<div class="mt-2">
-						<div
-							th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})" />
-						&nbsp;
-						<div
-							th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
-						&nbsp;
-						<div
-							th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
-					</div>
-				</div>
-				<div>&nbsp;</div>
-			</div>
-		</div>
-
-		<div th:replace="fragments :: pagination('users')"></div>
-
-		<div th:replace="modal_fragments :: confirm_modal" />
-
-		<div th:replace="fragments :: footer"></div>
-
-	</div>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/users}]]";
-
-		$(document).ready(function () {
-			$(".link-delete").on("click", function (e) {
-				e.preventDefault();
-				showDeleteConfirmModal($(this), 'user');
-			});
-		});
-	</script>
 </body>
 
 </html>

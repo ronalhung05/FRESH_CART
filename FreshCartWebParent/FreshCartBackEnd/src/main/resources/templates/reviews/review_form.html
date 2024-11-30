@@ -4,90 +4,130 @@
 <head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
 
-		<div>
-			<h2>Manage Reviews | [[${pageTitle}]]</h2>
-		</div>
+        <!-- main -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <!-- header row -->
+                <div class="row mb-8">
+                    <div class="col-md-12">
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div>
+                                <h2>[[${pageTitle}]]</h2>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a th:href="@{/}" class="text-inherit">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a th:href="@{/reviews}" class="text-inherit">Reviews</a></li>
+                                        <li class="breadcrumb-item active">[[${pageTitle}]]</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <div>
+                                <a th:href="@{/reviews}" class="btn btn-light">Back to Reviews</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<form th:action="@{/reviews/save}" th:object="${review}" method="post"
-			style="max-width: 800px; margin: 0 auto;">
-			<input type="hidden" th:field="*{id}" />
-			<div class="border border-secondary rounded p-3">
+                <form th:action="@{/reviews/save}" th:object="${review}" method="post" class="needs-validation">
+                    <input type="hidden" th:field="*{id}" />
+                    
+                    <div class="row">
+                        <div class="col-lg-12 col-12">
+                            <!-- card -->
+                            <div class="card mb-6 shadow border-0">
+                                <!-- card body -->
+                                <div class="card-body p-6">
+                                    <!-- Product Info -->
+                                    <h4 class="mb-4 h5">Product Information</h4>
+                                    <div class="mb-4 d-flex align-items-center">
+                                        <div class="position-relative">
+                                            <img th:src="@{${review.product.getMainImagePath}}" 
+                                                 class="rounded-4 icon-shape icon-xxxl bg-light" />
+                                        </div>
+                                        <div class="ms-3">
+                                            <h5 class="mb-1" th:text="${review.product.name}"></h5>
+                                            <p class="text-muted mb-0">By <span th:text="${review.customer.fullName}"></span></p>
+                                        </div>
+                                    </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Product:</label>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control"
-							th:value="${review.product.name}" />
-					</div>
-				</div>
+                                    <!-- Review Details -->
+                                    <h4 class="mb-4 h5 mt-5">Review Details</h4>
+                                    <div class="row">
+                                        <!-- Rating -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Rating</label>
+                                            <div class="d-flex align-items-center">
+                                                <div class="rating-stars me-2">
+                                                    <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                        <i class="bi bi-star-fill" 
+                                                           th:classappend="${i <= review.rating ? 'text-warning' : 'text-muted'}"></i>
+                                                    </th:block>
+                                                </div>
+                                                <span class="text-muted">([[${review.rating}]] out of 5)</span>
+                                            </div>
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Customer:</label>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control"
-							th:value="${review.customer.fullName}" />
-					</div>
-				</div>
+                                        <!-- Review Time -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Review Time</label>
+                                            <p class="form-control-plaintext" 
+                                               th:text="${#dates.format(review.reviewTime, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Rating:</label>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control"
-							th:value="${review.rating}" />
-					</div>
-				</div>
+                                        <!-- Votes -->
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label">Votes</label>
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-hand-thumbs-up text-muted me-2"></i>
+                                                    <span class="fw-bold">[[${review.votes}]]</span>
+                                                </div>
+                                                <div class="ms-3 text-muted small">
+                                                    helpful votes
+                                                </div>
+                                            </div>
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Votes:</label>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control"
-							th:value="${review.votes}" />
-					</div>
-				</div>
+                                        <!-- Headline -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label class="form-label">Headline</label>
+                                            <input type="text" class="form-control" th:field="*{headline}"
+                                                   minlength="20" maxlength="128" required />
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Review Time:</label>
-					<div class="col-sm-10">
-						<span
-							th:text="${#dates.format(review.reviewTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
-					</div>
-				</div>
+                                        <!-- Comment -->
+                                        <div class="mb-3 col-lg-12">
+                                            <label class="form-label">Comment</label>
+                                            <textarea rows="3" class="form-control" th:field="*{comment}"
+                                                      minlength="30" maxlength="300" required></textarea>
+                                        </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Headline:</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" th:field="*{headline}"
-							minlength="20" maxlength="128" required />
-					</div>
-				</div>
+                                        <!-- Buttons -->
+                                        <div class="col-lg-12">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-secondary ms-2" id="buttonCancel">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
 
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Comment:</label>
-					<div class="col-sm-10">
-						<textarea rows="3" class="form-control" th:field="*{comment}"
-							minlength="30" maxlength="300" required></textarea>
-					</div>
-				</div>
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: common-js"></div>
 
-				<div class="text-center">
-					<input type="submit" value="Save" class="btn btn-primary m-3" /> <input
-						type="button" value="Cancel" class="btn btn-secondary"
-						id="buttonCancel" />
-				</div>
-			</div>
-		</form>
-
-		<div th:replace="modal_fragments :: modal_dialog"></div>
-
-		<div th:replace="fragments :: footer"></div>
-	</div>
-	<script type="text/javascript">
-		moduleURL = "[[@{/reviews}]]";	
-	</script>
-	<script th:src="@{/js/common_form.js}"></script>
+    <script type="text/javascript">
+        moduleURL = "[[@{/reviews}]]";
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
 </body>
-
 </html>

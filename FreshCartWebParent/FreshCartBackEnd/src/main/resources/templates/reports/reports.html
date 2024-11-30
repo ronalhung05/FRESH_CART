@@ -1,95 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Sales Report - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Sales Report - FreshCart Admin', 'tag')" />
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Sales Report</h2>
-		</div>
+    <div th:replace="navigation :: top_nav"></div>
+    <div class="main-wrapper">
+        <div th:replace="navigation :: menu"></div>
+        
+        <!-- main content -->
+        <main class="main-content-wrapper bg-white">
+            <div class="container">
+                <!-- header -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h2>Sales Report</h2>
+                        <div class="d-flex">
+                            <a th:href="@{/}" class="text-inherit">Dashboard</a>
+                            <span class="mx-2">/</span>
+                            <span class="text-muted">Reports</span>
+                        </div>
+                    </div>
+                </div>
 
-		<div>
-			<ul class="nav nav-tabs" id="reportTab" role="tablist">
-				<li class="nav-item"><a class="nav-link active"
-					data-toggle="tab" href="#date" role="tab">Sales by Date</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#category" role="tab">Sales by Category</a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="tab"
-					href="#product" role="tab">Sales by Product</a></li>
-			</ul>
+                
+                <!-- Report Content -->
+                <div class="card h-100 card-lg">
+                    <div class="card-header">
+                        <ul class="nav nav-pills nav-lb-tab" id="reportTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="date-tab" data-bs-toggle="tab"
+                                    data-bs-target="#date" type="button" role="tab">
+                                    <i class="bi bi-calendar me-2"></i>Sales by Date
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="category-tab" data-bs-toggle="tab"
+                                    data-bs-target="#category" type="button" role="tab">
+                                    <i class="bi bi-grid me-2"></i>Sales by Category
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="product-tab" data-bs-toggle="tab"
+                                    data-bs-target="#product" type="button" role="tab">
+                                    <i class="bi bi-box me-2"></i>Sales by Product
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
 
-			<div class="tab-content">
-				<div class="tab-pane active p-3" id="date" role="tabpanel">
-					<div th:replace="reports/sales_report_fragment::content('_date')"></div>
-				</div>
-				<div class="tab-pane p-3" id="category" role="tabpanel">
-					<div
-						th:replace="reports/sales_report_fragment::content('_category')"></div>
-				</div>
-				<div class="tab-pane p-3" id="product" role="tabpanel">
-					<div
-						th:replace="reports/sales_report_fragment::content('_product')"></div>
-				</div>
-			</div>
-		</div>
+                    <div class="card-body">
+                        <div class="tab-content" id="reportTabContent">
+                            <div class="tab-pane fade show active" id="date" role="tabpanel">
+                                <div th:replace="reports/sales_report_fragment::content('_date')"></div>
+                            </div>
+                            <div class="tab-pane fade" id="category" role="tabpanel">
+                                <div th:replace="reports/sales_report_fragment::content('_category')"></div>
+                            </div>
+                            <div class="tab-pane fade" id="product" role="tabpanel">
+                                <div th:replace="reports/sales_report_fragment::content('_product')"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<div th:replace="fragments :: footer"></div>
+            </div>
+        </main>
+    </div>
 
-	</div>
-	<script type="text/javascript"
-		src="https://www.gstatic.com/charts/loader.js"></script>
-	<script type="text/javascript">
-		contextPath = "[[@{/}]]";
-		currencySymbol = "[[${CURRENCY_SYMBOL}]]";
-		thousandsPointType = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-		decimalPointType = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-		currencySymbolPosition = "[[${CURRENCY_SYMBOL_POSITION}]]";
-		decimalDigits = "[[${DECIMAL_DIGITS}]]";
+    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: common-js"></div>
+    
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        contextPath = "[[@{/}]]";
+        currencySymbol = "[[${CURRENCY_SYMBOL}]]";
+        thousandsPointType = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+        decimalPointType = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+        currencySymbolPosition = "[[${CURRENCY_SYMBOL_POSITION}]]";
+        decimalDigits = "[[${DECIMAL_DIGITS}]]";
 
-		prefixCurrencySymbol = currencySymbolPosition == 'Before price' ? currencySymbol : '';
-		suffixCurrencySymbol = currencySymbolPosition == 'After price' ? currencySymbol : '';
+        prefixCurrencySymbol = currencySymbolPosition == 'Before price' ? currencySymbol : '';
+        suffixCurrencySymbol = currencySymbolPosition == 'After price' ? currencySymbol : '';
 
-		$(document).ready(function () {
-			let isChartDrawn = {
-				date: false,
-				category: false,
-				product: false
-			};
-
-			google.charts.load('current', {'packages': ['corechart', 'table']});
-			google.charts.setOnLoadCallback(function() {
-				// Load data for the default tab (Sales by "Date")
-				loadSalesReportByDate('last_7_days');
-				isChartDrawn.date = true;
-			});
-
-			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-				const targetTab = $(e.target).attr('href');
-
-				if (targetTab === '#category' && !isChartDrawn.category) {
-					loadSalesReportByDateForCategory('last_7_days'); // Gọi đúng hàm
-					isChartDrawn.category = true;
-				} else if (targetTab === '#product' && !isChartDrawn.product) {
-					loadSalesReportByDateForProduct('last_7_days'); // Gọi đúng hàm
-					isChartDrawn.product = true;
-				} else if (targetTab === '#date' && !isChartDrawn.date) {
-					loadSalesReportByDate('last_7_days'); // Gọi đúng hàm
-					isChartDrawn.date = true;
-				}
-			});
-
-		});
-
-
-	</script>
-	<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-	<script type="text/javascript" th:src="@{/js/sales_report_common.js}"></script>
-	<script type="text/javascript" th:src="@{/js/sales_report_by_date.js}"></script>
-	<script type="text/javascript" th:src="@{/js/sales_report_by_category.js}"></script>
-	<script type="text/javascript" th:src="@{/js/sales_report_by_product.js}"></script>
+        $(document).ready(function() {
+            google.charts.load('current', {
+                'packages': ['corechart', 'table']
+            });
+            google.charts.setOnLoadCallback(function() {
+                loadSalesReportByDate('last_7_days');
+                loadSalesReportByDateForCategory('last_7_days');
+                loadSalesReportByDateForProduct('last_7_days');
+            });
+        });
+    </script>
+    <script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sales_report_common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sales_report_by_date.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sales_report_by_category.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sales_report_by_product.js}"></script>
 </body>
-
 </html>
