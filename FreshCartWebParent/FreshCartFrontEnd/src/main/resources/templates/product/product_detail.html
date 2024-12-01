@@ -24,6 +24,8 @@
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
     <div th:replace="breadcrumb :: content"></div>
+    
+
 
     <section class="mt-8">
         <div class="container">
@@ -65,7 +67,7 @@
                                         </span>
                                     </th:block>
                                 </div>
-                                <a th:href="@{${product.URI} + '#review'}" class="ms-2 text-decoration-none">
+                                <a href="#" class="ms-2 text-decoration-none" onclick="switchToReviewsTab(); return false;">
                                     ([[${product.reviewCount}]] reviews)
                                 </a>
                             </div>
@@ -101,12 +103,8 @@
                                     Out of Stock
                                 </button>
                             </div>
-                            <!-- Thêm trạng thái In Stock kế bên nút -->
-                            <div class="col-auto" th:if="${product.inStock}">
-                                <span class="badge bg-success">In Stock</span>
-                            </div>
-                            <div class="col-auto" th:unless="${product.inStock}">
-                                <span class="badge bg-danger">Out of Stock</span>
+                            <div class="col-auto" th:if="${product.inStock<= 20}">
+                                <span class="badge bg-danger" th:text="'Only ' + ${product.inStock} + ' left'"></span>
                             </div>
                         </div>
 
@@ -265,6 +263,35 @@
         const headerHeight = document.querySelector('header')?.offsetHeight || 0;
         const offset = 100;
         const tabPosition = descriptionTabContent.getBoundingClientRect().top + window.pageYOffset - headerHeight - offset;
+
+        // Scroll đến vị trí đã tính
+        window.scrollTo({
+            top: tabPosition,
+            behavior: 'auto'
+        });
+    }
+
+    function switchToReviewsTab() {
+        // Tìm tất cả các tab và tab content
+        const tabs = document.querySelectorAll('.nav-link');
+        const tabContents = document.querySelectorAll('.tab-pane');
+
+        // Tìm tab và tab content cụ thể cho reviews
+        const reviewsTab = document.querySelector('#reviews-tab');
+        const reviewsTabContent = document.querySelector('#reviews-tab-pane');
+
+        // Loại bỏ active class từ tất cả các tab và tab content
+        tabs.forEach(tab => tab.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('show', 'active'));
+
+        // Thêm active class vào tab và tab content reviews
+        reviewsTab.classList.add('active');
+        reviewsTabContent.classList.add('show', 'active');
+
+        // Tính toán vị trí scroll
+        const headerHeight = document.querySelector('header')?.offsetHeight || 0;
+        const offset = 100;
+        const tabPosition = reviewsTabContent.getBoundingClientRect().top + window.pageYOffset - headerHeight - offset;
 
         // Scroll đến vị trí đã tính
         window.scrollTo({
