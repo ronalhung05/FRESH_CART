@@ -126,23 +126,23 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @GetMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable(name = "id") Integer id,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
-        try {
-            service.delete(id);
-            String categoryDir = "category-images/" + id;
-            AmazonS3Util.removeFolder(categoryDir);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "The category ID " + id + " has been deleted successfully");
-        } catch (CategoryNotFoundException ex) {
-            redirectAttributes.addFlashAttribute("message", ex.getMessage());
-        }
-
-        return "redirect:/categories";
-    }
+//    @GetMapping("/categories/delete/{id}")
+//    public String deleteCategory(@PathVariable(name = "id") Integer id,
+//                                 Model model,
+//                                 RedirectAttributes redirectAttributes) {
+//        try {
+//            service.delete(id);
+//            String categoryDir = "category-images/" + id;
+//            AmazonS3Util.removeFolder(categoryDir);
+//
+//            redirectAttributes.addFlashAttribute("message",
+//                    "The category ID " + id + " has been deleted successfully");
+//        } catch (CategoryNotFoundException ex) {
+//            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+//        }
+//
+//        return "redirect:/categories";
+//    }
 
     @GetMapping("/categories/export/csv")
     public void exportToCSV(HttpServletResponse response) throws IOException {

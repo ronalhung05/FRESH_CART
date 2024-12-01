@@ -74,6 +74,20 @@
                                             </select>
                                         </div>
 
+                                        <div class="mb-3 col-lg-12">
+                                            <label class="form-label">Status</label><br/>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:field="*{enabled}"
+                                                       id="enabled" value="true" checked/>
+                                                <label class="form-check-label" for="enabled">Active</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" th:field="*{enabled}"
+                                                       id="disabled" value="false"/>
+                                                <label class="form-check-label" for="disabled">Disabled</label>
+                                            </div>
+                                        </div>
+
                                         <div class="col-lg-12">
                                             <input type="submit" value="Save" class="btn btn-primary"/>
                                             <input type="button" value="Cancel" class="btn btn-secondary ms-2" id="buttonCancel"/>
