@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: page_head('Add Import - FreshCart Admin', 'none')" />
+<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
 
 <body>
 <div th:replace="navigation :: top_nav"></div>
@@ -59,6 +60,7 @@
                                             <tr>
                                                 <th>Product ID</th>
                                                 <th>Product Name</th>
+                                                <th>Product Image</th>
                                                 <th>Amount</th>
                                                 <th>Cost</th>
                                                 <th>Sub Total</th>
@@ -102,12 +104,15 @@
                 <div class="row mb-4">
                     <div class="col-6">
                         <label class="form-label">Product</label>
-                        <select class="form-select" id="productSelect">
-                            <option value="" selected disabled>Please select a product</option>
-                            <th:block th:each="product : ${listProducts}">
-                                <option th:value="${product.id}" th:text="${product.name}"></option>
-                            </th:block>
-                        </select>
+                            <input type="text" id="productSearch" class="form-control" placeholder="Type to search..." list="productList" />
+                            <!-- Datalist for displaying the dropdown options -->
+                            <datalist id="productList">
+                                <option th:each="product : ${listProducts}"
+                                        th:value="${product.id}"
+                                        th:data-image-url="${product.mainImagePath}"
+                                        th:text="${product.name}">
+                                </option>
+                            </datalist>
                     </div>
                     <div class="col-6">
                         <label class="form-label">Amount</label>
@@ -182,11 +187,8 @@
             // Tính lại total price
             calculateTotal();
         });
-
         // Tính toán ban đầu
         calculateTotal();
-
-
     });
 </script>
 <style>

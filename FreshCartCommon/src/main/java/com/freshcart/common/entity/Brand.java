@@ -30,6 +30,7 @@ public class Brand extends IdBasedEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+    private boolean enabled;
 
     public Brand() {
 
@@ -67,6 +68,14 @@ public class Brand extends IdBasedEntity {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
