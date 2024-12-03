@@ -60,9 +60,9 @@
 				productStock = $("#pstock" + productId);
 
 				if (window.parent.isProductAlreadyAdded(productId)) {
-					showWarningModal("The product '" + productName + "' was already added.");
+					showWarningMessage("The product '" + productName + "' was already added.");
 				} else if (parseInt(productStock.text()) === 0) {
-					showWarningModal("The product '" + productName + "' is out of stock.");
+					showWarningMessage("The product '" + productName + "' is out of stock.");
 				} else {
 					window.parent.addProduct(productId, productName);
 				}

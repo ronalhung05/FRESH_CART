@@ -87,7 +87,7 @@ function getShippingCost(productId) {
 	}).done(function(shippingCost) {
 		getProductInfo(productId, shippingCost);
 	}).fail(function(err) {
-		showWarningModal(err.responseJSON.message);
+		showWarningMessage(err.responseJSON.message);
 		shippingCost = 0.0;
 		getProductInfo(productId, shippingCost);
 	}).always(function() {
@@ -112,7 +112,7 @@ function getProductInfo(productId, shippingCost) {
 		updateOrderAmounts();
 
 	}).fail(function(err) {
-		showWarningModal(err.responseJSON.message);
+		showWarningMessage(err.responseJSON.message);
 	});
 }
 
