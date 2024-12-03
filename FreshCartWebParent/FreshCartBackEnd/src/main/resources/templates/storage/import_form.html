@@ -59,8 +59,7 @@
                                             <thead class="bg-light">
                                             <tr>
                                                 <th>Product ID</th>
-                                                <th>Product Name</th>
-                                                <th>Product Image</th>
+                                                <th>Product</th>
                                                 <th>Amount</th>
                                                 <th>Cost</th>
                                                 <th>Sub Total</th>
@@ -79,8 +78,8 @@
 
                                 <!-- Buttons -->
                                 <div class="text-end">
-                                    <button type="button" class="btn btn-secondary me-2" id="buttonCancel">Cancel</button>
                                     <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary me-2" id="buttonCancel">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -150,10 +149,10 @@
 
 <div th:replace="fragments :: footer"></div>
 <div th:replace="fragments :: common-js"></div>
-<script th:src="@{/js/common_form.js}"></script>
 <script th:src="@{/js/import_form.js}"></script>
 <script>
     $(document).ready(function() {
+        moduleURL = "[[@{/imports/}]]";
         // Lưu giá trị ban đầu của các input
         const defaultAmount = $('#productAmount').val();
         const defaultPrice = $('#productCost').val();

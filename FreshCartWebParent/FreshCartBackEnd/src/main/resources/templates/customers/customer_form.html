@@ -189,12 +189,12 @@
         if (response == "OK") {
           form.submit();
         } else if (response == "Duplicated") {
-          showWarningModal("There is another customer having the email " + customerEmail);
+          showWarningMessage("There is another customer having the email " + customerEmail);
         } else {
-          showErrorModal("Unknown response from server");
+          showErrorMessage("Unknown response from server");
         }
       }).fail(function() {
-        showErrorModal("Could not connect to the server");
+        showErrorMessage("Could not connect to the server");
       });
 
       return false;

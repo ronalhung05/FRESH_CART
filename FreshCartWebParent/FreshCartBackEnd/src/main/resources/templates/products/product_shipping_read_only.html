@@ -2,80 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	
 	<div th:fragment="content" th:remove="tag">
-		<div class="row g-3">
-			<!-- Length -->
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="form-label">Length (inch)</label>
-					<div class="input-group">
-						<input type="text" class="form-control bg-light" th:value="${product.length}"
-							readonly />
-						<span class="input-group-text">inch</span>
+		<div class="card shadow-sm border-0">
+			<div class="card-body">
+				<div class="row g-4">
+					<!-- Length -->
+					<div class="col-md-6">
+						<label class="form-label">Length</label>
+						<div class="input-group">
+							<input type="text" class="form-control" th:value="${product.length}" readonly />
+							<span class="input-group-text bg-light">inch</span>
+						</div>
+					</div>
+
+					<!-- Width -->
+					<div class="col-md-6">
+						<label class="form-label">Width</label>
+						<div class="input-group">
+							<input type="text" class="form-control" th:value="${product.width}" readonly />
+							<span class="input-group-text bg-light">inch</span>
+						</div>
+					</div>
+
+					<!-- Height -->
+					<div class="col-md-6">
+						<label class="form-label">Height</label>
+						<div class="input-group">
+							<input type="text" class="form-control" th:value="${product.height}" readonly />
+							<span class="input-group-text bg-light">inch</span>
+						</div>
+					</div>
+
+					<!-- Weight -->
+					<div class="col-md-6">
+						<label class="form-label">Weight</label>
+						<div class="input-group">
+							<input type="text" class="form-control" th:value="${product.weight}" readonly />
+							<span class="input-group-text bg-light">lbs</span>
+						</div>
 					</div>
 				</div>
-			</div>
-
-			<!-- Width -->
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="form-label">Width (inch)</label>
-					<div class="input-group">
-						<input type="text" class="form-control bg-light" th:value="${product.width}"
-							readonly />
-						<span class="input-group-text">inch</span>
-					</div>
-				</div>
-			</div>
-
-			<!-- Height -->
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="form-label">Height (inch)</label>
-					<div class="input-group">
-						<input type="text" class="form-control bg-light" th:value="${product.height}"
-							readonly />
-						<span class="input-group-text">inch</span>
-					</div>
-				</div>
-			</div>
-
-			<!-- Weight -->
-			<div class="col-md-6">
-				<div class="form-group">
-					<label class="form-label">Weight (pounds)</label>
-					<div class="input-group">
-						<input type="text" class="form-control bg-light" th:value="${product.weight}"
-							readonly />
-						<span class="input-group-text">lb</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
-
-</html>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Width (inch):</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control" th:value="${product.width}"
-					readonly />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Height (inch):</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control" th:value="${product.height}"
-					readonly />
-			</div>
-		</div>
-		<div class="form-group row">
-			<label class="col-sm-2 col-form-label">Weight (pounds):</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control" th:value="${product.weight}"
-					readonly />
 			</div>
 		</div>
 	</div>

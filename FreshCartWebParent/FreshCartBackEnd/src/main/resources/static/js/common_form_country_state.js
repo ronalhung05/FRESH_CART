@@ -26,6 +26,6 @@ function loadStates4Country() {
 			$("<option>").val(state.name).text(state.name).appendTo(dropdownStates);
 		});
 	}).fail(function() {
-		showErrorModal("Error loading states/provinces for the selected country.");
+		showErrorMessage("Error loading states/provinces for the selected country.");
 	})
 }	

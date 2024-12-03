@@ -1,0 +1,75 @@
+/* Sorting arrows styling */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    position: relative;
+    padding-right: 20px; /* Space for arrows */
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc:after {
+    position: absolute;
+    right: 0.5em;
+    display: block;
+    opacity: 0.3;
+}
+
+/* Up arrow */
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before {
+    content: "↑";
+    top: 0.5em;
+}
+
+/* Down arrow */
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    content: "↓";
+    bottom: 0.5em;
+}
+
+/* Active state */
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:after {
+    opacity: 1;
+}
+
+/* Align header text */
+table.dataTable thead th {
+    vertical-align: middle;
+    line-height: 1.2;
+}
+/* Export buttons styling */
+.btn-export {
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    color: #5c6c75;
+}
+
+.btn-export:hover {
+    background-color: #f8f9fa;
+    color: #0aad0a;
+}
+
+.btn-export i {
+    font-size: 1.2rem;
+}
+
+/* Add margin between buttons */
+.dt-buttons .btn-export {
+    margin-right: 0.5rem;
+}
+
+.dt-buttons .btn-export:last-child {
+    margin-right: 0;
+}

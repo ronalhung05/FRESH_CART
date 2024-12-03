@@ -49,22 +49,38 @@ $(document).ready(function () {
             // Calculate total cost
             const totalCost = parseFloat(productAmount) * parseFloat(productCost);
 
+            // Format số tiền với 2 số thập phân và dấu phẩy phân cách hàng nghìn
+            function formatCurrency(number) {
+                return new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(number);
+            }
+
             // Create a new row for the selected product
             const newRow = `
                 <tr data-row-index="${rowIndex}">
                     <td>${selectedProductId}</td>
-                    <td>${selectedProductName}</td>
-                    <td><img src="${productImage}" alt="${productImage}" style="width: 120px" class="img-fluid"/></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="${productImage}" alt="${selectedProductName}" 
+                                 style="width: 60px; height: 60px; object-fit: cover;" 
+                                 class="rounded me-3"/>
+                            <div>
+                                <h6 class="mb-0">${selectedProductName}</h6>
+                            </div>
+                        </div>
+                    </td>
                     <td>${productAmount}</td>
-                    <td>${productCost}</td>
-                    <td>${totalCost.toFixed(2)}</td>
+                    <td>$${formatCurrency(productCost)}</td>
+                    <td>$${formatCurrency(totalCost)}</td>
                     <td>${productUnit}</td>
                     <td>
                         <a href="javascript:void(0);"
-                        class="fas fa-trash fa-2x icon-dark link-delete" 
-                        data-row-index="${rowIndex}" 
-                        data-product-id="${selectedProductId}" 
-                        data-product-name="${selectedProductName}"></a>
+                           class="fas fa-trash fa-2x icon-dark link-delete" 
+                           data-row-index="${rowIndex}" 
+                           data-product-id="${selectedProductId}" 
+                           data-product-name="${selectedProductName}"></a>
                     </td>
                 </tr>
             `;
