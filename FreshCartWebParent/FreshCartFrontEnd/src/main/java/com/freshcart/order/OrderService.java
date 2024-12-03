@@ -1,5 +1,6 @@
 package com.freshcart.order;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -75,13 +76,25 @@ public class OrderService {
             orderDetails.add(orderDetail);
         }
 
-        OrderTrack track = new OrderTrack();
-        track.setOrder(newOrder);
-        track.setStatus(OrderStatus.NEW);
-        track.setNotes(OrderStatus.NEW.defaultDescription());
-        track.setUpdatedTime(new Date());
+        List<OrderTrack> tracks = new ArrayList<>();
 
-        newOrder.getOrderTracks().add(track);
+        OrderTrack newTrack = new OrderTrack();
+        newTrack.setOrder(newOrder);
+        newTrack.setStatus(OrderStatus.NEW);
+        newTrack.setNotes(OrderStatus.NEW.defaultDescription());
+        newTrack.setUpdatedTime(new Date());
+        tracks.add(newTrack);
+
+        if (paymentMethod.equals(PaymentMethod.PAYPAL)) {
+            OrderTrack paidTrack = new OrderTrack();
+            paidTrack.setOrder(newOrder);
+            paidTrack.setStatus(OrderStatus.PAID);
+            paidTrack.setNotes(OrderStatus.PAID.defaultDescription());
+            paidTrack.setUpdatedTime(new Date());
+            tracks.add(paidTrack);
+        }
+
+        newOrder.setOrderTracks(tracks);
 
         return repo.save(newOrder);
     }

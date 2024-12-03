@@ -3,6 +3,8 @@ package com.freshcart.common.entity.order;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -333,11 +335,31 @@ public class Order extends AbstractAddress {
     public boolean hasStatus(OrderStatus status) {
         for (OrderTrack aTrack : orderTracks) {
             if (aTrack.getStatus().equals(status)) {
+                if (status.equals(OrderStatus.DELIVERED)) {
+                    return isWithin14Days(aTrack);
+                }
                 return true;
             }
         }
-
         return false;
+    }
+
+    public boolean isWithin14Days(OrderTrack aTrack) {
+        Date updatedTime = aTrack.getUpdatedTime(); // Lấy thời gian cập nhật
+
+        // Chuyển đổi Date sang LocalDate
+        LocalDate updatedLocalDate = updatedTime.toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
+
+        // Lấy ngày hiện tại
+        LocalDate today = LocalDate.now();
+
+        // Tính khoảng cách ngày giữa hai mốc thời gian
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(updatedLocalDate, today);
+
+        // Nếu lớn hơn 14 ngày, trả về false, ngược lại trả về true
+        return daysBetween <= 14;
     }
 
     @Transient
