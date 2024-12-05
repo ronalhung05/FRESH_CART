@@ -8,6 +8,36 @@ $(document).ready(function() {
 	});
 
 	getCategoriesForNewForm();
+
+	// Price validation
+	$("#cost").on("input", function() {
+		const isValid = validatePositiveNumber($(this), "cost");
+		if (isValid) validatePrice();
+	}).on("blur", function() {
+		const isValid = validatePositiveNumber($(this), "cost");
+		if (isValid) validatePrice();
+	});
+
+	$("#price").on("input", function() {
+		const isValid = validatePositiveNumber($(this), "price");
+		if (isValid) validatePrice();
+	}).on("blur", function() {
+		const isValid = validatePositiveNumber($(this), "price");
+		if (isValid) validatePrice();
+	});
+
+	$("#discountPercent").on("input", function() {
+		validatePositiveNumber($(this), "discount");
+	}).on("blur", function() {
+		validatePositiveNumber($(this), "discount");
+	});
+
+	// Add product name validation
+	$("#name").on("input", function() {
+		validateProductName($(this));
+	}).on("blur", function() {
+		validateProductName($(this));
+	});
 });
 
 function getCategoriesForNewForm() {
@@ -35,11 +65,98 @@ function getCategories() {
 			$("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
 		});
 	}).fail(function() {
-		showErrorMessage("Error loading categories for selected brand");
+		showErrorMessage(messages.CATEGORY_LOAD_ERROR);
 	});
 }
 
+function validatePositiveNumber(input, fieldName) {
+	const value = input.val().trim();
+	const formGroup = input.closest('.form-group');
+	const errorElement = formGroup.find('.invalid-feedback');
+	
+	if (!value) {
+		input.addClass("is-invalid");
+		errorElement.text(messages[`${fieldName.toUpperCase()}_REQUIRED`]);
+		errorElement.hide().fadeIn();
+		return false;
+	}
+	
+	const numValue = parseFloat(value) || 0;
+	if (numValue < 0) {
+		input.addClass("is-invalid");
+		errorElement.text(messages.NEGATIVE_NUMBER_ERROR);
+		errorElement.hide().fadeIn();
+		return false;
+	} else {
+		input.removeClass("is-invalid");
+		errorElement.hide();
+		return true;
+	}
+}
+
+function validatePrice() {
+	const cost = parseFloat($("#cost").val()) || 0;
+	const price = parseFloat($("#price").val()) || 0;
+	const priceInput = $("#price");
+	
+	if (price < cost) {
+		priceInput.addClass("is-invalid");
+		if (!priceInput.next(".invalid-feedback").length) {
+			priceInput.after(`<div class="invalid-feedback">${messages.PRICE_LESS_THAN_COST}</div>`);
+		}
+		return false;
+	} else {
+		priceInput.removeClass("is-invalid");
+		priceInput.next(".invalid-feedback").remove();
+		return true;
+	}
+}
+
+function validateProductName(input) {
+	const value = input.val().trim();
+	const formGroup = input.closest('.form-group');
+	const errorElement = formGroup.find('.invalid-feedback');
+	
+	if (!value) {
+		input.addClass("is-invalid");
+		errorElement.text(messages.PRODUCT_NAME_REQUIRED);
+		errorElement.hide().fadeIn();
+		return false;
+	} else if (value.length < 3 || value.length > 256) {
+		input.addClass("is-invalid");
+		errorElement.text(messages.PRODUCT_NAME_LENGTH_ERROR);
+		errorElement.hide().fadeIn();
+		return false;
+	} else {
+		input.removeClass("is-invalid");
+		errorElement.hide();
+		return true;
+	}
+}
+
 function checkUnique(form) {
+	// Validate product name
+	const nameValid = validateProductName($("#name"));
+	if (!nameValid) {
+		document.getElementById('overview-tab').click();
+		return false;
+	}
+
+	// Validate all numbers are positive
+	const costValid = validatePositiveNumber($("#cost"), "cost");
+	const priceValid = validatePositiveNumber($("#price"), "price");
+	const discountValid = validatePositiveNumber($("#discountPercent"), "discount");
+	
+	// Validate price is greater than cost
+	const priceValidation = validatePrice();
+	
+	// Validate shipping dimensions and weight
+	const shippingValidation = validateShipping();
+	
+	if (!costValid || !priceValid || !discountValid || !priceValidation || !shippingValidation) {
+		return false;
+	}
+	
 	productId = $("#id").val();
 	productName = $("#name").val();
 
@@ -51,12 +168,12 @@ function checkUnique(form) {
 		if (response == "OK") {
 			form.submit();
 		} else if (response == "Duplicate") {
-			showWarningMessage("There is another product having the name " + productName);
+			showWarningMessage(messages.DUPLICATE_PRODUCT_NAME);
 		} else {
-			showErrorMessage("Unknown response from server");
+			showErrorMessage(messages.SERVER_ERROR);
 		}
 	}).fail(function() {
-		showErrorMessage("Could not connect to the server");
+		showErrorMessage(messages.CONNECTION_ERROR);
 	});
 
 	return false;
