@@ -13,32 +13,73 @@ $(document).ready(function() {
 	$("#track").on("click", "#linkAddTrack", function(e) {
 		e.preventDefault();
 		addNewTrackRecord();
+		updateTrackStatusOptions();
 	});
 
 	$("#trackList").on("change", ".dropDownStatus", function(e) {
-		var dropDownList = $(this);
-		var rowNumber = dropDownList.attr("rowNumber");
-		var selectedOption = $("option:selected", dropDownList);
-		var defaultNote = selectedOption.attr("defaultDescription");
-		if (defaultNote) {
-			$("#trackNote" + rowNumber).text(defaultNote);
-		}
+		const dropdown = $(this);
+		updateTrackStatusOptions();
+		updateTrackNotesBasedOnStatus(dropdown); // Gọi hàm cập nhật notes khi status thay đổi
 	});
 
 	$("#trackList").on("change", "input[name='trackDate'], select[name='trackStatus']", function() {
 		updateOverviewStatus();
 	});
 
-
+	updateTrackStatusOptions();
 });
+
+function updateTrackNotesBasedOnStatus(dropdown) {
+	const selectedOption = dropdown.find("option:selected");
+	const defaultDescription = selectedOption.attr("defaultDescription"); // Lấy giá trị của thuộc tính defaultDescription
+	const rowNumber = dropdown.attr("rowNumber");
+
+	if (defaultDescription) {
+		$(`#trackNote${rowNumber}`).val(defaultDescription); // Cập nhật textarea tương ứng với mô tả
+	}
+}
+
+function updateTrackStatusOptions() {
+	let selectedStatuses = [];
+
+	// Lấy tất cả các giá trị đã chọn từ các dropdown
+	$(".dropDownStatus").each(function() {
+		const selectedValue = $(this).val();
+		if (selectedValue) {
+			selectedStatuses.push(selectedValue);
+		}
+	});
+
+	// Cập nhật danh sách dropdown để loại bỏ các giá trị đã chọn
+	$(".dropDownStatus").each(function() {
+		const currentDropdown = $(this);
+		const currentValue = currentDropdown.val();
+
+		// Xóa tất cả các tùy chọn
+		currentDropdown.find("option").each(function() {
+			$(this).show(); // Hiển thị tất cả tùy chọn trước khi lọc
+			if ($(this).val() !== currentValue && selectedStatuses.includes($(this).val())) {
+				$(this).hide(); // Ẩn các tùy chọn đã được chọn
+			}
+		});
+	});
+}
 
 function updateOverviewStatus() {
 	let latestDate = null;
 	let latestStatus = null;
 
+	// Log toàn bộ dữ liệu dòng
+	console.log("Updating overview status. Current rows:");
 	$("#trackList tbody tr").each(function() {
 		let currentDate = new Date($(this).find("input[name='trackDate']").val());
 		let currentStatus = $(this).find("select[name='trackStatus']").val();
+
+		// Log dữ liệu từng dòng
+		console.log("Row data:", {
+			currentDate: currentDate,
+			currentStatus: currentStatus
+		});
 
 		if (!latestDate || currentDate > latestDate) {
 			latestDate = currentDate;
@@ -46,8 +87,12 @@ function updateOverviewStatus() {
 		}
 	});
 
+	console.log("Latest status:", { latestDate, latestStatus });
+
 	if (latestStatus) {
 		$("#overviewStatus").val(latestStatus);
+	} else {
+		$("#overviewStatus").val("NEW");
 	}
 }
 
@@ -83,7 +128,7 @@ function generateTrackRowCode() {
 				<input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" />
 			</td>
 			<td>
-				<select name="trackStatus" class="form-control dropDownStatus" required style="max-width: 300px" rowNumber="${nextCount}">
+				<select name="trackStatus" class="form-control dropDownStatus" required rowNumber="${nextCount}">
 					<option value="CANCELLED" defaultDescription="Order has been cancelled">CANCELLED</option>
 					<option value="PROCESSING" defaultDescription="Order is being processed">PROCESSING</option>
 					<option value="PACKAGED" defaultDescription="Order has been packaged">PACKAGED</option>
@@ -97,10 +142,12 @@ function generateTrackRowCode() {
 				</select>
 			</td>
 			<td>
-				<textarea rows="1" class="form-control" name="trackNotes" id="${trackNoteId}" required style="width: 100%;"></textarea>
+				<textarea rows="2" class="form-control" name="trackNotes" id="${trackNoteId}" required"></textarea>
 			</td>
 			<td>
-				<a class="fas fa-trash icon-dark linkRemoveTrack" href="" rowNumber="${nextCount}" title="Delete"></a> Delete
+				<a class="text-danger linkRemoveTrack" href="" rowNumber="${nextCount}">
+					<i class="feather-icon icon-trash-2"></i>
+				</a>
 			</td>
 		</tr>
 	`;
@@ -125,3 +172,8 @@ function formatCurrentDateTime() {
 
 	return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 }
+
+
+
+
+

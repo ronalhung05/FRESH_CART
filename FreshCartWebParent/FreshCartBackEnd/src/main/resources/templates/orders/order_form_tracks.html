@@ -37,14 +37,14 @@
 									   class="form-control bg-light" readonly />
 							</th:block>
 							<th:block th:if="${!isTrackWithStatusNew}">
-								<select name="trackStatus" class="form-select dropDownStatus"
-										required th:rowNumber="${status.count}">
+								<select name="trackStatus" class="form-control dropDownStatus"
+										required th:rowNumber="${status.count}" th:disabled="${isTrackWithStatusNew}">
 									<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
-										<option th:value="${os}" th:text="${os}" 
-												th:selected="${os == track.status}" />
+										<option th:value="${os}" th:text="${os}" th:selected="${os == track.status}" />
 									</th:block>
 								</select>
 							</th:block>
+
 						</td>
 
 						<!-- Notes Column -->

@@ -3,13 +3,23 @@
 
 <body>
 	<div th:fragment="content" th:remove="tag">
-		<div class="py-6">
+		
+			<!-- Header -->
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<h2 class="mb-0">Mail Templates Settings</h2>
+			</div>
+
 			<!-- Description Card -->
-			<div class="mb-8 bg-light rounded-3">
-				<div class="p-4">
+			<div class="card mb-8 bg-light border-0">
+				<div class="card-body">
 					<div class="d-flex align-items-center">
-						<i class="bi bi-info-circle text-primary fs-4 me-3"></i>
-						<p class="mb-0">Configure email templates that will be sent to customers in different scenarios.</p>
+						<div class="me-3">
+							<i class="bi bi-envelope-paper text-primary fs-4"></i>
+						</div>
+						<p class="mb-0">
+							Configure email templates that will be sent to customers in different scenarios. 
+							You can customize the content and subject for each type of email.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -49,12 +59,11 @@
 				<!-- Action Buttons -->
 				<div class="d-flex mt-4">
 					<button type="submit" class="btn btn-primary me-2">
-						<i class="bi bi-check-circle me-2"></i>Save
+						Save
 					</button>
 					
 				</div>
 			</form>
-		</div>
 	</div>
 
 </body>

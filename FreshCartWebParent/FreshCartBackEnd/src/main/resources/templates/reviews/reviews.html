@@ -17,12 +17,6 @@
             <div class="d-md-flex justify-content-between align-items-center">
               <div>
                 <h2>Reviews</h2>
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-inherit">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Reviews</li>
-                  </ol>
-                </nav>
               </div>
             </div>
           </div>
@@ -35,18 +29,18 @@
               <!-- Table -->
               <div class="card-body p-0">
                 <div class="table-responsive">
-                  <table class="table table-centered table-hover text-nowrap table-borderless mb-0" id="reviewsTable">
+                  <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
                     <thead class="bg-light">
                       <tr>
-                        <th>ID</th>
-                        <th>Product</th>
-                        <th>Customer</th>
-                        <th>Rating</th>
-                        <th>Review Time</th>
-                        <th>Actions</th>
+                        <th th:replace="fragments :: column_link('id', 'ID', 'none')"></th>
+                        <th th:replace="fragments :: column_link('product', 'Product', 'none')"></th>
+                        <th th:replace="fragments :: column_link('customer', 'Customer', 'none')"></th>
+                        <th th:replace="fragments :: column_link('rating', 'Rating', 'none')"></th>
+                        <th th:replace="fragments :: column_link('reviewTime', 'Review Time', 'none')"></th>
+                        <th class="text-dark">Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-dark">
                       <tr th:each="review : ${listReviews}">
                         <td>[[${review.id}]]</td>
                         <td>
@@ -101,6 +95,7 @@
                     </tbody>
                   </table>
                 </div>
+                <div th:replace="fragments :: pagination('reviews')"></div>
               </div>
             </div>
           </div>
@@ -122,7 +117,6 @@
 
   <script type="text/javascript" th:src="@{/js/common_list.js}"></script>
   <script type="text/javascript" th:src="@{/js/common.js}"></script>
-  <script th:src="@{/js/datatable.js}"></script>
   <script type="text/javascript">
     moduleURL = "[[@{/reviews}]]";
 
@@ -136,7 +130,6 @@
       handleCustomerDetailLink();
       handleReviewDetailLink();
       
-      initializeDataTable('reviewsTable');
     });
 
     function handleProductDetailLink() {
