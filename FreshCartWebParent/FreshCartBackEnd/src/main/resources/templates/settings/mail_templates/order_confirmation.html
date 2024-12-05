@@ -12,7 +12,7 @@
 						name="ORDER_CONFIRMATION_SUBJECT"
 						th:value="${ORDER_CONFIRMATION_SUBJECT}" 
 						placeholder="Enter email subject..."
-						required />
+						required maxlength="255"/>
 				</div>
 
 				<!-- Email Content -->
@@ -20,7 +20,7 @@
 					<label class="form-label">Email Content</label>
 					<input type="hidden" name="ORDER_CONFIRMATION_CONTENT" 
 						id="orderConfirmationContent" 
-						th:value="${ORDER_CONFIRMATION_CONTENT}" />
+						th:value="${ORDER_CONFIRMATION_CONTENT}" maxlength="255"/>
 					
 					<!-- Quill Editor Container -->
 					<div id="orderEmailContentEditor" style="height: 300px; margin-bottom: 1rem;"></div>

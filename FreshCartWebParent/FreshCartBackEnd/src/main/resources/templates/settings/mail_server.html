@@ -33,7 +33,7 @@
 								<div class="col-lg-6">
 									<label class="form-label">SMTP Server Host Name</label>
 									<input type="text" class="form-control" name="MAIL_HOST"
-										th:value="${MAIL_HOST}" required />
+										th:value="${MAIL_HOST}" required maxlength="255"/>
 									<div class="invalid-feedback">
 										Please enter SMTP host name.
 									</div>
@@ -43,9 +43,9 @@
 								<div class="col-lg-6">
 									<label class="form-label">Port Number</label>
 									<input type="text" class="form-control" name="MAIL_PORT"
-										th:value="${MAIL_PORT}" required />
+										   th:value="${MAIL_PORT}" required maxlength="5" pattern="\d{1,5}"/>
 									<div class="invalid-feedback">
-										Please enter port number.
+										Please enter a valid port number (up to 5 digits).
 									</div>
 								</div>
 
@@ -53,7 +53,7 @@
 								<div class="col-lg-6">
 									<label class="form-label">Username</label>
 									<input type="text" class="form-control" name="MAIL_USERNAME"
-										th:value="${MAIL_USERNAME}" required />
+										th:value="${MAIL_USERNAME}" required maxlength="255" />
 									<div class="invalid-feedback">
 										Please enter username.
 									</div>
@@ -70,7 +70,7 @@
 											<input type="password" 
 												class="form-control" 
 												name="MAIL_PASSWORD"
-												th:value="${MAIL_PASSWORD}" 
+												th:value="${MAIL_PASSWORD}" maxlength="255"
 												placeholder="Enter mail password"
 												required />
 										</div>
@@ -84,26 +84,20 @@
 								<!-- Server Authentication -->
 								<div class="col-lg-6">
 									<label class="form-label">Server Authentication Required</label>
-									<select name="SMTP_AUTH" class="form-select">
-										<option value="true" th:selected="(${SMTP_AUTH} == 'true')">True</option>
-										<option value="false" th:selected="(${SMTP_AUTH} == 'false')">False</option>
-									</select>
+									<input type="text" name="SMTP_AUTH" class="form-control" value="true" readonly>
 								</div>
 
 								<!-- TLS Required -->
 								<div class="col-lg-6">
 									<label class="form-label">Server Requires TLS</label>
-									<select name="SMTP_SECURED" class="form-select">
-										<option value="true" th:selected="(${SMTP_SECURED} == 'true')">True</option>
-										<option value="false" th:selected="(${SMTP_SECURED} == 'false')">False</option>
-									</select>
+									<input type="text" name="SMTP_SECURED" class="form-control" value="true" readonly>
 								</div>
 
 								<!-- From Email -->
 								<div class="col-lg-6">
 									<label class="form-label">From E-mail Address</label>
 									<input type="email" class="form-control" name="MAIL_FROM"
-										th:value="${MAIL_FROM}" required />
+										th:value="${MAIL_FROM}" required maxlength="255" />
 									<div class="invalid-feedback">
 										Please enter valid email address.
 									</div>
@@ -113,7 +107,7 @@
 								<div class="col-lg-6">
 									<label class="form-label">Sender Name</label>
 									<input type="text" class="form-control" name="MAIL_SENDER_NAME"
-										th:value="${MAIL_SENDER_NAME}" required />
+										th:value="${MAIL_SENDER_NAME}" required maxlength="255"/>
 									<div class="invalid-feedback">
 										Please enter sender name.
 									</div>

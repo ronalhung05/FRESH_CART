@@ -12,7 +12,7 @@
 						name="CUSTOMER_VERIFY_SUBJECT"
 						th:value="${CUSTOMER_VERIFY_SUBJECT}" 
 						placeholder="Enter email subject..."
-						required />
+						required maxlength="255"/>
 				</div>
 
 				<!-- Email Content -->
@@ -22,7 +22,7 @@
 					<!-- Hidden input to store HTML content -->
 					<input type="hidden" name="CUSTOMER_VERIFY_CONTENT" 
 						id="customerVerificationContent" 
-						th:value="${CUSTOMER_VERIFY_CONTENT}" />
+						th:value="${CUSTOMER_VERIFY_CONTENT}" maxlength="255"/>
 					
 					<!-- Quill editor container -->
 					<div id="emailContentEditor" style="height: 300px; margin-bottom: 1rem;"></div>

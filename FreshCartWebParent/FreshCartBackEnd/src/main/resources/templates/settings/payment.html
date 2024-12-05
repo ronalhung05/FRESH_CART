@@ -39,7 +39,7 @@
 									name="PAYPAL_API_BASE_URL"
 									th:value="${PAYPAL_API_BASE_URL}" 
 									placeholder="Enter PayPal API Base URL"
-									required />
+									required maxlength="255"/>
 							</div>
 							<small class="text-muted">Example: https://api-m.sandbox.paypal.com (for testing)</small>
 						</div>
@@ -56,7 +56,7 @@
 									name="PAYPAL_API_CLIENT_ID"
 									th:value="${PAYPAL_API_CLIENT_ID}" 
 									placeholder="Enter PayPal Client ID"
-									required />
+									required maxlength="255"/>
 							</div>
 						</div>
 
@@ -73,7 +73,7 @@
 										name="PAYPAL_API_CLIENT_SECRET"
 										th:value="${PAYPAL_API_CLIENT_SECRET}" 
 										placeholder="Enter PayPal Client Secret"
-										required />
+										required maxlength="255"/>
 								</div>
 								<span><i class="bi bi-eye-slash password-toggler"></i></span>
 							</div>

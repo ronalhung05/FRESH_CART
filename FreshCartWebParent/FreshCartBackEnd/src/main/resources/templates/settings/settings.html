@@ -35,20 +35,20 @@
                             General
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="countries-tab" data-bs-toggle="tab"
-                                data-bs-target="#countries" type="button" role="tab"
-                                aria-controls="countries" aria-selected="false">
-                            Countries
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="states-tab" data-bs-toggle="tab"
-                                data-bs-target="#states" type="button" role="tab"
-                                aria-controls="states" aria-selected="false">
-                            States
-                        </button>
-                    </li>
+<!--                    <li class="nav-item" role="presentation">-->
+<!--                        <button class="nav-link" id="countries-tab" data-bs-toggle="tab"-->
+<!--                                data-bs-target="#countries" type="button" role="tab"-->
+<!--                                aria-controls="countries" aria-selected="false">-->
+<!--                            Countries-->
+<!--                        </button>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item" role="presentation">-->
+<!--                        <button class="nav-link" id="states-tab" data-bs-toggle="tab"-->
+<!--                                data-bs-target="#states" type="button" role="tab"-->
+<!--                                aria-controls="states" aria-selected="false">-->
+<!--                            States-->
+<!--                        </button>-->
+<!--                    </li>-->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="mailServer-tab" data-bs-toggle="tab"
                                 data-bs-target="#mailServer" type="button" role="tab"
@@ -117,7 +117,7 @@
             // Activate the correct tab
             $('button[data-bs-target="#' + currentTab + '"]').tab('show');
             
-            var message = /*[[${message}]]*/ '';
+            var message = "[[${message}]]";
             if (message && message.trim() !== "") {
                 showSuccessMessage(message);
             }
@@ -134,7 +134,7 @@
             // Activate the correct tab
             $('#' + currentTab + '-tab').tab('show');
             
-            var message = /*[[${message}]]*/ '';
+            var message = "[[${message}]]";
             if (message && message.trim() !== "") {
                 showSuccessMessage(message);
             }
