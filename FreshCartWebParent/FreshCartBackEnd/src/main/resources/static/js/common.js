@@ -40,3 +40,7 @@ function updateStatusWithURL(checkbox) {
 	const url = checkbox.getAttribute("entityURL");
 	updateStatus(url);
 }
+
+function clearFilter() {
+    window.location = moduleURL;
+}

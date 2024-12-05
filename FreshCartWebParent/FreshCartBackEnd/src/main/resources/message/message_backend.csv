@@ -15,3 +15,23 @@ USER_DISABLE_SUCCESS,The user has been disabled
 REVIEW_UPDATE_SUCCESS,The review has been updated
 REVIEW_DELETE_SUCCESS,The review has been deleted
 SUCCESS_PRODUCT,The product has been saved successfully
+CATEGORY_LOAD_ERROR,Error loading categories for selected brand
+NEGATIVE_NUMBER_ERROR,The value cannot be negative. Please enter a positive number.
+PRICE_LESS_THAN_COST,The selling price cannot be less than the cost price. Please check your input.
+DUPLICATE_PRODUCT_NAME,There is another product having the same name
+SERVER_ERROR,Unknown response from server
+CONNECTION_ERROR,Could not connect to the server
+SHORT_DESCRIPTION_REQUIRED,Please enter a short description for the product.
+FULL_DESCRIPTION_REQUIRED,Please enter a full description for the product.
+IMAGE_UPLOAD_SIZE_ERROR,File size exceeds {0}MB. Please choose a smaller file.
+IMAGE_UPLOAD_TYPE_ERROR,Invalid image format. Supported formats are JPEG and PNG.
+IMAGE_MAIN_REQUIRED,Please select a main image for the product.
+SHIPPING_LENGTH_ERROR,The length must be greater than 0.
+SHIPPING_WIDTH_ERROR,The width must be greater than 0.
+SHIPPING_HEIGHT_ERROR,The height must be greater than 0.
+SHIPPING_WEIGHT_ERROR,The weight must be greater than 0.
+PRODUCT_NAME_REQUIRED,Please enter a product name.
+PRODUCT_NAME_LENGTH_ERROR,Product name must be between 3 and 256 characters.
+COST_REQUIRED,Please enter the cost price.
+PRICE_REQUIRED,Please enter the selling price.
+DISCOUNT_REQUIRED,Please enter the discount percentage.

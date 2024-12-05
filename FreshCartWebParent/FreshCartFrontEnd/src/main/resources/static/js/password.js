@@ -1,18 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // For main password field
     var password = document.getElementById('password'),
         toggler = document.getElementById('passwordToggler');
 
-    function showHidePassword() {
-        if (password.type === 'password') {
-            password.setAttribute('type', 'text');
-            toggler.classList.remove('bi-eye-slash');
-            toggler.classList.add('bi-eye');
+    // For confirm password field
+    var confirmPassword = document.getElementById('confirmPassword'),
+        confirmToggler = document.getElementById('confirmPasswordToggler');
+
+    function showHidePassword(passwordField, togglerIcon) {
+        if (passwordField.type === 'password') {
+            passwordField.setAttribute('type', 'text');
+            togglerIcon.classList.remove('bi-eye-slash');
+            togglerIcon.classList.add('bi-eye');
         } else {
-            password.setAttribute('type', 'password');
-            toggler.classList.remove('bi-eye');
-            toggler.classList.add('bi-eye-slash');
+            passwordField.setAttribute('type', 'password');
+            togglerIcon.classList.remove('bi-eye');
+            togglerIcon.classList.add('bi-eye-slash');
         }
     }
 
-    toggler.addEventListener('click', showHidePassword);
+    // Event listener for main password
+    toggler.addEventListener('click', function() {
+        showHidePassword(password, toggler);
+    });
+
+    // Event listener for confirm password
+    confirmToggler.addEventListener('click', function() {
+        showHidePassword(confirmPassword, confirmToggler);
+    });
 });

@@ -8,35 +8,21 @@
 	<title>[[${title}]]</title>
 	<link rel="stylesheet" th:href="@{/css/theme.min.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/fontawesome/all.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/libs/dropzone/dist/min/dropzone.min.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick-theme.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" type="text/css"/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/libs/feather-webfont/dist/feather-icons.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/libs/simplebar/dist/simplebar.min.css}" type="text/css"/>
-	<link rel="stylesheet" th:href="@{/libs/dropzone/dist/min/dropzone.min.css}" type="text/css"/>
 	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css"/>
     <link th:href="@{/css/custom-notify.css}" rel="stylesheet" type="text/css" />
-	
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.5/r-2.2.9/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
 	<link rel="stylesheet" th:href="@{/css/datatables-custom.css}" />
 	<link rel="stylesheet" th:href="@{/css/choices-custom.css}">
-	<!-- Common JavaScript -->
-    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 
-	
-	<!-- <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
-	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
-	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script> -->
-	<script type="text/javascript" th:src="@{/js/common.js}"></script>
 </head>
 
 <body>
@@ -100,7 +86,7 @@
 				<ul class="pagination mb-0">
 					<!-- First Page -->
 					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a class="page-link" th:href="@{${moduleURL} + '/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+						<a class="page-link" th:href="@{${moduleURL} + '/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
 							<i class="bi bi-chevron-double-left"></i>
 						</a>
 					</li>
@@ -184,9 +170,9 @@
 
 	<div th:fragment="common-js">
 		 <!-- Core JS -->
-		 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+		 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 		 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-		 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		 <script type= "text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 		 <script type="text/javascript" th:src="@{/js/bootstrap_validation.js}"></script>
 		 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.5/r-2.2.9/datatables.min.js"></script>
 		 <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
@@ -201,11 +187,9 @@
 		 <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
 		 <script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
 		 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/simplebar@5.3.6/dist/simplebar.min.js"></script>
-		 <script type="text/javascript" th:src="@{/libs/dropzone/dist/min/dropzone.min.js}"></script>
 		 <script type="text/javascript" th:src="@{/js/theme.min.js}"></script>
-		 
 		 <script th:src="@{/js/common_form.js}"></script>
-		 
+		 <script th:src="@{/js/common_list.js}"></script>
 	</div>
 
 </body>

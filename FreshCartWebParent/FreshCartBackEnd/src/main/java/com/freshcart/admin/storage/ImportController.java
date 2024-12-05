@@ -32,7 +32,7 @@ import java.util.List;
 
 @Controller
 public class ImportController {
-    private String defaultRedirectURL = "redirect:/imports/page/1?sortField=id&sortDir=asc";
+    private String defaultRedirectURL = "redirect:/imports/page/1?sortField=transactionTime&sortDir=desc";
     @Autowired
     private ImportService importService;
     @Autowired

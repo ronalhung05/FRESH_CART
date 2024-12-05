@@ -39,22 +39,25 @@
                         <div class="card-body p-6">
                             <!-- Upload Photo Section -->
                             <div class="mb-5">
-                                <div class="d-flex align-items-center gap-3">
-                                    <input type="hidden" th:field="*{photos}" />
-                                    <div class="icon-shape icon-xxl border rounded-3 bg-light">
-                                        <img id="thumbnail" th:src="@{${user.photosImagePath}}"
+                                <input type="hidden" th:field="*{photos}" />
+                                <div class="d-flex align-items-center">
+                                    <!-- Image Preview -->
+                                    <div class="image avatar avatar-lg rounded-3 me-3">
+                                        <img id="userThumbnail" th:src="@{${user.photosImagePath}}"
                                              class="img-fluid rounded-3" 
                                              alt="User photo"/>
                                     </div>
-                                    <div>
-                                        <label class="btn btn-light">
-                                            Upload Photo
-                                            <input type="file" id="fileImage" name="image" 
-                                                   accept="image/png, image/jpeg, image/gif"
-                                                   class="d-none"/>
-                                        </label>
-                                        <div class="text-muted small mt-1">JPG, GIF or PNG. 1MB Max.</div>
-                                    </div>
+                                    
+                                    <!-- Upload Button -->
+                                    <label class="btn btn-light me-3">
+                                        Upload Photo
+                                        <input type="file" id="fileImage" name="image" 
+                                               accept="image/png, image/jpeg, image/gif"
+                                               class="d-none"/>
+                                    </label>
+
+                                    <!-- Text -->
+                                    <span class="text-muted small">JPG, GIF or PNG. 1MB Max.</span>
                                 </div>
                             </div>
 
@@ -95,16 +98,26 @@
                                     <label class="form-label">
                                         Password <span class="text-danger" th:if="${user.id == null}">*</span>
                                     </label>
-                                    <div class="position-relative">
-                                        <input th:if="${user.id == null}" type="password"
-                                            class="form-control" th:field="*{password}" required
-                                            minlength="8" maxlength="20" placeholder="Enter password" />
-                                        <input th:if="${user.id != null}" type="password"
-                                            class="form-control" th:field="*{password}"
-                                            minlength="8" maxlength="20" placeholder="Leave blank to keep current password" />
-                                        <span class="password-toggler position-absolute top-50 end-0 translate-middle-y me-3">
-                                            <i class="bi bi-eye"></i>
-                                        </span>
+                                    <div class="password-field position-relative">
+                                        <input th:if="${user.id == null}" 
+                                            type="password"
+                                            class="form-control" 
+                                            id="password" 
+                                            th:field="*{password}" 
+                                            required 
+                                            minlength="8" 
+                                            maxlength="20" 
+                                            placeholder="Enter password" />
+                                                
+                                        <input th:if="${user.id != null}" 
+                                            type="password"
+                                            class="form-control" 
+                                            id="password" 
+                                            th:field="*{password}"
+                                            minlength="8" 
+                                            maxlength="20" 
+                                            placeholder="Leave blank to keep current password" />
+                                        <span><i class="bi bi-eye-slash password-toggler"></i></span>
                                     </div>
                                 </div>
 
@@ -159,7 +172,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const element = document.querySelector('#rolesSelect');
             
-            // Decode HTML entities trong options trước khi khởi tạo Choices
+            // Decode HTML entities trong options trưc khi khởi tạo Choices
             element.querySelectorAll('option').forEach(option => {
                 option.textContent = decodeHTMLEntities(option.textContent);
             });
@@ -198,24 +211,6 @@
             return textArea.value;
         }
 
-        // Password toggle
-        document.querySelector('.password-toggler').addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            const icon = this.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            }
-        });
-
-		
-
         function checkEmailUnique(form) {
             url = "[[@{/users/check_email}]]";
             userEmail = $("#email").val();
@@ -238,6 +233,28 @@
 
             return false;
         }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var password = document.getElementById('password'),
+            toggler = document.getElementById('passwordToggler');
+
+        function showHidePassword(passwordField, togglerIcon) {
+            if (passwordField.type === 'password') {
+                passwordField.setAttribute('type', 'text');
+                togglerIcon.classList.remove('bi-eye-slash');
+                togglerIcon.classList.add('bi-eye');
+            } else {
+                passwordField.setAttribute('type', 'password');
+                togglerIcon.classList.remove('bi-eye');
+                togglerIcon.classList.add('bi-eye-slash');
+            }
+        }
+
+        toggler.addEventListener('click', function() {
+            showHidePassword(password, toggler);
+        });
+    });
     </script>
 </div>
 </body>

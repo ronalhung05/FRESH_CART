@@ -3,29 +3,40 @@
 
 <body>
 	<div th:fragment="content" th:remove="tag">
-		<div class="row">
-			<div class="col border m-3 p-2">
-				<div>
-					<label>Main Image: [[${product.mainImage}]]</label>
-				</div>
-				<div class="m-2">
-					<img alt="Main image preview" class="img-fluid"
-						th:src="@{${product.mainImagePath}}" />
+		<div class="card shadow-sm border-0">
+			<div class="card-body">
+				<div class="row">
+					<!-- Main Image -->
+					<div class="col-md-4 mb-4">
+						<div class="card h-100 rounded-3">
+							<div class="card-header bg-white border-bottom">
+								<h6 class="mb-0">Main Image</h6>
+								<small class="text-muted">[[${product.mainImage}]]</small>
+							</div>
+							<div class="card-body text-center">
+								<img alt="Main image preview" class="img-fluid rounded-3"
+									th:src="@{${product.mainImagePath}}" />
+							</div>
+						</div>
+					</div>
+
+					<!-- Extra Images -->
+					<th:block th:each="productImage, status : ${product.images}">
+						<div class="col-md-4 mb-4">
+							<div class="card h-100 rounded-3">
+								<div class="card-header bg-white border-bottom">
+									<h6 class="mb-0">Extra Image #[[${status.index + 1}]]</h6>
+									<small class="text-muted">[[${productImage.name}]]</small>
+								</div>
+								<div class="card-body text-center">
+									<img th:alt="'Extra image #' + ${status.index + 1} + ' preview'"
+										class="img-fluid rounded-3" th:src="@{${productImage.imagePath}}" />
+								</div>
+							</div>
+						</div>
+					</th:block>
 				</div>
 			</div>
-
-			<th:block th:each="productImage, status : ${product.images}">
-				<div class="col border m-3 p-2">
-					<div>
-						<label>Extra Image #[[${status.index + 1}]]:
-							[[${productImage.name}]]</label>
-					</div>
-					<div class="m-2">
-						<img th:alt="'Extra image #' + ${status.index + 1} + ' preview'"
-							class="img-fluid" th:src="@{${productImage.imagePath}}" />
-					</div>
-				</div>
-			</th:block>
 		</div>
 	</div>
 </body>

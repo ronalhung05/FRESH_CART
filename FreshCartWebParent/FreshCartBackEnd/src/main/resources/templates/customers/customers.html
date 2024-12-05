@@ -73,10 +73,10 @@
 							th:replace="fragments :: column_link('country', 'Country', 'none')" />
 						<th
 							th:replace="fragments :: column_link('enabled', 'Status', 'none')" />
-                        <th>Actions</th>
+                        <th class="text-dark">Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-dark">
                       <tr th:each="customer : ${listCustomers}">
                         <td>[[${customer.id}]]</td>
                         <td>[[${customer.firstName}]]</td>

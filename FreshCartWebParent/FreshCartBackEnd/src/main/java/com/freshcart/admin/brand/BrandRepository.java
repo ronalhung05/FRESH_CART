@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.freshcart.admin.paging.SearchRepository;
@@ -20,4 +21,8 @@ public interface BrandRepository extends SearchRepository<Brand, Integer> {
 
     @Query("SELECT NEW Brand(b.id, b.name) FROM Brand b ORDER BY b.name ASC")
     public List<Brand> findAll();
+
+    @Query("UPDATE Brand b SET b.enabled = ?2 WHERE b.id = ?1")
+    @Modifying
+    public void updateEnabledStatus(Integer id, boolean enabled);
 }

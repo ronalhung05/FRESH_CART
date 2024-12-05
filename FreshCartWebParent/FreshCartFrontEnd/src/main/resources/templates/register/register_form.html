@@ -9,7 +9,7 @@
     <nav class="navbar navbar-light py-2">
         <div class="container justify-content-center justify-content-lg-between">
             <a class="navbar-brand" th:href="@{/}">
-                <img alt="" class="d-inline-block align-text-top" src="../assets/images/logo/freshcart-logo.svg">
+                <img alt="FreshCart" class="d-inline-block align-text-top" th:src="@{${S3_BASE_URI + SITE_LOGO}}"/>
             </a>
             <span class="navbar-text">
                     Already have an account? <a th:href="@{/login}">Sign in</a>
@@ -36,9 +36,10 @@
 
                     <form method="post" onsubmit="return checkEmailUnique(this);" th:action="@{/create_customer}"
                           th:object="${customer}">
-
+                        
                         <!-- Step 1: Basic Info -->
                         <div class="row g-3">
+                            <!-- Name fields in one row -->
                             <div class="col-6">
                                 <input class="form-control" maxlength="45" minlength="2"
                                        placeholder="First name" required th:field="*{firstName}" type="text">
@@ -48,43 +49,84 @@
                                        placeholder="Last name" required th:field="*{lastName}" type="text">
                             </div>
 
+                            <!-- Contact Information -->
                             <div class="col-12">
                                 <input class="form-control" maxlength="45" minlength="8"
                                        placeholder="Email" required th:field="*{email}" type="email">
                             </div>
-                            <div class="col-12">
-                                <div class="password-field position-relative">
-                                    <input class="form-control" id="password" maxlength="15"
-                                           minlength="6"
-                                           oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
-                                           placeholder="Password" required
-                                           th:field="*{password}" type="password">
-                                    <span><i class="bi bi-eye-slash password-toggler"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="password-field position-relative">
-                                    <input class="form-control" id="confirmPassword" maxlength="15"
-                                           minlength="6" oninput="checkPasswordMatch(this)"
-                                           placeholder="Confirm Password" required
-                                           type="password">
-                                    <span><i class="bi bi-eye-slash password-toggler"></i></span>
-                                </div>
-                            </div>
-
-
+                            
                             <div class="col-12">
                                 <input class="form-control" maxlength="15" minlength="8"
                                        placeholder="Phone Number" required th:field="*{phoneNumber}" type="tel">
                             </div>
 
-                            <div class="col-12 d-grid">
+                            <!-- Password fields -->
+                            <div class="col-12">
+                                <div class="password-field position-relative">
+                                    <input class="form-control" id="password" maxlength="15" minlength="6"
+                                           oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"
+                                           placeholder="Password" required th:field="*{password}" type="password">
+                                    <span><i id="passwordToggler" class="bi bi-eye-slash password-toggler"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="password-field position-relative">
+                                    <input class="form-control" id="confirmPassword" maxlength="15" minlength="6"
+                                           oninput="checkPasswordMatch(this)" placeholder="Confirm Password" 
+                                           required type="password">
+                                    <span><i id="confirmPasswordToggler" class="bi bi-eye-slash password-toggler"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- Address Information -->
+                            <div class="col-12">
+                                <hr class="my-3">
+                                <h5 class="mb-3">Shipping Address</h5>
+                            </div>
+
+                            <div class="col-12">
+                                <input class="form-control" maxlength="64" minlength="3"
+                                       placeholder="Address Line 1" required th:field="*{addressLine1}" type="text">
+                            </div>
+
+                            <div class="col-12">
+                                <input class="form-control" maxlength="64"
+                                       placeholder="Address Line 2 (Optional)" th:field="*{addressLine2}" type="text">
+                            </div>
+
+                            <div class="col-12">
+                                <select class="form-control" th:field="*{country}">
+                                    <option value="">Select Country</option>
+                                    <th:block th:each="country : ${listCountries}">
+                                        <option th:value="${country.id}">[[${country.name}]]</option>
+                                    </th:block>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" maxlength="45" minlength="2"
+                                       placeholder="City" required th:field="*{city}" type="text">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input class="form-control" list="listStates" maxlength="45" minlength="3"
+                                       placeholder="State/Province" required th:field="*{state}" type="text">
+                                <datalist id="listStates"></datalist>
+                            </div>
+
+                            <div class="col-12">
+                                <input class="form-control" maxlength="10" minlength="2"
+                                       placeholder="Postal Code" required th:field="*{postalCode}" type="text">
+                            </div>
+
+                            <!-- Submit button and terms -->
+                            <div class="col-12 d-grid mt-4">
                                 <button class="btn btn-primary" type="submit">Create Account</button>
                             </div>
 
                             <div class="col-12">
-                                <p class="small">By continuing, you agree to our
+                                <p class="small text-center">By continuing, you agree to our
                                     <a href="#!">Terms of Service</a> &
                                     <a href="#!">Privacy Policy</a>
                                 </p>
@@ -117,18 +159,19 @@
             if (response == "OK") {
                 form.submit();
             } else if (response == "Duplicated") {
-                showWarningModal("There is another customer having the email " + customerEmail);
+                showWarningMessage("There is another customer having the email " + customerEmail);
             } else {
-                showErrorModal("Unknown response from server");
+                showErrorMessage("Unknown response from server");
             }
         }).fail(function () {
-            showErrorModal("Could not connect to the server");
+            showErrorMessage("Could not connect to the server");
         });
 
         return false;
     }
 </script>
 <script th:src="@{/js/common_modal.js}" type="text/javascript"></script>
-<script src="js/password.js"></script>
+<script th:src="@{/js/password.js}" type="text/javascript"></script>
+<script th:src="@{/js/common_toast.js}" type="text/javascript"></script>
 </body>
 </html>
