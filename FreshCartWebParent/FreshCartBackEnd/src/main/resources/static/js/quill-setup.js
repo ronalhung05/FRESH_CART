@@ -59,45 +59,140 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    let shortDescriptionEditor, fullDescriptionEditor;
+
     // Khởi tạo Quill cho Short Description
     if (document.getElementById('shortDescriptionEditor')) {
-        const shortDescriptionEditor = new Quill('#shortDescriptionEditor', {
+        shortDescriptionEditor = new Quill('#shortDescriptionEditor', {
             theme: 'snow',
             modules: {
                 toolbar: toolbarOptions
             }
         });
 
-        // Load nội dung từ input hidden
         const shortDescriptionInput = document.getElementById('shortDescriptionInput');
         if (shortDescriptionInput && shortDescriptionInput.value) {
             shortDescriptionEditor.root.innerHTML = shortDescriptionInput.value;
         }
 
-        // Cập nhật input hidden khi nội dung thay đổi
         shortDescriptionEditor.on('text-change', function() {
-            shortDescriptionInput.value = shortDescriptionEditor.root.innerHTML;
+            const content = shortDescriptionEditor.root.innerHTML;
+            shortDescriptionInput.value = content;
+            
+            // Validate content
+            if (isQuillEmpty(shortDescriptionEditor)) {
+                const errorElement = document.getElementById('shortDescriptionError');
+                errorElement.textContent = messages.SHORT_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                shortDescriptionEditor.root.style.border = '1px solid #dc3545';
+            } else {
+                document.getElementById('shortDescriptionError').style.display = 'none';
+                shortDescriptionEditor.root.style.border = '1px solid #ced4da';
+            }
+        });
+
+        // Add blur event for short description
+        shortDescriptionEditor.root.addEventListener('blur', function() {
+            const content = shortDescriptionEditor.root.innerHTML;
+            shortDescriptionInput.value = content;
+            
+            if (isQuillEmpty(shortDescriptionEditor)) {
+                const errorElement = document.getElementById('shortDescriptionError');
+                errorElement.textContent = messages.SHORT_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                shortDescriptionEditor.root.style.border = '1px solid #dc3545';
+            }
         });
     }
 
     // Khởi tạo Quill cho Full Description
     if (document.getElementById('fullDescriptionEditor')) {
-        const fullDescriptionEditor = new Quill('#fullDescriptionEditor', {
+        fullDescriptionEditor = new Quill('#fullDescriptionEditor', {
             theme: 'snow',
             modules: {
                 toolbar: toolbarOptions
             }
         });
 
-        // Load nội dung từ input hidden
         const fullDescriptionInput = document.getElementById('fullDescriptionInput');
         if (fullDescriptionInput && fullDescriptionInput.value) {
             fullDescriptionEditor.root.innerHTML = fullDescriptionInput.value;
         }
 
-        // Cập nhật input hidden khi nội dung thay đổi
         fullDescriptionEditor.on('text-change', function() {
-            fullDescriptionInput.value = fullDescriptionEditor.root.innerHTML;
+            const content = fullDescriptionEditor.root.innerHTML;
+            fullDescriptionInput.value = content;
+            
+            // Validate content
+            if (isQuillEmpty(fullDescriptionEditor)) {
+                const errorElement = document.getElementById('fullDescriptionError');
+                errorElement.textContent = messages.FULL_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                fullDescriptionEditor.root.style.border = '1px solid #dc3545';
+            } else {
+                document.getElementById('fullDescriptionError').style.display = 'none';
+                fullDescriptionEditor.root.style.border = '1px solid #ced4da';
+            }
+        });
+
+        // Add blur event for full description
+        fullDescriptionEditor.root.addEventListener('blur', function() {
+            const content = fullDescriptionEditor.root.innerHTML;
+            fullDescriptionInput.value = content;
+            
+            if (isQuillEmpty(fullDescriptionEditor)) {
+                const errorElement = document.getElementById('fullDescriptionError');
+                errorElement.textContent = messages.FULL_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                fullDescriptionEditor.root.style.border = '1px solid #dc3545';
+            }
+        });
+    }
+
+    // Helper function to check if Quill editor is empty
+    function isQuillEmpty(quill) {
+        if (!quill || !quill.root) return true;
+        
+        // Check if the editor contains only whitespace or empty HTML tags
+        const text = quill.getText().trim();
+        const html = quill.root.innerHTML;
+        return text.length === 0 || html === '<p><br></p>';
+    }
+
+    // Add form submit validation
+    const productForm = document.querySelector('form');
+    if (productForm) {
+        productForm.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Validate short description
+            if (shortDescriptionEditor && isQuillEmpty(shortDescriptionEditor)) {
+                const errorElement = document.getElementById('shortDescriptionError');
+                errorElement.textContent = messages.SHORT_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                shortDescriptionEditor.root.style.border = '1px solid #dc3545';
+                isValid = false;
+            }
+
+            // Validate full description
+            if (fullDescriptionEditor && isQuillEmpty(fullDescriptionEditor)) {
+                const errorElement = document.getElementById('fullDescriptionError');
+                errorElement.textContent = messages.FULL_DESCRIPTION_REQUIRED;
+                errorElement.style.display = 'none';
+                $(errorElement).fadeIn();
+                fullDescriptionEditor.root.style.border = '1px solid #dc3545';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                document.getElementById('description-tab').click();
+            }
         });
     }
 });
