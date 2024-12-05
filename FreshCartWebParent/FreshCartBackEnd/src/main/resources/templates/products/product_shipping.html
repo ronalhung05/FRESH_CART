@@ -21,11 +21,14 @@
 					<!-- Length -->
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="form-label">Length (inch):  <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<input type="number"  class="form-control"
-									th:field="*{length}" placeholder="Enter length" required />
+							<label class="form-label">Length (inch): <span class="text-danger">*</span></label>
+							<div class="input-group has-validation">
+								<input type="number" class="form-control" step="0.01"
+									th:field="*{length}" id="length" placeholder="Enter length" required />
 								<span class="input-group-text">inch</span>
+							</div>
+							<div class="invalid-feedback" style="display: none;"
+								th:text="${@messageServiceAdmin.getMessage('SHIPPING_LENGTH_ERROR')}">
 							</div>
 						</div>
 					</div>
@@ -33,11 +36,14 @@
 					<!-- Width -->
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="form-label">Width (inch):  <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<input type="number"  class="form-control"
-									th:field="*{width}" placeholder="Enter width" required />
+							<label class="form-label">Width (inch): <span class="text-danger">*</span></label>
+							<div class="input-group has-validation">
+								<input type="number" class="form-control" step="0.01"
+									th:field="*{width}" id="width" placeholder="Enter width" required />
 								<span class="input-group-text">inch</span>
+							</div>
+							<div class="invalid-feedback" style="display: none;"
+								th:text="${@messageServiceAdmin.getMessage('SHIPPING_WIDTH_ERROR')}">
 							</div>
 						</div>
 					</div>
@@ -45,11 +51,14 @@
 					<!-- Height -->
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="form-label">Height (inch):  <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<input type="number"  class="form-control"
-									th:field="*{height}" placeholder="Enter height" required />
+							<label class="form-label">Height (inch): <span class="text-danger">*</span></label>
+							<div class="input-group has-validation">
+								<input type="number" class="form-control" step="0.01"
+									th:field="*{height}" id="height" placeholder="Enter height" required />
 								<span class="input-group-text">inch</span>
+							</div>
+							<div class="invalid-feedback" style="display: none;"
+								th:text="${@messageServiceAdmin.getMessage('SHIPPING_HEIGHT_ERROR')}">
 							</div>
 						</div>
 					</div>
@@ -57,11 +66,14 @@
 					<!-- Weight -->
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="form-label">Weight (pounds):  <span class="text-danger">*</span></label>
-							<div class="input-group">
-								<input type="number" class="form-control"
-									th:field="*{weight}" placeholder="Enter weight" required/>
+							<label class="form-label">Weight (pounds): <span class="text-danger">*</span></label>
+							<div class="input-group has-validation">
+								<input type="number" class="form-control" step="0.01"
+									th:field="*{weight}" id="weight" placeholder="Enter weight" required/>
 								<span class="input-group-text">lbs</span>
+							</div>
+							<div class="invalid-feedback" style="display: none;"
+								th:text="${@messageServiceAdmin.getMessage('SHIPPING_WEIGHT_ERROR')}">
 							</div>
 						</div>
 					</div>
