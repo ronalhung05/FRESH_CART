@@ -79,16 +79,13 @@
 								   th:field="*{cost}"
 								   placeholder="Enter cost" 
 								   step="0.01"
-								   min="0"
-								   th:readonly="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')}"
-								   th:value="${#authorization.expression('hasAuthority(''Editor'')') && product.id == null} ? 0 : *{cost}"
-								   th:style="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')} ? 'background-color: #e9ecef' : ''" />
+								   min="0" />
 						</div>
 					</div>
 
 					<!-- Price -->
 					<div class="col-md-6">
-						<label class="form-label">Price <span class="text-danger">*</span></label>
+						<label class="form-label">Price <span class="text-danger">*</span>	</label>
 						<div class="input-group">
 							<span class="input-group-text bg-light">$</span>
 							<input type="number" 
@@ -96,16 +93,13 @@
 								   th:field="*{price}"
 								   placeholder="Enter price" 
 								   step="0.01"
-								   min="0"
-								   th:readonly="${#authorization.expression('hasAuthority(''Editor'')')}"
-								   th:value="${#authorization.expression('hasAuthority(''Editor'')') && product.id == null} ? 0 : *{price}"
-								   th:style="${#authorization.expression('hasAuthority(''Editor'')')} ? 'background-color: #e9ecef' : ''" />
+								   min="0" />
 						</div>
 					</div>
 
 					<!-- Sale Price -->
 					<div class="col-md-6">
-						<label class="form-label">Sale Price <span class="text-danger">*</span></label>
+							<label class="form-label">Sale Price  <span class="text-danger">*</span></label>
 						<div class="input-group">
 							<span class="input-group-text bg-light">$</span>
 							<input type="number" 
@@ -113,10 +107,7 @@
 								   th:field="*{discountPercent}"
 								   placeholder="Enter sale price" 
 								   step="0.01"
-								   min="0"
-								   th:readonly="${#authorization.expression('hasAuthority(''Editor'')')}"
-								   th:value="${#authorization.expression('hasAuthority(''Editor'')') && product.id == null} ? 0 : *{discountPercent}"
-								   th:style="${#authorization.expression('hasAuthority(''Editor'')')} ? 'background-color: #e9ecef' : ''" />
+								   min="0" />
 						</div>
 					</div>
 

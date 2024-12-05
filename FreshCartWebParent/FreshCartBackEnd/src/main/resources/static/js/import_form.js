@@ -1,5 +1,15 @@
 $(document).ready(function () {
     let rowIndex = 0; // Initialize row index
+    const originalProductMap = {}; // Map to store original product list with order
+
+    // Save original product list on page load into a map
+    $("#productSelect option").each(function (index) {
+        originalProductMap[$(this).val()] = {
+            id: $(this).val(),
+            name: $(this).text(),
+            order: index // Keep track of the original order
+        };
+    });
 
     // Open modal on button click
     $("#addProductBtn").on("click", function () {
@@ -24,72 +34,37 @@ $(document).ready(function () {
 
     // Save new product logic
     $("#saveProductBtn").on("click", function () {
-        const selectedProductId = $("#productSearch").val();
-        const selectedOption = $(`#productList option[value="${selectedProductId}"]`);
-
-        // Check if the selected product exists in the datalist
-        if (selectedOption.length === 0) {
-            alert("Please select a valid product from the list");
-            return;
-        }
-
-        // Check the product in the added list but want to add again
-        if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
-            alert("This product is already added to the list. Please delete it to edit or add.");
-            return;
-        }
-
-        const selectedProductName = selectedOption.text();
-        const productImage = selectedOption.data("image-url");
+        const selectedProductId = $("#productSelect").val();
+        const selectedProductName = $("#productSelect option:selected").text();
         const productAmount = $("#productAmount").val();
         const productCost = $("#productCost").val();
         const productUnit = $("#productUnit").val();
 
         if (selectedProductId && productAmount && productCost) {
+            // Check if product is already in the table (to prevent duplicates)
+            if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
+                alert("This product is already added. Please delete it first if you want to add it again.");
+                return;
+            }
+
             // Calculate total cost
             const totalCost = parseFloat(productAmount) * parseFloat(productCost);
-
-            // Format số tiền với 2 số thập phân và dấu phẩy phân cách hàng nghìn
-            function formatCurrency(number) {
-                return new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(number);
-            }
 
             // Create a new row for the selected product
             const newRow = `
                 <tr data-row-index="${rowIndex}">
                     <td>${selectedProductId}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="${productImage}" alt="${selectedProductName}" 
-                                 style="width: 60px; height: 60px; object-fit: cover;" 
-                                 class="rounded me-3"/>
-                            <div>
-                                <h6 class="mb-0">${selectedProductName}</h6>
-                            </div>
-                        </div>
-                    </td>
+                    <td>${selectedProductName}</td>
                     <td>${productAmount}</td>
-                    <td>$${formatCurrency(productCost)}</td>
-                    <td>$${formatCurrency(totalCost)}</td>
+                    <td>${productCost}</td>
+                    <td>${totalCost.toFixed(2)}</td>
                     <td>${productUnit}</td>
                     <td>
-                        <a href="javascript:void(0);"
-                           class="fas fa-trash fa-2x icon-dark link-delete" 
-                           data-row-index="${rowIndex}" 
-                           data-product-id="${selectedProductId}" 
-                           data-product-name="${selectedProductName}"></a>
+                        <a type="button" class="btn btn-light btn-icon-text delete-btn" data-row-index="${rowIndex}" data-product-id="${selectedProductId}" data-product-name="${selectedProductName}"><i class="bi bi-trash fs-5"></i></a>
                     </td>
                 </tr>
             `;
-
             $("#productTableBody").append(newRow);
-
-            // Scroll to the bottom of the table
-            const container = $("#productTableBody").closest("div");
-            container.animate({ scrollTop: container.prop("scrollHeight") }, 500);
 
             // Add hidden inputs for form submission
             const hiddenInputs = `
@@ -99,14 +74,17 @@ $(document).ready(function () {
                     <input type="hidden" name="productCosts" value="${productCost}" />
                 </div>
             `;
-
             $("#hiddenInputsContainer").append(hiddenInputs);
+
+            // Remove the selected option from the dropdown
+            $(`#productSelect option[value="${selectedProductId}"]`).remove();
 
             // Increment row index
             rowIndex++;
 
             // Close modal and reset modal form inputs
             $("#addProductModal").modal('hide');
+            $("#productSelect").val('');
             $("#productAmount").val(1);
             $("#productCost").val(1.0);
         } else {
@@ -115,14 +93,36 @@ $(document).ready(function () {
     });
 
     // Delete product logic with reinsertion in correct position using map
-    $("#productTableBody").on("click", ".link-delete", function () {
+    $("#productTableBody").on("click", ".delete-btn", function () {
         const indexToDelete = $(this).data("row-index");
+        const productIdToReAdd = $(this).data("product-id");
 
         // Remove the table row with the matching index
         $(`tr[data-row-index="${indexToDelete}"]`).remove();
 
         // Remove associated hidden inputs
         $(`#hiddenInputs-${indexToDelete}`).remove();
+
+        // Use the originalProductMap to find the original order and reinsert
+        if (originalProductMap[productIdToReAdd]) {
+            const productToReAdd = originalProductMap[productIdToReAdd];
+            const newOption = `<option value="${productToReAdd.id}">${productToReAdd.name}</option>`;
+
+            // Insert at the correct position based on the original order
+            const options = $("#productSelect option");
+            let inserted = false;
+            for (let i = 0; i < options.length; i++) {
+                if (originalProductMap[$(options[i]).val()].order > productToReAdd.order) {
+                    $(options[i]).before(newOption);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) {
+                // If not inserted, add at the end
+                $("#productSelect").append(newOption);
+            }
+        }
     });
 
     // Cancel button logic

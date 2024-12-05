@@ -40,16 +40,16 @@
                                     <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="text-dark" th:replace="fragments :: column_link('id', 'ID', 'none')" />
+                                                <th th:replace="fragments :: column_link('id', 'ID', 'none')" />
                                                 <th th:replace="fragments :: column_link('country', 'Country', 'none')" />
                                                 <th th:replace="fragments :: column_link('state', 'State', 'none')" />
                                                 <th th:replace="fragments :: column_link('rate', 'Rate', 'none')" />
                                                 <th th:replace="fragments :: column_link('days', 'Days', 'none')" />
                                                 <th th:replace="fragments :: column_link('codSupported', 'COD Supported', 'none')" />
-                                                <th class="text-dark">Actions</th>
+                                                <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="text-dark">
+                                        <tbody>
                                             <tr th:each="rate : ${shippingRates}">
                                                 <td>[[${rate.id}]]</td>
                                                 <td>[[${rate.country.name}]]</td>
@@ -80,6 +80,7 @@
         </main>
     </div>
 
+    <div th:replace="modal_fragments :: confirm_modal" />
     <div th:replace="fragments :: footer"></div>
     <div th:replace="fragments :: common-js"></div>
 
@@ -92,6 +93,10 @@
                 showSuccessMessage(message);
             }
 
+            $(".link-delete").on("click", function(e) {
+                e.preventDefault();
+                showDeleteConfirmModal($(this), 'shipping rate');
+            });
         });
     </script>
 </body>

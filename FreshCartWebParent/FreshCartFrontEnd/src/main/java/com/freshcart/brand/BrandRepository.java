@@ -7,6 +7,6 @@ import com.freshcart.common.entity.Brand;
 import java.util.List;
 
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
-    @Query("SELECT b FROM Brand b WHERE b.enabled = true ORDER BY b.name ASC")
+    @Query("SELECT b FROM Brand b ORDER BY b.name ASC")
     public List<Brand> findAllOrderByNameAsc();
 } 

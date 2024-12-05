@@ -12,7 +12,7 @@
 						<small class="text-muted">[[${product.mainImage}]]</small>
 					</div>
 					<div class="card-body text-center">
-						<img id="mainThumbnail" alt="Main image preview" class="img-fluid rounded-3 mb-3"
+						<img id="thumbnail" alt="Main image preview" class="img-fluid rounded-3 mb-3"
 							th:src="@{${product.mainImagePath}}" />
 						<div class="d-grid">
 							<label for="fileImage" class="btn btn-outline-primary">
@@ -24,7 +24,7 @@
 						</div>
 					</div>
 				</div>
-				<input type="hidden" th:field="*{mainImage}" id="mainImage" />
+				<input type="hidden" th:field="*{mainImage}" />
 			</div>
 
 			<!-- Extra Images -->

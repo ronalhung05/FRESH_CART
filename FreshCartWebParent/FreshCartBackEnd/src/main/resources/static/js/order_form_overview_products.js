@@ -15,11 +15,6 @@ $(document).ready(function() {
 	formatOrderAmounts();
 	formatProductAmounts();
 
-	$("#productList").on("change", ".quantity-input", function(e) {
-		updateSubtotalWhenQuantityChanged($(this));
-		updateOrderAmounts();
-	});
-
 	$("#productList").on("change", ".price-input", function(e) {
 		updateSubtotalWhenPriceChanged($(this));
 		updateOrderAmounts();
@@ -31,6 +26,11 @@ $(document).ready(function() {
 
 	$("#productList").on("change", ".ship-input", function(e) {
 		updateOrderAmounts();
+	});
+
+	$("#productList").on("change", ".quantity-input", function () {
+		updateSubtotalWhenQuantityChanged($(this));
+		updateOrderAmounts()
 	});
 
 	fieldTax.on("change", function() {
