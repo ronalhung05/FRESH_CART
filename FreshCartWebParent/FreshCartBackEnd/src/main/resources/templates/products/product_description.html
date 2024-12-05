@@ -7,20 +7,25 @@
 			<div class="card-body">
 				<!-- Short Description -->
 				<div class="mb-4">
-					<label class="form-label">Short Description:</label>
+					<label class="form-label">Short Description <span class="text-danger">*</span></label>
 					<div id="shortDescriptionEditor"></div>
-					<input type="hidden" th:field="*{shortDescription}" id="shortDescriptionInput" />
+					<div class="invalid-feedback" id="shortDescriptionError" style="display: none;"
+						 th:text="${@messageServiceAdmin.getMessage('SHORT_DESCRIPTION_REQUIRED')}">
+					</div>
+					<input type="hidden" th:field="*{shortDescription}" id="shortDescriptionInput" required />
 				</div>
 
 				<!-- Full Description -->
 				<div class="mb-4">
-					<label class="form-label">Full Description:</label>
+					<label class="form-label">Full Description <span class="text-danger">*</span></label>
 					<div id="fullDescriptionEditor"></div>
-					<input type="hidden" th:field="*{fullDescription}" id="fullDescriptionInput" />
+					<div class="invalid-feedback" id="fullDescriptionError" style="display: none;"
+						 th:text="${@messageServiceAdmin.getMessage('FULL_DESCRIPTION_REQUIRED')}">
+					</div>
+					<input type="hidden" th:field="*{fullDescription}" id="fullDescriptionInput" required />
 				</div>
 			</div>
 		</div>
-
 	</div>
 </body>
 
