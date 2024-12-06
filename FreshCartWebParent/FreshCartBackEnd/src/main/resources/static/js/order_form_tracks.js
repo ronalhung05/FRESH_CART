@@ -69,17 +69,26 @@ function updateOverviewStatus() {
 	let latestDate = null;
 	let latestStatus = null;
 
-	// Log toàn bộ dữ liệu dòng
-	console.log("Updating overview status. Current rows:");
-	$("#trackList tbody tr").each(function() {
-		let currentDate = new Date($(this).find("input[name='trackDate']").val());
-		let currentStatus = $(this).find("select[name='trackStatus']").val();
+	console.log("Updating overview status:");
 
-		// Log dữ liệu từng dòng
-		console.log("Row data:", {
-			currentDate: currentDate,
-			currentStatus: currentStatus
-		});
+	let rows = $("#trackList tbody tr").toArray();
+	rows.sort((rowA, rowB) => {
+		let dateA = new Date($(rowA).find("input[name='trackDate']").val());
+		let dateB = new Date($(rowB).find("input[name='trackDate']").val());
+		return dateB - dateA; // Sắp xếp theo ngày giảm dần
+	});
+
+	rows.forEach(row => {
+		let dateInput = $(row).find("input[name='trackDate']").val();
+		let currentDate = new Date(dateInput);
+		let currentStatus = $(row).find("select[name='trackStatus']").val();
+
+		console.log("Row data:", { trackDate: dateInput, parsedDate: currentDate, status: currentStatus });
+
+		if (!currentDate || isNaN(currentDate)) {
+			console.warn("Invalid date:", dateInput);
+			return;
+		}
 
 		if (!latestDate || currentDate > latestDate) {
 			latestDate = currentDate;
@@ -95,6 +104,7 @@ function updateOverviewStatus() {
 		$("#overviewStatus").val("NEW");
 	}
 }
+
 
 
 function deleteTrack(link) {

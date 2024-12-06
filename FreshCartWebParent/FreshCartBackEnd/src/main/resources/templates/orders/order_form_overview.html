@@ -43,8 +43,8 @@
             <label class="form-label">Shipping Cost</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input type="text" th:field="*{shippingCost}" required readonly
-                       class="form-control bg-light" />
+                <input type="text" th:field="*{shippingCost}" required class="form-control bg-light" readonly/>
+
             </div>
         </div>
 
@@ -53,12 +53,7 @@
             <label class="form-label">Tax</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
-                <th:block th:if="${order.isCOD}">
-                    <input type="text" th:field="*{tax}" required class="form-control tax-input" />
-                </th:block>
-                <th:block th:if="${!order.isCOD}">
-                    <input type="text" th:field="*{tax}" required class="form-control bg-light"  readonly />
-                </th:block>
+                <input type="text" th:field="*{tax}" required class="form-control bg-light" readonly />
             </div>
         </div>
 
@@ -67,8 +62,7 @@
             <label class="form-label">Total</label>
             <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input type="text" th:field="*{total}" required readonly
-                       class="form-control bg-light" />
+                <input type="text" th:field="*{total}" required class="form-control bg-light" readonly/>
             </div>
         </div>
 

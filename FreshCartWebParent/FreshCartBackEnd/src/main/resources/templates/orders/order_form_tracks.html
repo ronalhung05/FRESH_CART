@@ -17,7 +17,7 @@
 				<tbody>
 				<th:block th:each="track, status : ${order.orderTracks}">
 					<tr th:id="'rowTrack' + ${status.count}"
-						th:with="isTrackWithStatusNew = ${track.status.toString() == 'NEW'}">
+						th:with="isTrackWithStatusNewOrPaid = ${track.status.toString() == 'NEW' || track.status.toString() == 'PAID'}">
 
 						<!-- Hidden input for trackId -->
 						<input type="hidden" name="trackId" th:value="${track.id}" class="hiddenTrackId" />
@@ -25,39 +25,33 @@
 						<!-- Time Column -->
 						<td>
 							<input type="datetime-local" name="trackDate" class="form-control"
-								   th:value="${track.updatedTimeOnForm}" 
-								   th:readonly="${isTrackWithStatusNew}"
-								   th:required="${!isTrackWithStatusNew}" />
+								   th:value="${track.updatedTimeOnForm}"
+								   th:readonly="${isTrackWithStatusNewOrPaid}"/>
 						</td>
 
 						<!-- Status Column -->
 						<td>
-							<th:block th:if="${isTrackWithStatusNew}">
-								<input type="text" name="trackStatus" th:value="'NEW'" 
-									   class="form-control bg-light" readonly />
-							</th:block>
-							<th:block th:if="${!isTrackWithStatusNew}">
-								<select name="trackStatus" class="form-control dropDownStatus"
-										required th:rowNumber="${status.count}" th:disabled="${isTrackWithStatusNew}">
-									<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
-										<option th:value="${os}" th:text="${os}" th:selected="${os == track.status}" />
-									</th:block>
-								</select>
-							</th:block>
-
+							<select name="trackStatus" class="form-control dropDownStatus"
+									th:attr="style=${isTrackWithStatusNewOrPaid} ? 'pointer-events: none;' : ''"
+									required th:rowNumber="${status.count}">
+								<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
+									<option th:value="${os}" th:text="${os}"
+											th:selected="${os == track.status}" />
+								</th:block>
+							</select>
 						</td>
 
 						<!-- Notes Column -->
 						<td>
 								<textarea class="form-control" name="trackNotes" rows="2"
 										  th:id="'trackNote' + ${status.count}" 
-										  th:readonly="${isTrackWithStatusNew}"
+										  th:readonly="${isTrackWithStatusNewOrPaid}"
 										  required>[[${track.notes}]]</textarea>
 						</td>
 
 						<!-- Delete Action Column -->
 						<td>
-							<th:block th:if="${!isTrackWithStatusNew}">
+							<th:block th:if="${!isTrackWithStatusNewOrPaid}">
 								<a class="text-danger linkRemoveTrack" href="#" 
 								   th:rowNumber="${status.count}">
 									<i class="feather-icon icon-trash-2"></i>

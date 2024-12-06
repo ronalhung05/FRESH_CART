@@ -137,17 +137,15 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
             <input type="hidden" name="productId" value="${productId}" class="hiddenProductId" />
 
             <td>
-                <div class="d-flex align-items-center">
-                    <img src="${mainImagePath}" alt="" class="icon-shape icon-xl">
-                    <div class="ms-3">
-                        <h5 class="mb-0">${productName}</h5>
-                    </div>
+                <div class="d-flex flex-column align-items-center">
+                    <img src="${mainImagePath}" alt="" class="icon-shape icon-xl mb-2">
+					<h5 class="mb-0 text-center">${productName}</h5>
                 </div>
-            </td>
+		  	</td>
             <td>
-                <input type="text" class="form-control w-auto cost-input" name="productDetailCost"
+                <input type="text" class="form-control text-center cost-input" name="productDetailCost"
                        value="${productCost}" rowNumber="${nextCount}"
-                       min="0" step="any" readonly/>
+                       min="0" step="any" readonly style="width: 100px"/>
             </td>
             <td>
                 <div class="input-group input-spinner">
@@ -158,19 +156,19 @@ function generateProductCode(productId, productName, mainImagePath, productCost,
                 </div>
             </td>
             <td>
-                <input type="text" class="form-control w-auto price-input" name="productPrice"
+                <input type="text" class="form-control text-center price-input" name="productPrice"
                        id="${priceId}"
                        rowNumber="${nextCount}" value="${productPrice}"
-                       min="0" step="any" required/>
+                       min="0" step="any" required style="width: 100px"/>
             </td>
             <td>
-                <input type="text" class="form-control w-auto subtotal-output" name="productSubtotal"
-                       id="${subtotalId}" value="${productPrice}" readonly />
+                <input type="text" class="form-control text-center subtotal-output" name="productSubtotal"
+                       id="${subtotalId}" value="${productPrice}" readonly style="width: 100px"/>
             </td>
             <td>
-                <input type="text" class="form-control w-auto ship-input" name="productShipCost"
+                <input type="text" class="form-control text-center ship-input" name="productShipCost"
                        value="${shippingCost}"
-                       min="0" step="any" required/>
+                       min="0" step="any" required style="width: 100px"/>
             </td>
             <td>
                 <a href="#" class="text-muted linkRemove" rowNumber="${nextCount}">

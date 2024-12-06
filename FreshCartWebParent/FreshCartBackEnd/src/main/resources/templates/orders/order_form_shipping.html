@@ -5,6 +5,8 @@
 <body>
 <div th:fragment="content" th:remove="tag" class="container">
 	<div class="row">
+		<input type="hidden" id="orderTime" th:value="${#dates.format(order.orderTime, 'yyyy-MM-dd')}" />
+
 		<!-- Cột bên trái -->
 		<div class="col-md-6">
 			<div class="mb-3">
@@ -20,24 +22,24 @@
 				<input type="text" class="form-control phone-input" th:field="*{phoneNumber}" required />
 			</div>
 			<div class="mb-3">
-				<label class="form-label">Address Line 1:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control" th:field="*{addressLine1}" required />
+				<label class="form-label">Address Line 1:</label>
+				<input type="text" class="form-control bg-light" th:field="*{addressLine1}" readonly />
 			</div>
 			<div class="mb-3">
-				<label class="form-label">City:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control" th:field="*{city}" required />
+				<label class="form-label">City:</label>
+				<input type="text" class="form-control bg-light" th:field="*{city}" readonly />
 			</div>
 			<div class="mb-3">
-				<label class="form-label">Postal Code:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control" th:field="*{postalCode}" required />
+				<label class="form-label">Postal Code:</label>
+				<input type="text" class="form-control bg-light" th:field="*{postalCode}" readonly />
 			</div>
 		</div>
 
 		<!-- Cột bên phải -->
 		<div class="col-md-6">
 			<div class="mb-3">
-				<label class="form-label">Expected Deliver Date:</label> <span class="text-danger">*</span></label>
-				<input type="date" class="form-control" th:field="*{deliverDateOnForm}" required />
+				<label class="form-label">Expected Deliver Date:</label> <span class="text-danger">*</span>
+				<input type="date" class="form-control bg-light" th:field="*{deliverDateOnForm}" readonly />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Last Name:</label> <span class="text-danger">*</span></label>
@@ -48,21 +50,21 @@
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Address Line 2:</label>
-				<input type="text" class="form-control" th:field="*{addressLine2}" />
+				<input type="text" class="form-control bg-light" th:field="*{addressLine2}" readonly/>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">Country:</label> <span class="text-danger">*</span>
+				<label class="form-label">Country:</label>
 				<input type="hidden" name="countryName" id="countryName"
-					   th:value="${order.country}" /> <select class="form-control"
-															  id="country">
+					   th:value="${order.country}" />
+				<select class="form-control bg-light" id="country" style="pointer-events: none;">
 				<option th:each="aCountry : ${listCountries}"
 						th:value="${aCountry.id}"
 						th:selected="${aCountry.name == order.country}">[[${aCountry.name}]]</option>
 			</select>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">State:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control" th:field="*{state}" list="listStates" />
+				<label class="form-label">State:</label>
+				<input type="text" class="form-control bg-light" th:field="*{state}" list="listStates" readonly />
 				<datalist id="listStates">
 				</datalist>
 			</div>

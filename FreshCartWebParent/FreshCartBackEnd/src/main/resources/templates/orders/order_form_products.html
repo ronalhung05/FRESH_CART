@@ -24,15 +24,13 @@
                             <input type="hidden" name="productId" th:value="${product.id}" class="hiddenProductId" />
 
                             <td>
-                                <div class="d-flex align-items-center">
-                                    <img th:src="@{${product.mainImagePath}}" alt="" class="icon-shape icon-xl">
-                                    <div class="ms-3">
-                                        <h5 class="mb-0">[[${product.name}]]</h5>
-                                    </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <img th:src="@{${product.mainImagePath}}" alt="" class="icon-shape icon-xl mb-2">
+                                    <h5 class="mb-0 text-center">[[${product.name}]]</h5>
                                 </div>
                             </td>
                             <td>
-                                <input type="text" class="form-control w-auto cost-input" name="productDetailCost"
+                                <input type="text" class="form-control text-center cost-input" name="productDetailCost"
                                        th:value="${detail.productCost}" th:rowNumber="${status.count}"
                                        min="0" step="any" readonly style="width: 100px"/>
                             </td>
@@ -57,37 +55,38 @@
                             </td>
                             <td>
                                 <th:block th:if="${order.isCOD}">
-                                    <input type="text" class="form-control w-auto price-input" name="productPrice"
+                                    <input type="text" class="form-control text-center price-input" name="productPrice"
                                            th:id="'price' + ${status.count}"
                                            th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
-                                           min="0" step="any" required/>
+                                           min="0" step="any" required style="width: 100px"/>
                                 </th:block>
                                 <th:block th:if="${!order.isCOD}">
-                                    <input type="text" class="form-control w-auto price-input" name="productPrice"
+                                    <input type="text" class="form-control text-center price-input" name="productPrice"
                                            th:id="'price' + ${status.count}"
                                            th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
-                                           min="0" step="any" required readonly/>
+                                           min="0" step="any" required readonly style="width: 100px"/>
                                 </th:block>
 
                             </td>
                             <td>
                                 <th:block th:if="${order.isCOD}">
-                                    <input type="text" class="form-control w-auto ship-input" name="productShipCost"
+                                    <input type="text" class="form-control text-center ship-input" name="productShipCost"
                                            th:value="${detail.shippingCost}"
-                                           min="0" step="any" required/>
+                                           min="0" step="any" required style="width: 100px"/>
                                 </th:block>
                                 <th:block th:if="${!order.isCOD}">
-                                    <input type="text" class="form-control w-auto ship-input" name="productShipCost"
+                                    <input type="text" class="form-control text-center ship-input" name="productShipCost"
                                            th:value="${detail.shippingCost}"
-                                           min="0" step="any" required readonly/>
+                                           min="0" step="any" required readonly style="width: 100px"/>
                                 </th:block>
                             </td>
                             <td>
-                                <input type="text" class="form-control w-auto subtotal-output" name="productSubtotal"
-                                       th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" readonly />
+                                <input type="text" class="form-control text-center subtotal-output" name="productSubtotal"
+                                       th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" readonly style="width: 100px"/>
                             </td>
                             <td>
-                                <a href="#" class="text-muted linkRemove" th:rowNumber="${status.count}">
+                                <a href="#" class="text-muted linkRemove" th:rowNumber="${status.count}"
+                                   th:if="${order.isCOD and order.status.toString().matches('NEW|PROCESSING')}">
                                     <i class="feather-icon icon-trash-2 text-danger"></i>
                                 </a>
                             </td>
@@ -96,7 +95,7 @@
                 </tbody>
             </table>
         </div>
-        <th:block th:if="${order.isCOD}">
+        <th:block th:if="${order.isCOD and order.status.toString().matches('NEW|PROCESSING')}">
             <button type="button" id="linkAddProduct" class="btn btn-primary mt-3">
                 <i class="bi bi-plus"></i> Add Product
             </button>
