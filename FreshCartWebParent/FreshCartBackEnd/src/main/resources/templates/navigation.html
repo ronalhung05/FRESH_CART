@@ -335,55 +335,13 @@
 
                         <!-- Settings Menu -->
                         <li class="nav-item" sec:authorize="hasAuthority('Admin')">
-                            <a class="nav-link"
-                               th:classappend="${moduleURL != null && moduleURL.startsWith('/settings') ? 'show' : 'collapsed'}"
-                               href="#" 
-                               data-bs-toggle="collapse" 
-                               data-bs-target="#navSettings">
+                            <a class="nav-link" th:href="@{/settings}">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon"><i class="bi bi-gear"></i></span>
                                     <span class="nav-link-text">Settings</span>
                                 </div>
                             </a>
-                            <div id="navSettings" 
-                                 class="collapse"
-                                 th:classappend="${moduleURL != null && moduleURL.startsWith('/settings') ? 'show' : ''}"
-                                 data-bs-parent="#sideNavbar">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='general')}"
-                                           th:classappend="${param.tab == null || param.tab[0] == 'general' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">General</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='countries')}"
-                                           th:classappend="${param.tab != null && param.tab[0] == 'countries' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">Countries</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='states')}"
-                                           th:classappend="${param.tab != null && param.tab[0] == 'states' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">States</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='mailServer')}"
-                                           th:classappend="${param.tab != null && param.tab[0] == 'mailServer' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">Mail Server</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='mailTemplates')}"
-                                           th:classappend="${param.tab != null && param.tab[0] == 'mailTemplates' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">Mail Templates</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/settings(tab='payment')}"
-                                           th:classappend="${param.tab != null && param.tab[0] == 'payment' ? 'active' : ''}"
-                                           onclick="event.stopPropagation();">Payment</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
-
                         <!-- User Profile -->
 
                     </ul>

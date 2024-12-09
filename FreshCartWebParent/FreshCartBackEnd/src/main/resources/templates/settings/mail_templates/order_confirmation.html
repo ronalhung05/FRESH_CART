@@ -2,36 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" th:remove="tag">
-		<div class="card border-0" style="box-shadow: var(--fc-box-shadow-sm)">
-			<div class="card-body p-6">
-				<!-- Email Subject -->
-				<div class="mb-4">
-					<label class="form-label">Email Subject</label>
-					<input type="text" class="form-control" 
-						name="ORDER_CONFIRMATION_SUBJECT"
-						th:value="${ORDER_CONFIRMATION_SUBJECT}" 
-						placeholder="Enter email subject..."
-						required maxlength="255"/>
-				</div>
+<div th:fragment="content" th:remove="tag">
+    <div class="card border-0" style="box-shadow: var(--fc-box-shadow-sm)">
+        <div class="card-body p-6">
+            <!-- Email Subject -->
+            <div class="mb-4">
+                <label class="form-label">Email Subject</label>
+                <div class="form-group">
+                    <input type="text" class="form-control"
+                           name="ORDER_CONFIRMATION_SUBJECT" id="ORDER_CONFIRMATION_SUBJECT"
+                           th:value="${ORDER_CONFIRMATION_SUBJECT}"
+                           placeholder="Enter email subject..."
+                           required maxlength="255"/>
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
 
-				<!-- Email Content -->
-				<div class="mb-4">
-					<label class="form-label">Email Content</label>
-					<input type="hidden" name="ORDER_CONFIRMATION_CONTENT" 
-						id="orderConfirmationContent" 
-						th:value="${ORDER_CONFIRMATION_CONTENT}" maxlength="255"/>
-					
-					<!-- Quill Editor Container -->
-					<div id="orderEmailContentEditor" style="height: 300px; margin-bottom: 1rem;"></div>
-					
-					
-				</div>
-
-				
-			</div>
-		</div>
-	</div>
+            <!-- Email Content -->
+            <div class="mb-4">
+                <label class="form-label">Email Content</label>
+                <div class="form-group">
+                    <input type="hidden" name="ORDER_CONFIRMATION_CONTENT"
+                           id="orderConfirmationContent"
+                           th:value="${ORDER_CONFIRMATION_CONTENT}"
+                           required maxlength="255"/>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <!-- Quill Editor Container -->
+                <div id="orderEmailContentEditor" style="height: 300px; margin-bottom: 1rem;"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

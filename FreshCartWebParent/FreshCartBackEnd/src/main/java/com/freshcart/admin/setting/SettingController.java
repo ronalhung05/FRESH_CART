@@ -61,7 +61,7 @@ public class SettingController {
         updateSettingValuesFromForm(request, settingBag.list());
 
 
-        ra.addFlashAttribute("message", messageService.getMessage("SETTING_GENERAL_SAVE_SUCCESS"));
+        ra.addFlashAttribute("message", messageService.getMessage("GENERAL_SAVE_SUCCESS"));
 
         return "redirect:/settings?tab=general";
     }
@@ -104,7 +104,7 @@ public class SettingController {
         List<Setting> mailServerSettings = service.getMailServerSettings();
         updateSettingValuesFromForm(request, mailServerSettings);
 
-        ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_SERVER_SAVE_SUCCESS"));
+        ra.addFlashAttribute("message", messageService.getMessage("MAIL_SERVER_SAVE_SUCCESS"));
 
         return "redirect:/settings?tab=mailServer";
     }
@@ -114,7 +114,7 @@ public class SettingController {
         List<Setting> mailTemplateSettings = service.getMailTemplateSettings();
         updateSettingValuesFromForm(request, mailTemplateSettings);
 
-        ra.addFlashAttribute("message", messageService.getMessage("SETTING_MAIL_TEMPLATE_SAVE_SUCCESS"));
+        ra.addFlashAttribute("message", messageService.getMessage("MAIL_TEMPLATE_SAVE_SUCCESS"));
 
         return "redirect:/settings?tab=mailTemplates";
     }
@@ -124,7 +124,7 @@ public class SettingController {
         List<Setting> paymentSettings = service.getPaymentSettings();
         updateSettingValuesFromForm(request, paymentSettings);
 
-        ra.addFlashAttribute("message", messageService.getMessage("SETTING_PAYMENT_SAVE_SUCCESS"));
+        ra.addFlashAttribute("message", messageService.getMessage("PAYMENT_SAVE_SUCCESS"));
 
         return "redirect:/settings?tab=payment";
     }
