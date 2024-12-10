@@ -1,6 +1,19 @@
 var extraImagesCount = 0;
+var MAX_FILE_SIZE = 1024 * 1024; // 1MB
 
 $(document).ready(function() {
+	$("#fileImage").change(function() {
+		if (!checkFileSize(this)) {
+			return;
+		}
+		showMainImageThumbnail(this);
+		$("#clearMainImage").show();
+	});
+
+	$("#clearMainImage").click(function() {
+		clearMainImage();
+	});
+
 	$("input[name='extraImage']").each(function(index) {
 		extraImagesCount++;
 
@@ -20,20 +33,45 @@ $(document).ready(function() {
 
 });
 
+function checkFileSize(fileInput) {
+	if (!fileInput.files || fileInput.files.length === 0) return false;
+	
+	const file = fileInput.files[0];
+	
+	// Check file type
+	if (!ALLOWED_EXTENSIONS.includes(file.type)) {
+		showErrorMessage(messages.IMAGE_UPLOAD_TYPE_ERROR);
+		fileInput.value = '';
+		return false;
+	}
+	
+	// Check file size
+	if (file.size > MAX_FILE_SIZE) {
+		 showErrorMessage(messages.IMAGE_UPLOAD_SIZE_ERROR.replace('{0}', MAX_FILE_SIZE_IN_MB));
+		fileInput.value = '';
+		return false;
+	}
+	
+	return true;
+}
+
 function showExtraImageThumbnail(fileInput, index) {
+	if (!checkFileSize(fileInput)) {
+		return;
+	}
+	
 	var file = fileInput.files[0];
-
 	fileName = file.name;
-
+	
 	imageNameHiddenField = $("#imageName" + index);
 	if (imageNameHiddenField.length) {
 		imageNameHiddenField.val(fileName);
 	}
 
-
 	var reader = new FileReader();
 	reader.onload = function(e) {
 		$("#extraThumbnail" + index).attr("src", e.target.result);
+		$("#btnClearExtra" + index).show();
 	};
 
 	reader.readAsDataURL(file);
@@ -51,17 +89,30 @@ function addNextExtraImageSection(index) {
 					<div>
 						<h6 class="mb-0">Extra Image #${index + 1}</h6>
 					</div>
-					<a name="linkRemoveExtraImage" class="btn btn-outline-danger btn-sm"
-						href="javascript:removeExtraImage(${index})" 
-						title="Remove this image">
-						<i class="bi bi-x-lg"></i>
-					</a>
+					${index > 0 ? `
+					<div>
+						<button class="btn btn-outline-danger btn-sm"
+								onclick="removeExtraImage(${index})" 
+								title="Delete this image">
+							<i class="bi bi-trash"></i>
+						</button>
+					</div>
+					` : ''}
 				</div>
 				<div class="card-body text-center">
-					<img id="extraThumbnail${index}" 
-						alt="Extra image #${index + 1} preview"
-						class="img-fluid rounded-3 mb-3" 
-						src="${defaultImageThumbnailSrc}" />
+					<div class="position-relative mb-3">
+						<img id="extraThumbnail${index}" 
+							alt="Extra image #${index + 1} preview"
+							class="img-fluid rounded-3" 
+							src="${defaultImageThumbnailSrc}" />
+						<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+								id="btnClearExtra${index}"
+								onclick="clearExtraImage(${index})"
+								title="Clear image"
+								style="display: none;">
+							<i class="bi bi-x-lg"></i>
+						</button>
+					</div>
 					<div class="d-grid">
 						<label class="btn btn-outline-primary">
 							<i class="bi bi-upload me-2"></i>Choose File
@@ -85,30 +136,54 @@ function removeExtraImage(index) {
 	$("#divExtraImage" + index).remove();
 }
 
-// // Thêm CSS animation cho card mới
-// const style = document.createElement('style');
-// style.textContent = `
-// 	.card {
-// 		transition: all 0.3s ease;
-// 	}
+function showMainImageThumbnail(fileInput) {
+	if (!checkFileSize(fileInput)) {
+		return;
+	}
+	
+	var file = fileInput.files[0];
+	
+	if (file) {
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			$("#mainThumbnail").attr("src", e.target.result);
+		};
+		reader.readAsDataURL(file);
+		
+		$("#mainImage").val(file.name);
+		$("#clearMainImage").show();
+	} else {
+		$("#mainThumbnail").attr("src", defaultImageThumbnailSrc);
+		$("#mainImage").val('');
+		$("#clearMainImage").hide();
+	}
+}
 
-// 	.card:hover {
-// 		transform: translateY(-5px);
-// 		box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-// 	}
+function clearMainImage() {
+	$("#fileImage").val('');
+	$("#mainImage").val('');
+	$("#mainThumbnail").attr("src", defaultImageThumbnailSrc);
+	$("#clearMainImage").hide();
+}
 
-// 	.btn-outline-primary {
-// 		transition: all 0.3s ease;
-// 	}
+function clearExtraImage(index) {
+	$(`#divExtraImage${index} input[type="file"]`).val('');
+	$(`#extraThumbnail${index}`).attr("src", defaultImageThumbnailSrc);
+	$(`#imageName${index}`).val('');
+	$(`#btnClearExtra${index}`).hide();
+}
 
-// 	.btn-outline-primary:hover {
-// 		background-color: #0aad0a;
-// 		border-color: #0aad0a;
-// 	}
-
-// 	.img-fluid {
-// 		max-height: 200px;
-// 		object-fit: contain;
-// 	}
-// `;
-// document.head.appendChild(style);
+// Add form validation for main image
+const productForm = document.querySelector('form');
+if (productForm) {
+    productForm.addEventListener('submit', function(e) {
+        const mainImageInput = document.getElementById('fileImage');
+        const mainImageHidden = document.getElementById('mainImage');
+        
+        if (!mainImageInput.files.length && !mainImageHidden.value) {
+            e.preventDefault();
+            showErrorMessage(messages.IMAGE_MAIN_REQUIRED);
+            document.getElementById('images-tab').click();
+        }
+    });
+}

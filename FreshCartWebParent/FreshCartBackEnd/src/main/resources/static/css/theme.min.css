@@ -27299,3 +27299,19 @@ footer .social-icons a:hover {
         padding: 1.25rem;
     }
 }
+/* Action button styling */
+.btn-light.btn-icon-text {
+	padding: 0.4rem;
+	border: 1px solid #dee2e6;
+	background-color: transparent;
+	transition: all 0.2s ease;
+}
+
+.btn-light.btn-icon-text:hover {
+	background-color: #f8f9fa;
+}
+
+.btn-light.btn-icon-text i {
+	line-height: 1;
+	vertical-align: middle;
+}

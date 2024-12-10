@@ -13,7 +13,7 @@ public enum OrderStatus {
     CANCELLED {
         @Override
         public String defaultDescription() {
-            return "Order was rejected";
+            return "Order has been cancelled";
         }
     },
 

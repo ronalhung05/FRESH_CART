@@ -162,13 +162,23 @@
 
   <div th:replace="fragments :: footer"></div>
   <div th:replace="fragments :: common-js"></div>
-  
+
   <script type="text/javascript">
     moduleURL = "[[@{/orders}]]";
 
     $(document).ready(function() {
       handleLinkViewCustomerDetails();
       handleLinkViewOrderDetails();
+
+      var message = "[[${message}]]";
+      if (message) {
+        showSuccessMessage(message);
+      }
+
+      $(".link-delete").on("click", function(e) {
+        e.preventDefault();
+        showDeleteConfirmModal($(this), 'brand');
+      });
     });
 
     function handleLinkViewCustomerDetails() {

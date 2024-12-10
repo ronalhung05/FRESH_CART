@@ -52,25 +52,32 @@
                                     <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="hideable-column">
+                                                <th class="text-dark">
                                                     <th th:replace="fragments :: column_link('id', 'Import ID', 'tag')" />
                                                 </th>
-                                                <th class="hideable-column">
+                                                <th class="text-dark">
                                                     <th th:replace="fragments :: column_link('userId', 'User ID', 'tag')" />
                                                 </th>
-                                                <th>User Name</th>
-                                                <th th:replace="fragments :: column_link('transactionTime', 'Transaction Time', 'none')" />
-                                                <th th:replace="fragments :: column_link('sumCost', 'Sum Cost', 'none')" />
-                                                <th>Actions</th>
+                                                <th class="text-dark">User Name</th>
+                                                <th class="text-dark" th:replace="fragments :: column_link('transactionTime', 'Transaction Time', 'none')" />
+                                                <th class="text-dark" th:replace="fragments :: column_link('sumCost', 'Sum Cost', 'none')" />
+                                                <th class="text-dark">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-dark">
                                             <tr th:each="import : ${listImports}">
                                                 <td>[[${import.id}]]</td>
                                                 <td>[[${import.user.id}]]</td>
-                                                <td>[[${import.user.firstName} + ' ' + ${import.user.lastName}]]</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img th:src="@{${import.user.photosImagePath}}" 
+                                                             class="icon-shape icon-md rounded-circle me-3"
+                                                             th:alt="${import.user.fullName}" />
+                                                        <span>[[${import.user.firstName} + ' ' + ${import.user.lastName}]]</span>
+                                                    </div>
+                                                </td>
                                                 <td>[[${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
-                                                <td>[[${import.sumCost}]]</td>
+                                                <td>$[[${#numbers.formatDecimal(import.sumCost, 0, 'COMMA', 2, 'POINT')}]]</td>
                                                 <td>
                                                     <a class="btn btn-light btn-icon-text" 
                                                        th:href="@{'/imports/detail/' + ${import.id}}"
@@ -96,15 +103,30 @@
     <div th:replace="fragments :: footer"></div>
     <div th:replace="fragments :: common-js" />
 
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         moduleURL = "[[@{/imports}]]";
 
         $(document).ready(function() {
-            $(".link-detail").on("click", function(e) {
+            $(".btn-icon-text").on("click", function(e) {
                 e.preventDefault();
-                linkDetailURL = $(this).attr("href");
-                $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+                let url = $(this).attr("href");
+                $("#detailModal .modal-content").load(url, function() {
+                    $("#detailModal").modal("show");
+                });
             });
+
+            var message = "[[${message}]]";
+            if (message) {
+                showSuccessMessage(message);
+            }
         });
     </script>
 </body>

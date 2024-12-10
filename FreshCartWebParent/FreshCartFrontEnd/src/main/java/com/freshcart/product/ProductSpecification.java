@@ -20,6 +20,15 @@ import javax.persistence.criteria.Predicate;
 import java.util.List;
 
 public class ProductSpecification {
+    public static Specification<Product> isBrandAndCategoryEnabled() {
+        return (root, query, cb) -> {
+            Join<Product, Brand> brandJoin = root.join(Product_.brand);
+            return cb.and(
+                    cb.isTrue(brandJoin.get("enabled")),
+                    cb.isTrue(root.get(Product_.category).get("enabled"))
+            );
+        };
+    }
 
     public static Specification<Product> hasCategory(Category category) {
         return (root, query, cb) -> {

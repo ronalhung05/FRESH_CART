@@ -1,72 +1,92 @@
-<div class="modal-header">
-	<h4 class="modal-title">Import Details</h4>
-	<button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="modal-header border-0 p-4">
+	<div>
+		<h4 class="modal-title mb-1">Import Details</h4>
+		<span class="text-muted small">View detailed information about this import</span>
+	</div>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 
-<div>
-	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item"><a class="nav-link active" data-toggle="tab"
-			href="#overview" role="tab">Overview</a></li>
-		<li class="nav-item"><a class="nav-link" data-toggle="tab"
-			href="#details" role="tab">Details</a></li>
+<div class="modal-body p-4">
+	<!-- Nav tabs -->
+	<ul class="nav nav-pills nav-lb-tab mb-4" id="importDetailTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="overview-tab" data-bs-toggle="tab" 
+					data-bs-target="#overview" type="button" role="tab">
+				<i class="bi bi-info-circle me-2"></i>Overview
+			</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="details-tab" data-bs-toggle="tab" 
+					data-bs-target="#details" type="button" role="tab">
+				<i class="bi bi-list-ul me-2"></i>Details
+			</button>
+		</li>
 	</ul>
 
+	<!-- Tab content -->
 	<div class="tab-content">
-		<div class="tab-pane active p-3" id="overview" role="tabpanel">
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Import ID:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" th:value="${import.id}"
-						readonly />
+		<div class="tab-pane fade show active" id="overview" role="tabpanel">
+			<div class="row g-4">
+				<!-- Import Info Card -->
+				<div class="col-12">
+					<div class="card border-0 bg-light">
+						<div class="card-body">
+							<h6 class="mb-3">Import Information</h6>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="form-label text-muted small">Import ID</label>
+									<input type="text" class="form-control" th:value="${import.id}" readonly />
+								</div>
+								<div class="col-md-6">
+									<label class="form-label text-muted small">Imported Time</label>
+									<input type="text" class="form-control" 
+										   th:value="${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}" readonly />
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">User ID:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" th:value="${import.user.id}"
-						readonly />
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">User Name:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control"
-						th:value="${import.user.firstName + ' ' + import.user.lastName}" readonly />
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Email:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control"
-						   th:value="${import.user.email}" readonly />
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Sum Cost:</label>
-				<div class="col-sm-10">
-					<div th:replace="fragments :: currency_input(${import.sumCost})">Sum Cost</div>
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label">Imported Time:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control"
-						th:value="${#dates.format(import.transactionTime, 'yyyy-MM-dd HH:mm:ss')}" readonly />
+				<!-- User Info Card -->
+				<div class="col-12">
+					<div class="card border-0 bg-light">
+						<div class="card-body">
+							<h6 class="mb-3">User Information</h6>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="form-label text-muted small">User ID</label>
+									<input type="text" class="form-control" th:value="${import.user.id}" readonly />
+								</div>
+								<div class="col-md-6">
+									<label class="form-label text-muted small">User Name</label>
+									<input type="text" class="form-control" 
+										   th:value="${import.user.firstName + ' ' + import.user.lastName}" readonly />
+								</div>
+								<div class="col-md-6">
+									<label class="form-label text-muted small">Email</label>
+									<input type="text" class="form-control" th:value="${import.user.email}" readonly />
+								</div>
+								<div class="col-md-6">
+									<label class="form-label text-muted small">Sum Cost</label>
+									<div th:replace="fragments :: currency_input(${import.sumCost})"></div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="tab-pane p-3" id="details" role="tabpanel">
-			<div th:replace="storage/import_details_read_only :: content"></div>
+		<div class="tab-pane fade" id="details" role="tabpanel">
+			<div class="card border-0">
+				<div class="card-body p-0">
+					<div th:replace="storage/import_details_read_only :: content"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
-<div class="modal-footer">
-	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+<div class="modal-footer border-0 p-4">
+	<button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Close</button>
 </div>
