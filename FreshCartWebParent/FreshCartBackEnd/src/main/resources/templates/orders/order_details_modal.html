@@ -74,11 +74,6 @@
 						<label class="form-label">Status</label>
 						<input type="text" readonly class="form-control bg-light" th:value="${order.status}">
 					</div>
-					<!-- Order Date -->
-					<div class="col-md-6">
-						<label class="form-label">Order Date</label>
-						<input type="text" readonly class="form-control bg-light" th:value="${order.orderTime}">
-					</div>
 				</div>
 			</div>
 
@@ -100,11 +95,9 @@
 						<th:block th:each="detail : ${order.orderDetails}">
 							<tr>
 								<td>
-									<div class="d-flex align-items-center">
-										<img th:src="@{${detail.product.mainImagePath}}" style="width: 50px; height: 50px;" />
-										<div class="ms-3">
-											<h5>[[${detail.product.name}]]</h5>
-										</div>
+									<div class="d-flex flex-column align-items-center">
+										<img th:src="@{${detail.product.mainImagePath}}" style="width: 50px; height: 50px;">
+										<h5 class="mb-0 text-center">[[${detail.product.name}]]</h5>
 									</div>
 								</td>
 								<td>[[${detail.productCost}]]</td>

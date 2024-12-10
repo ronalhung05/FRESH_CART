@@ -25,15 +25,14 @@
 						<!-- Time Column -->
 						<td>
 							<input type="datetime-local" name="trackDate" class="form-control"
-								   th:value="${track.updatedTimeOnForm}"
-								   th:readonly="${isTrackWithStatusNewOrPaid}"/>
+								   th:value="${track.updatedTimeOnForm}" readonly/>
 						</td>
 
 						<!-- Status Column -->
 						<td>
 							<select name="trackStatus" class="form-control dropDownStatus"
 									th:attr="style=${isTrackWithStatusNewOrPaid} ? 'pointer-events: none;' : ''"
-									required th:rowNumber="${status.count}">
+									required th:rowNumber="${status.count}" >
 								<th:block th:each="os : ${T(com.freshcart.common.entity.order.OrderStatus).values()}">
 									<option th:value="${os}" th:text="${os}"
 											th:selected="${os == track.status}" />
@@ -45,8 +44,7 @@
 						<td>
 								<textarea class="form-control" name="trackNotes" rows="2"
 										  th:id="'trackNote' + ${status.count}" 
-										  th:readonly="${isTrackWithStatusNewOrPaid}"
-										  required>[[${track.notes}]]</textarea>
+										  th:readonly="${isTrackWithStatusNewOrPaid}">[[${track.notes}]]</textarea>
 						</td>
 
 						<!-- Delete Action Column -->

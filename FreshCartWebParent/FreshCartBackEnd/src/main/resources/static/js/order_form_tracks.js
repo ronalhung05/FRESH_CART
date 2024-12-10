@@ -26,16 +26,51 @@ $(document).ready(function() {
 		updateOverviewStatus();
 	});
 
+	$('#trackList').on('blur', "textarea[name='trackNotes']", function () {
+		const noteField = $(this);
+		const maxLength = 256;
+
+		// Kiểm tra nếu rỗng
+		if (!noteField.val().trim()) {
+			showErrorMessage(messages.NOT_NULL_NOTES);
+			noteField.addClass('is-invalid');
+			noteField.focus();
+		} else if (noteField.val().length > maxLength) {
+			// Kiểm tra nếu vượt quá ký tự cho phép
+			showErrorMessage(messages.EXCEED_MAX_LENGTH_NOTES);
+			noteField.addClass('is-invalid');
+			noteField.focus();
+		} else {
+			noteField.removeClass('is-invalid');
+		}
+	});
+
 	updateTrackStatusOptions();
 });
 
+const statusDescriptions = {
+	NEW: "Order was placed by the customer",
+	CANCELLED: "Order was rejected",
+	PROCESSING: "Order is being processed",
+	PACKAGED: "Products were packaged",
+	PICKED: "Shipper picked the package",
+	SHIPPING: "Shipper is delivering the package",
+	DELIVERED: "Customer received products",
+	RETURN_REQUESTED: "Customer sent request to return purchase",
+	RETURNED: "Products were returned",
+	PAID: "Customer has paid this order",
+	REFUNDED: "Customer has been refunded"
+};
+
 function updateTrackNotesBasedOnStatus(dropdown) {
-	const selectedOption = dropdown.find("option:selected");
-	const defaultDescription = selectedOption.attr("defaultDescription"); // Lấy giá trị của thuộc tính defaultDescription
+	const selectedStatus = dropdown.val();
 	const rowNumber = dropdown.attr("rowNumber");
+	const defaultDescription = statusDescriptions[selectedStatus];
 
 	if (defaultDescription) {
-		$(`#trackNote${rowNumber}`).val(defaultDescription); // Cập nhật textarea tương ứng với mô tả
+		$(`#trackNote${rowNumber}`).val(defaultDescription); // Cập nhật textarea
+	} else {
+		console.warn(`No description found for status: ${selectedStatus}`);
 	}
 }
 
@@ -122,6 +157,9 @@ function updateTrackCountNumbers() {
 function addNewTrackRecord() {
 	var htmlCode = generateTrackRowCode();
 	$("#trackList tbody").append(htmlCode);
+
+	const newDropdown = $(`#rowTrack${trackRecordCount} select[name='trackStatus']`);
+	updateTrackNotesBasedOnStatus(newDropdown);
 }
 
 function generateTrackRowCode() {
@@ -135,7 +173,7 @@ function generateTrackRowCode() {
 		<tr id="${rowId}">
 			<input type="hidden" name="trackId" value="0" class="hiddenTrackId" />
 			<td>
-				<input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" />
+				<input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" readonly/>
 			</td>
 			<td>
 				<select name="trackStatus" class="form-control dropDownStatus" required rowNumber="${nextCount}">
@@ -147,12 +185,11 @@ function generateTrackRowCode() {
 					<option value="DELIVERED" defaultDescription="Order has been delivered">DELIVERED</option>
 					<option value="RETURN_REQUESTED" defaultDescription="Return has been requested">RETURN_REQUESTED</option>
 					<option value="RETURNED" defaultDescription="Order has been returned">RETURNED</option>
-					<option value="PAID" defaultDescription="Customer has paid this order">PAID</option>
 					<option value="REFUNDED" defaultDescription="Order has been refunded">REFUNDED</option>
 				</select>
 			</td>
 			<td>
-				<textarea rows="2" class="form-control" name="trackNotes" id="${trackNoteId}" required"></textarea>
+				<textarea rows="2" class="form-control" name="trackNotes" id="${trackNoteId}"></textarea>
 			</td>
 			<td>
 				<a class="text-danger linkRemoveTrack" href="" rowNumber="${nextCount}">
@@ -182,7 +219,6 @@ function formatCurrentDateTime() {
 
 	return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 }
-
 
 
 

@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Lấy giá trị ngày tạo đơn hàng
             const orderTime = new Date(orderTimeElement.value);
             if (isNaN(orderTime.getTime())) {
-                console.error('Ngày tạo đơn hàng không hợp lệ.');
                 return;
             }
 
@@ -26,3 +25,92 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+$(document).ready(function () {
+    $('.container').on('blur', "input[name='deliverDays']", function () {
+        const noteField = $(this);
+        const value = noteField.val().toString().trim();
+
+        if (!value) {
+            showErrorMessage(messages.NOT_NULL_DELIVERDAYS);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else if (!Number.isInteger(parseFloat(value) || parseInt(value, 10) <= 0)) {
+            showErrorMessage(messages.EXCEED_MAX_LENGTH_DELIVERDAYS);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else {
+            noteField.removeClass('is-invalid');
+        }
+    });
+
+    $('.container').on('blur', "input[name='phoneNumber']", function () {
+        const noteField = $(this);
+        const value = noteField.val().toString().trim();
+
+        if (!value) {
+            showErrorMessage(messages.NOT_NULL_PHONENUMBER);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else if (!Number.isInteger(parseFloat(value)) || value.length !== 10) {
+            showErrorMessage(messages.NOT_PHONENUMBER);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else {
+            noteField.removeClass('is-invalid');
+        }
+    });
+
+    $('.container').on('blur', "input[name='phoneNumber']", function () {
+        const noteField = $(this);
+        const value = noteField.val().toString().trim();
+
+        if (!value) {
+            showErrorMessage(messages.NOT_NULL_PHONENUMBER);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else if (!Number.isInteger(parseFloat(value)) || value.length !== 10) {
+            showErrorMessage(messages.NOT_PHONENUMBER);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else {
+            noteField.removeClass('is-invalid');
+        }
+    });
+
+    $('.container').on('blur', "input[name='firstName']", function () {
+        const noteField = $(this);
+        const value = noteField.val().toString().trim();
+
+        if (!value) {
+            showErrorMessage(messages.NOT_NULL_FIRSTNAME);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else if (value.length > 30) {
+            showErrorMessage(messages.EXCEED_MAX_LENGTH_FIRSTNAME);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else {
+            noteField.removeClass('is-invalid');
+        }
+    });
+
+    $('.container').on('blur', "input[name='lastName']", function () {
+        const noteField = $(this);
+        const value = noteField.val().toString().trim();
+
+        if (!value) {
+            showErrorMessage(messages.NOT_NULL_LASTNAME);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else if (value.length > 30) {
+            showErrorMessage(messages.EXCEED_MAX_LENGTH_LASTNAME);
+            noteField.addClass('is-invalid');
+            noteField.focus();
+        } else {
+            noteField.removeClass('is-invalid');
+        }
+    });
+})
+
+

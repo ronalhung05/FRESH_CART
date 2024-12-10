@@ -23,18 +23,16 @@
 		</div>
 	</div>
 
-	<div th:fragment="confirm_modal" class="modal fade text-center" id="confirmModal">
+	<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Delete Confirmation</h4>
-					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+					<h5 class="modal-title" id="confirmModalLabel">Update Confirmation</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-
 				<div class="modal-body">
 					<span id="confirmText"></span>
 				</div>
-
 				<div class="modal-footer">
 					<a class="btn btn-success" href="" id="yesButton">Yes</a>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
@@ -42,6 +40,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div th:replace="fragments :: common-js"></div>
 </body>
 

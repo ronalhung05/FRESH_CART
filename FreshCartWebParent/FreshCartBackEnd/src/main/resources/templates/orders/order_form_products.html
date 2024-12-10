@@ -14,7 +14,7 @@
                         <th>Price</th>
                         <th>Shipping Cost</th>
                         <th>Total</th>
-                        <th></th>
+                        <!--<th></th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -35,71 +35,40 @@
                                        min="0" step="any" readonly style="width: 100px"/>
                             </td>
                             <td>
-                                <th:block th:if="${order.isCOD}">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control text-center quantity-input" name="quantity"
-                                               th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
-                                               th:attr="max=${product.inStock} + ${detail.quantity}"
-                                               th:rowNumber="${status.count}" min="1" step="1" required />
-                                    </div>
-                                </th:block>
-                                <th:block th:if="${!order.isCOD}">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control text-center quantity-input" name="quantity"
-                                               th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
-                                               th:attr="max=${product.inStock} + ${detail.quantity}"
-                                               th:rowNumber="${status.count}" min="1" step="1" required readonly/>
-                                    </div>
-                                </th:block>
+                                <input type="number" class="form-control text-center quantity-input" name="quantity"
+                                       th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
+                                       th:attr="max=${product.inStock} + ${detail.quantity}"
+                                       th:rowNumber="${status.count}" min="1" step="1" required readonly style="width: 100px"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control text-center price-input" name="productPrice"
+                                       th:id="'price' + ${status.count}"
+                                       th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
+                                       min="0" step="any" required readonly style="width: 100px"/>
 
                             </td>
                             <td>
-                                <th:block th:if="${order.isCOD}">
-                                    <input type="text" class="form-control text-center price-input" name="productPrice"
-                                           th:id="'price' + ${status.count}"
-                                           th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
-                                           min="0" step="any" required style="width: 100px"/>
-                                </th:block>
-                                <th:block th:if="${!order.isCOD}">
-                                    <input type="text" class="form-control text-center price-input" name="productPrice"
-                                           th:id="'price' + ${status.count}"
-                                           th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
-                                           min="0" step="any" required readonly style="width: 100px"/>
-                                </th:block>
-
-                            </td>
-                            <td>
-                                <th:block th:if="${order.isCOD}">
-                                    <input type="text" class="form-control text-center ship-input" name="productShipCost"
-                                           th:value="${detail.shippingCost}"
-                                           min="0" step="any" required style="width: 100px"/>
-                                </th:block>
-                                <th:block th:if="${!order.isCOD}">
-                                    <input type="text" class="form-control text-center ship-input" name="productShipCost"
-                                           th:value="${detail.shippingCost}"
-                                           min="0" step="any" required readonly style="width: 100px"/>
-                                </th:block>
+                                <input type="text" class="form-control text-center ship-input" name="productShipCost"
+                                       th:value="${detail.shippingCost}"
+                                       min="0" step="any" required readonly style="width: 100px"/>
                             </td>
                             <td>
                                 <input type="text" class="form-control text-center subtotal-output" name="productSubtotal"
                                        th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" readonly style="width: 100px"/>
                             </td>
+                            <!--
                             <td>
                                 <a href="#" class="text-muted linkRemove" th:rowNumber="${status.count}"
                                    th:if="${order.isCOD and order.status.toString().matches('NEW|PROCESSING')}">
                                     <i class="feather-icon icon-trash-2 text-danger"></i>
                                 </a>
                             </td>
+                            -->
                         </tr>
                     </th:block>
                 </tbody>
             </table>
         </div>
-        <th:block th:if="${order.isCOD and order.status.toString().matches('NEW|PROCESSING')}">
-            <button type="button" id="linkAddProduct" class="btn btn-primary mt-3">
-                <i class="bi bi-plus"></i> Add Product
-            </button>
-        </th:block>
     </div>
 </div>
 <div th:replace="fragments :: common-js"></div>

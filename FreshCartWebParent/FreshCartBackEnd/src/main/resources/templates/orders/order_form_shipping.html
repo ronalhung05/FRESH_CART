@@ -10,16 +10,16 @@
 		<!-- Cột bên trái -->
 		<div class="col-md-6">
 			<div class="mb-3">
-				<label class="form-label">Deliver Days:</label> <span class="text-danger">*</span></label>
-				<input type="number" step="1" class="form-control" th:field="*{deliverDays}" required />
+				<label class="form-label">Deliver Days:</label> <span class="text-danger">*</span>
+				<input type="number" step="1" class="form-control" name="deliverDays" th:field="*{deliverDays}"/>
 			</div>
 			<div class="mb-3">
-				<label class="form-label">First Name:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control firstName-input" th:field="*{firstName}" required />
+				<label class="form-label">First Name:</label> <span class="text-danger">*</span>
+				<input type="text" class="form-control firstName-input" name="firstName" th:field="*{firstName}" required />
 			</div>
 			<div class="mb-3">
-				<label class="form-label">Phone Number:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control phone-input" th:field="*{phoneNumber}" required />
+				<label class="form-label">Phone Number:</label> <span class="text-danger">*</span>
+				<input type="text" class="form-control phone-input" name="phoneNumber" th:field="*{phoneNumber}" />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Address Line 1:</label>
@@ -42,8 +42,8 @@
 				<input type="date" class="form-control bg-light" th:field="*{deliverDateOnForm}" readonly />
 			</div>
 			<div class="mb-3">
-				<label class="form-label">Last Name:</label> <span class="text-danger">*</span></label>
-				<input type="text" class="form-control lastName-input" th:field="*{lastName}" required />
+				<label class="form-label">Last Name:</label> <span class="text-danger">*</span>
+				<input type="text" class="form-control lastName-input" name="lastName" th:field="*{lastName}" required />
 			</div>
 			<div class="mb-3">
 				<div style="height: 74px;"></div>

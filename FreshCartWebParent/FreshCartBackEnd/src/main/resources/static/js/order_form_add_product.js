@@ -29,14 +29,6 @@ $(document).on("blur", ".cost-input, .price-input, .ship-input, .tax-input", fun
 	validateInput(this, /^\d*\.?\d*$/, "Please enter numbers only!");
 });
 
-$(document).on("blur", ".firstName-input, .lastName-input", function () {
-	validateInput(this, /^[a-zA-Z\s]*$/, "Please enter letters only!", 50);
-});
-
-$(document).on("blur", ".phone-input", function () {
-	validateInput(this, /^\d*\.?\d*$/, "The phone number must consist of numbers only!", 11, 10);
-});
-
 function validatePositiveNumber(input, fieldName) {
 	const value = parseFloat(input.val()) || 0;
 
