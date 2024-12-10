@@ -30,9 +30,6 @@ public class ProductService {
                                         int pageSize) {
         Specification<Product> spec = Specification.where(null);
 
-        //1
-        spec = spec.and(ProductSpecification.isBrandAndCategoryEnabled());
-
         spec = spec.and((root, query, cb) ->
                 cb.isTrue(root.get(Product_.enabled)));
 
@@ -62,41 +59,31 @@ public class ProductService {
 
     public Product getProduct(String alias) throws ProductNotFoundException {
         Product product = repo.findByAlias(alias);
-        if (product == null || !product.isEnabled()
-                || !product.getBrand().isEnabled()
-                || !product.getCategory().isEnabled()) {
-            throw new ProductNotFoundException("Product not found or unavailable.");
+        if (product == null) {
+            throw new ProductNotFoundException("Could not find any product with alias " + alias);
         }
+
         return product;
     }
-
 
     public Product getProduct(Integer id) throws ProductNotFoundException {
         try {
             Product product = repo.findById(id).get();
-            if (!product.isEnabled()
-                    || !product.getBrand().isEnabled()
-                    || !product.getCategory().isEnabled()) {
-                throw new ProductNotFoundException("Product not found or unavailable.");
-            }
             return product;
         } catch (NoSuchElementException ex) {
             throw new ProductNotFoundException("Could not find any product with ID " + id);
         }
     }
 
-
     public Page<Product> search(String keyword, int pageNum) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return Page.empty();
         }
-
+        
         Pageable pageable = PageRequest.of(pageNum - 1, SEARCH_RESULTS_PER_PAGE);
-        Specification<Product> spec = Specification.where(ProductSpecification.searchProduct(keyword))
-                .and(ProductSpecification.isBrandAndCategoryEnabled());
+        Specification<Product> spec = ProductSpecification.searchProduct(keyword);
         return repo.findAll(spec, pageable);
     }
-
 
     public Page<Product> listByPage(Specification<Product> spec, Pageable pageable, Integer categoryId) {
         if (pageable.getSort().equals(Sort.by("id"))) {

@@ -27,7 +27,7 @@ function decreaseQuantity(button) {
 		quantityInput.val(newQuantity);
 		updateQuantity(productId, newQuantity);
 	} else {
-		showWarningMessage('Minimum quantity is 1');
+		showWarningModal('Minimum quantity is 1');
 	}
 }
 
@@ -71,7 +71,7 @@ function updateQuantity(productId, quantity) {
 		
 		$(".estimatedTotal, #checkout-amount, .d-flex.justify-content-between.mb-2 .fw-bold").fadeOut(100).fadeIn(100);
 	}).fail(function() {
-		showErrorMessage("Error while updating product quantity.");
+		showErrorModal("Error while updating product quantity.");
 	});
 }
 
@@ -132,7 +132,7 @@ function removeProduct(link) {
 			updateCartBadge(0); // Set badge về 0 khi giỏ hàng trống
 		}
 	}).fail(function() {
-		showErrorMessage("Error while removing product.");
+		showErrorModal("Error while removing product.");
 	});
 }
 

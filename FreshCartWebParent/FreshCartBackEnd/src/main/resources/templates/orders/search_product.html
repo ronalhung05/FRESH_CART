@@ -45,7 +45,6 @@
 
 	<div th:replace="modal_fragments :: modal_dialog"></div>
 	<div th:replace="fragments :: common-js"></div>
-
 	<script th:src="@{/js/common_form.js}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -60,9 +59,9 @@
 				productStock = $("#pstock" + productId);
 
 				if (window.parent.isProductAlreadyAdded(productId)) {
-					showWarningMessage("The product '" + productName + "' was already added.");
+					showErrorMessage("The product '" + productName + "' was already added.");
 				} else if (parseInt(productStock.text()) === 0) {
-					showWarningMessage("The product '" + productName + "' is out of stock.");
+					showErrorMessage("The product '" + productName + "' is out of stock.");
 				} else {
 					window.parent.addProduct(productId, productName);
 				}

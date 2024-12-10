@@ -1,134 +1,171 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head
-	th:replace="fragments :: page_head('Orders - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Orders - Shopme Admin', 'none')" />
+<style>
+	.icon-size {
+		font-size: 1.25rem; /* Đảm bảo tất cả icon có cùng kích thước */
+		vertical-align: middle; /* Căn giữa theo chiều dọc */
+	}
+</style>
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: menu"></div>
-		<div>
-			<h2>Manage Orders</h2>
-		</div>
+<div th:replace="navigation :: top_nav"></div>
+<div class="main-wrapper">
+	<div th:replace="navigation :: menu"></div>
 
-		<div th:replace="fragments :: search_form_and_message" />
-
-		<div>
-			<th:block th:each="order : ${listOrders}">
-				<div class="row m-1">
-					<div class="card">
-						<div class="card-header">
-							<div class="row">
-								<div class="col">
-									<span>Order ID #[[${order.id}]]</span>
+	<main class="main-content-wrapper">
+		<div class="container">
+			<!-- header -->
+			<div class="row mb-4">
+				<div class="col-md-12">
+					<div class="d-flex justify-content-between align-items-center">
+						<div>
+							<h2>[[${pageTitle}]]</h2>
+							<div class="d-flex">
+								<a th:href="@{/orders}" class="text-decoration-none">Orders</a>
+								<span class="mx-2">/</span>
+								<span class="text-muted">[[${pageTitle}]]</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<!-- Loop through each order -->
+				<th:block th:each="order : ${listOrders}">
+					<div class="row g-3 mb-4">
+						<div class="card shadow-sm rounded">
+							<!-- Card Header -->
+							<div class="card-header bg-light fw-bold">
+								<div class="row">
+									<!-- Order ID -->
+									<div class="col">
+										<span>Order ID #[[${order.id}]]</span>
+									</div>
+									<!-- Order Detail Link -->
+									<div class="col text-end">
+										<a class="fas fa-file-alt fa-2x text-primary text-decoration-none linkOrderDetail"
+										   th:href="@{'/orders/detail/' + ${order.id}}"
+										   title="View details of this order"></a>
+									</div>
 								</div>
-								<div class="col">
-									<div class="float-right">
-										<a class="fas fa-file-alt fa-2x icon-green linkOrderDetail"
-											th:href="@{'/orders/detail/' + ${order.id}}"
-											title="View details of this order"></a>
+							</div>
+
+							<!-- Card Body -->
+							<div class="card-body">
+								<!-- Recipient Name -->
+								<div class="d-flex align-items-center mb-2">
+									<i class="fas fa-user fa-lg me-2 text-primary"></i>
+									<b>[[${order.recipientName}]]</b>
+								</div>
+								<!-- Recipient Address -->
+								<div class="d-flex align-items-center mb-2">
+									<i class="fas fa-home fa-lg me-2 text-primary"></i>
+									<span>[[${order.recipientAddress}]]</span>
+								</div>
+								<!-- Recipient Phone -->
+								<div class="d-flex align-items-center mb-2">
+									<i class="fas fa-phone-alt fa-lg me-2 text-primary"></i>
+									<span>[[${order.phoneNumber}]]</span>
+								</div>
+								<!-- COD Section -->
+								<div th:if="${order.COD}" class="d-flex align-items-center mb-2">
+									<i class="fas fa-money-bill-wave fa-lg me-2 text-primary"></i>
+									<span>COD: <b>
+                                                <div th:replace="fragments :: format_currency(${order.total})"></div>
+                                            </b></span>
+								</div>
+
+								<!-- Order Status -->
+								<div class="row">
+									<!-- Picked Status -->
+									<div th:replace="orders/order_status_fragment :: content(${order.picked}, 'PICKED', 'fa-people-carry')">
+									</div>
+									<!-- Shipping Status -->
+									<div th:replace="orders/order_status_fragment :: content(${order.shipping}, 'SHIPPING', 'fa-shipping-fast')">
+									</div>
+									<!-- Delivered Status -->
+									<div th:replace="orders/order_status_fragment :: content(${order.delivered}, 'DELIVERED', 'fa-box-open')">
+									</div>
+									<!-- Returned Status -->
+									<div th:replace="orders/order_status_fragment :: content(${order.returned}, 'RETURNED', 'fa-undo')">
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="card-body">
-							<div>
-								<i class="fas fa-user"></i> <b>[[${order.recipientName}]]</b>
-							</div>
-							<div>
-								<i class="fas fa-home"></i> [[${order.recipientAddress}]]
-							</div>
-							<div>
-								<i class="fas fa-phone-alt"></i> [[${order.phoneNumber}]]
-							</div>
-							<div th:if="${order.COD}">
-								<span>COD: <b>
-										<div th:replace="fragments :: format_currency(${order.total})"></div>
-								</b></span>
-							</div>
-							<div>&nbsp;</div>
-							<div class="row">
-								<div
-									th:replace="orders/order_status_fragment :: content(${order.picked}, 'PICKED', 'fa-people-carry')">
-								</div>
-
-								<div
-									th:replace="orders/order_status_fragment :: content(${order.shipping}, 'SHIPPING', 'fa-shipping-fast')">
-								</div>
-
-								<div
-									th:replace="orders/order_status_fragment :: content(${order.delivered}, 'DELIVERED', 'fa-box-open')">
-								</div>
-
-								<div
-									th:replace="orders/order_status_fragment :: content(${order.returned}, 'RETURNED', 'fa-undo')">
-								</div>
-
-							</div>
-						</div>
 					</div>
-				</div>
-			</th:block>
-		</div>
-
-		<div th:replace="fragments :: pagination('orders')"></div>
-
-		<div class="modal fade text-center" id="confirmModal" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Update Confirmation</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<span id="confirmText"></span>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-success" href="" id="yesButton">Yes</a>
-						<button type="button" class="btn btn-danger" id="noButton" data-dismiss="modal">NO</button>
-					</div>
-				</div>
+				</th:block>
 			</div>
 		</div>
+	</main>
+</div>
 
+<div th:replace="fragments :: pagination('orders')"></div>
 
-		<div class="modal fade" id="orderDetailModal">
-			<div class="modal-dialog modal-xl">
-				<div class="modal-content"></div>
+<div class="modal fade text-center" id="confirmModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Update Confirmation</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<span id="confirmText"></span>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-success" href="" id="yesButton">Yes</a>
+				<button type="button" class="btn btn-danger" id="noButton" data-bs-dismiss="modal">NO</button>
 			</div>
 		</div>
-
-		<div th:replace="fragments :: footer"></div>
-
 	</div>
-	<script th:src="@{/js/common_list.js}"></script>
-	<script type="text/javascript">
-		moduleURL = "[[@{/orders}]]";
-		var csrfHeaderName = "[[${_csrf.headerName}]]";
-		var csrfValue = "[[${_csrf.token}]]";
+</div>
 
-		$(document).ready(function () {
-			$("[name='keyword']").attr("placeholder", "Type #number to search by Order ID");
-			handleLinkViewOrderDetails();
-		});
+<div class="modal fade" id="orderDetailModal">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content"></div>
+	</div>
+</div>
 
-		function handleLinkViewOrderDetails() {
-			$(".linkOrderDetail").on("click", function (e) {
+<div th:replace="fragments :: footer"></div>
+<div th:replace="fragments :: common-js"></div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+	moduleURL = "[[@{/orders}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+
+	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelectorAll(".linkOrderDetail").forEach(link => {
+			link.addEventListener("click", function (e) {
 				e.preventDefault();
-				linkDetailURL = $(this).attr("href");
-				$("#orderDetailModal").modal("show").find(".modal-content").load(linkDetailURL);
+
+				const linkDetailURL = this.getAttribute("href");
+				const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+				const modalContent = document.querySelector("#orderDetailModal .modal-content");
+
+				// Xóa nội dung cũ trước khi tải mới
+				modalContent.innerHTML = "";
+
+				// Tải nội dung động
+				fetch(linkDetailURL)
+						.then(response => response.text())
+						.then(html => {
+							modalContent.innerHTML = html;
+							modal.show();
+						})
+						.catch(error => {
+							console.error("Error loading order details:", error);
+							modalContent.innerHTML = "<p>Error loading order details. Please try again.</p>";
+							modal.show();
+						});
 			});
-		}
-	</script>
-	<script th:src="@{/js/orders_shipper.js}"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+		});
+	});
+</script>
+
+<script th:src="@{/js/orders_shipper.js}"></script>
+
 </body>
 
 </html>
