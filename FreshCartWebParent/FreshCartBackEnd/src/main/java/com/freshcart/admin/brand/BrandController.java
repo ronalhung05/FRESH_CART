@@ -93,14 +93,21 @@ public class BrandController {
         }
     }
 
-    @GetMapping("/brands/{id}/enabled/{status}")
-    public String updateBrandEnabledStatus(@PathVariable("id") Integer id,
-                              @PathVariable("status") boolean enabled,
+    @GetMapping("/brands/delete/{id}")
+    public String deleteBrand(@PathVariable(name = "id") Integer id,
+                              Model model,
                               RedirectAttributes redirectAttributes) {
-        brandService.updateBrandEnabledStatus(id, enabled);
-        String status = enabled ? "enabled" : "disabled";
-        String message = "The category ID " + id + " has been " + status;
-        redirectAttributes.addFlashAttribute("message", message);
+        try {
+            brandService.delete(id);
+            String brandDir = "brand-logos/" + id;
+            AmazonS3Util.removeFolder(brandDir);
+
+            redirectAttributes.addFlashAttribute("message",
+                    "The brand ID " + id + " has been deleted successfully");
+        } catch (BrandNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+
         return defaultRedirectURL;
     }
 }

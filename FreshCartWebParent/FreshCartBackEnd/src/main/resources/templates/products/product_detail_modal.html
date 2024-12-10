@@ -1,156 +1,118 @@
-<div class="modal-content border-0">
-    <div class="modal-header border-0">
-        <h4 class="modal-title">Product Details</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
+<div class="modal-header">
+	<h4 class="modal-title">Product Details</h4>
+	<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
 
-    <div class="modal-body px-4">
-        <!-- Navigation Tabs -->
-        <ul class="nav nav-pills nav-lb-tab mb-4" id="productDetailTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" 
-                        data-bs-target="#overview" type="button" role="tab" 
-                        aria-controls="overview" aria-selected="true">
-                    Overview
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="description-tab" data-bs-toggle="tab" 
-                        data-bs-target="#description" type="button" role="tab" 
-                        aria-controls="description" aria-selected="false">
-                    Description
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="images-tab" data-bs-toggle="tab" 
-                        data-bs-target="#images" type="button" role="tab" 
-                        aria-controls="images" aria-selected="false">
-                    Images
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="details-tab" data-bs-toggle="tab" 
-                        data-bs-target="#details" type="button" role="tab" 
-                        aria-controls="details" aria-selected="false">
-                    Details
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" 
-                        data-bs-target="#shipping" type="button" role="tab" 
-                        aria-controls="shipping" aria-selected="false">
-                    Shipping
-                </button>
-            </li>
-        </ul>
+<div>
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a class="nav-link active" data-toggle="tab"
+			href="#overview" role="tab">Overview</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#description" role="tab">Description</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#images" role="tab">Images</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#details" role="tab">Details</a></li>
+		<li class="nav-item"><a class="nav-link" data-toggle="tab"
+			href="#shipping" role="tab">Shipping</a></li>
+	</ul>
 
-        <!-- Tab Content -->
-        <div class="tab-content" id="productDetailTabsContent">
-            <!-- Overview Tab -->
-            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="row g-4">
-                            <!-- Title -->
-                            <div class="col-md-6">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" th:value="${product.name}" readonly />
-                            </div>
+	<div class="tab-content">
+		<div class="tab-pane active p-3" id="overview" role="tabpanel">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Product Name:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" th:value="${product.name}"
+						readonly />
+				</div>
+			</div>
 
-                            <!-- Product Category -->
-                            <div class="col-md-6">
-                                <label class="form-label">Product Category</label>
-                                <input type="text" class="form-control" th:value="${product.category.name}" readonly />
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Alias:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" th:value="${product.alias}"
+						readonly />
+				</div>
+			</div>
 
-                            <!-- Alias -->
-                            <div class="col-md-6">
-                                <label class="form-label">Alias</label>
-                                <input type="text" class="form-control" th:value="${product.alias}" readonly />
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Brand:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control"
+						th:value="${product.brand.name}" readonly />
+				</div>
+			</div>
 
-                            <!-- Brand -->
-                            <div class="col-md-6">
-                                <label class="form-label">Brand</label>
-                                <input type="text" class="form-control" th:value="${product.brand.name}" readonly />
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Category:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control"
+						th:value="${product.category.name}" readonly />
+				</div>
+			</div>
 
-                            <!-- Cost -->
-                            <div class="col-md-6">
-                                <label class="form-label">Cost</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light">$</span>
-                                    <input type="text" class="form-control" th:value="${product.cost}" readonly />
-                                </div>
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Enabled:</label>
+				<div class="col-sm-10">
+					<input type="checkbox" th:checked="${product.enabled}"
+						onclick="return false;" />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">In-Stock:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" th:value="${product.inStock}"
+						   readonly />
+				</div>
+			</div>
 
-                            <!-- Price -->
-                            <div class="col-md-6">
-                                <label class="form-label">Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light">$</span>
-                                    <input type="text" class="form-control" th:value="${product.price}" readonly />
-                                </div>
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Cost:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" th:value="${product.cost}"
+						readonly />
+				</div>
+			</div>
 
-                            <!-- Sale Price -->
-                            <div class="col-md-6">
-                                <label class="form-label">Sale Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light">$</span>
-                                    <input type="text" class="form-control" th:value="${product.discountPercent}" readonly />
-                                </div>
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Price:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" th:value="${product.price}"
+						readonly />
+				</div>
+			</div>
 
-                            <!-- Status -->
-                            <div class="col-md-6">
-                                <label class="form-label">Status</label>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" th:checked="${product.enabled}" disabled>
-                                    <label class="form-check-label">Enable this product</label>
-                                </div>
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Discount:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control"
+						th:value="${product.discountPercent}" readonly />
+				</div>
+			</div>
 
-                            <!-- In Stock -->
-                            <div class="col-md-6">
-                                <label class="form-label">In Stock</label>
-                                <input type="text" class="form-control" th:value="${product.inStock}" readonly />
-                            </div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Updated Time:</label>
+				<div class="col-sm-10">
+					<span
+						th:text="${#dates.format(product.updatedTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="description" role="tabpanel">
+			<div th:replace="products/product_description_read_only :: content"></div>
+		</div>
+		<div class="tab-pane" id="images" role="tabpanel">
+			<div th:replace="products/product_images_read_only :: content"></div>
+		</div>
+		<div class="tab-pane p-3" id="details" role="tabpanel">
+			<div th:replace="products/product_details_read_only :: content"></div>
+		</div>
+		<div class="tab-pane p-3" id="shipping" role="tabpanel">
+			<div th:replace="products/product_shipping_read_only :: content"></div>
+		</div>
+	</div>
+</div>
 
-                            <!-- Updated Time -->
-                            <div class="col-md-6">
-                                <label class="form-label">Updated Time</label>
-                                <input type="text" class="form-control" 
-                                       th:value="${#dates.format(product.updatedTime, 'yyyy-MM-dd HH:mm:ss')}" readonly />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description Tab -->
-            <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
-                <div th:replace="products/product_description_read_only :: content"></div>
-            </div>
-
-            <!-- Images Tab -->
-            <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
-                <div th:replace="products/product_images_read_only :: content"></div>
-            </div>
-
-            <!-- Details Tab -->
-            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
-                <div th:replace="products/product_details_read_only :: content"></div>
-            </div>
-
-            <!-- Shipping Tab -->
-            <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
-                <div th:replace="products/product_shipping_read_only :: content"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-footer border-0">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-    </div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 </div>

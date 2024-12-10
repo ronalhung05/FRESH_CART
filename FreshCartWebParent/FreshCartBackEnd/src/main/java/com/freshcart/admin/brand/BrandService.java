@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.common.entity.Brand;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
 public class BrandService {
     public static final int BRANDS_PER_PAGE = 10;
 
@@ -62,9 +59,5 @@ public class BrandService {
         }
 
         return "OK";
-    }
-
-    public void updateBrandEnabledStatus(Integer id, boolean enabled) {
-        repo.updateEnabledStatus(id, enabled);
     }
 }

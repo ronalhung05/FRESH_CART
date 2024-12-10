@@ -17,14 +17,6 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
                                 <h2>[[${pageTitle}]]</h2>
-                                <div class="d-flex">
-                                    <a th:href="@{/shipping_rates}" class="text-inherit">Shipping Rates</a>
-                                    <span class="mx-2">/</span>
-                                    <span class="text-muted">[[${pageTitle}]]</span>
-                                </div>
-                            </div>
-                            <div>
-                                <a th:href="@{/shipping_rates}" class="btn btn-light">Back to Shipping Rates</a>
                             </div>
                         </div>
                     </div>
@@ -41,10 +33,8 @@
                                     
                                     <!-- Country -->
                                     <div class="col-md-12">
-                                        <label for="country" class="form-label">
-                                            Destination Country <span class="text-danger">*</span>
-                                        </label>
-                                        <select th:field="*{country}" class="form-select" required>
+                                        <label for="country" class="form-label">Destination Country</label>
+                                        <select th:field="*{country}" class="form-select">
                                             <option th:each="country : ${listCountries}"
                                                 th:value="${country.id}">[[${country.name}]]</option>
                                         </select>
@@ -52,9 +42,7 @@
 
                                     <!-- State -->
                                     <div class="col-md-12">
-                                        <label for="state" class="form-label">
-                                            Destination State/Province <span class="text-danger">*</span>
-                                        </label>
+                                        <label for="state" class="form-label">Destination State/Province</label>
                                         <input type="text" class="form-control" th:field="*{state}"
                                             minlength="3" maxlength="64" list="listStates" required>
                                         <datalist id="listStates">
@@ -63,18 +51,14 @@
 
                                     <!-- Rate -->
                                     <div class="col-md-6">
-                                        <label for="rate" class="form-label">
-                                            Shipping Rate (per DIM weight) <span class="text-danger">*</span>
-                                        </label>
+                                        <label for="rate" class="form-label">Shipping Rate (per DIM weight)</label>
                                         <input type="number" class="form-control" th:field="*{rate}"
                                             required step="0.01" min="0">
                                     </div>
 
                                     <!-- Days -->
                                     <div class="col-md-6">
-                                        <label for="days" class="form-label">
-                                            Days to deliver <span class="text-danger">*</span>
-                                        </label>
+                                        <label for="days" class="form-label">Days to deliver</label>
                                         <input type="number" class="form-control" th:field="*{days}"
                                             required step="1" min="0">
                                     </div>

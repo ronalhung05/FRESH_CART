@@ -29,17 +29,13 @@ $(document).ready(function() {
 });
 
 function showImageThumbnail(fileInput) {
-    var file = fileInput.files[0];
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        // Kiểm tra context để xác định đang ở form nào
-        if (window.location.pathname.includes('/users/')) {
-            $("#userThumbnail").attr("src", e.target.result);
-        } else if (window.location.pathname.includes('/account')) {
-            $("#avatarImage").attr("src", e.target.result);
-        }
-    };
-    reader.readAsDataURL(file);
+	var file = fileInput.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		$("#thumbnail").attr("src", e.target.result);
+	};
+
+	reader.readAsDataURL(file);
 }
 
 function checkFileSize(fileInput) {

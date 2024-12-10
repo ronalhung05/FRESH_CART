@@ -123,28 +123,28 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/users/delete/{id}")
-//    public String deleteUser(@PathVariable(name = "id") Integer id,
-//                             Model model, @AuthenticationPrincipal FreshCartUserDetails loggedUser,
-//                             RedirectAttributes redirectAttributes) {
-//        try {
-//            String editedUser = service.get(id).getEmail();
-//            String loggedUsername = loggedUser.getUsername();
-//            if(loggedUsername.equals(editedUser)){
-//                return defaultRedirectURL;
-//            }
-//            service.delete(id);
-//            String userPhotosDir = "user-photos/" + id;
-//            AmazonS3Util.removeFolder(userPhotosDir);
-//
-//            redirectAttributes.addFlashAttribute("message",
-//                    messageService.getMessage("USER_DELETE_SUCCESS") + " (ID: " + id + ")");
-//        } catch (UserNotFoundException ex) {
-//            redirectAttributes.addFlashAttribute("message", ex.getMessage());
-//        }
-//
-//        return defaultRedirectURL;
-//    }
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id,
+                             Model model, @AuthenticationPrincipal FreshCartUserDetails loggedUser,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            String editedUser = service.get(id).getEmail();
+            String loggedUsername = loggedUser.getUsername();
+            if(loggedUsername.equals(editedUser)){
+                return defaultRedirectURL;
+            }
+            service.delete(id);
+            String userPhotosDir = "user-photos/" + id;
+            AmazonS3Util.removeFolder(userPhotosDir);
+
+            redirectAttributes.addFlashAttribute("message",
+                    messageService.getMessage("USER_DELETE_SUCCESS") + " (ID: " + id + ")");
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+
+        return defaultRedirectURL;
+    }
 
     @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id, @AuthenticationPrincipal FreshCartUserDetails loggedUser,

@@ -11,8 +11,6 @@ import com.freshcart.common.entity.Customer;
 import com.freshcart.common.entity.product.Product;
 
 public interface CartItemRepository extends CrudRepository<CartItem, Integer> {
-    @Query("SELECT c FROM CartItem c WHERE c.customer = :customer AND c.product.enabled = true AND " +
-            "c.product.category.enabled = true AND c.product.brand.enabled = true")
     public List<CartItem> findByCustomer(Customer customer);
 
     public CartItem findByCustomerAndProduct(Customer customer, Product product);
