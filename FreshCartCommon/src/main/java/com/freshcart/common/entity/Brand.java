@@ -30,7 +30,6 @@ public class Brand extends IdBasedEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
-    private boolean enabled;
 
     public Brand() {
 
@@ -70,14 +69,6 @@ public class Brand extends IdBasedEntity {
         this.categories = categories;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public String toString() {
         return "Brand [id=" + id + ", name=" + name + ", categories=" + categories + "]";
@@ -85,7 +76,7 @@ public class Brand extends IdBasedEntity {
 
     @Transient
     public String getLogoPath() {
-        if (this.id == null) return "/images/bakery.svg";
+        if (this.id == null) return "/images/image-thumbnail.png";
 
         return Constants.S3_BASE_URI + "/brand-logos/" + this.id + "/" + this.logo;
     }

@@ -3,7 +3,7 @@
 
 <body>
 
-	<div th:fragment="content(statusVar, statusName, iconName)" class="col">
+	<div th:fragment="content(statusVar, statusName, iconName)" class="col-3 text-center">
 		<th:block th:if="${statusVar}">
 			<i th:class="'fas ' + ${iconName} + ' fa-2x icon-green'"></i>
 		</th:block>
@@ -16,3 +16,4 @@
 				th:href="@{'/orders_shipper/update/' + ${order.id} + '/' + ${statusName}}"></a>
 		</th:block>
 	</div>
+	<div th:replace="fragments :: common-js"></div>

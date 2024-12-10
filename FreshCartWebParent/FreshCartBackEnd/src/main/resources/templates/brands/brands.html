@@ -56,7 +56,6 @@
                                                 <th>Logo</th>
                                                 <th	th:replace="fragments :: column_link('name', 'Brand Name', 'none')" />
                                                 <th>Categories</th>
-                                                <th>Enabled</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -75,12 +74,15 @@
                                                     </th:block>
                                                 </td>
                                                 <td>
-                                                    <div th:replace="fragments :: status(${brand.enabled}, 'brand', '/brands/' + ${brand.id})" />
-                                                </td>
-                                                <td>
                                                     <a class="btn btn-light btn-icon-text" th:href="@{'/brands/edit/' + ${brand.id}}" 
                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                         <i class="bi bi-pencil fs-5"></i>
+                                                    </a>
+                                                    <a class="btn btn-light btn-icon-text link-delete" 
+                                                       th:href="@{'/brands/delete/' + ${brand.id}}"
+                                                       th:entityId="${brand.id}"
+                                                       data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                        <i class="bi bi-trash fs-5"></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -96,7 +98,6 @@
         </main>
     </div>
 
-    <div th:replace="modal_fragments :: confirm_modal" />
     <div th:replace="fragments :: footer"></div>
     <div th:replace="fragments :: common-js"></div>
 
@@ -108,10 +109,11 @@
             if (message) {
                 showSuccessMessage(message);
             }
-            // $(".link-delete").on("click", function(e) {
-            //     e.preventDefault();
-            //     showDeleteConfirmModal($(this), 'brand');
-            // });
+
+            $(".link-delete").on("click", function(e) {
+                e.preventDefault();
+                showDeleteConfirmModal($(this), 'brand');
+            });
         });
     </script>
 </body>

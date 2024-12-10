@@ -1,10 +1,10 @@
-NOT_FULL_FILL,Please Fill
+NOT_FULL_FIELD,Please Fill
 NOT_FIND_PRODUCT_ALIAS,Could not find any product with alias
 NOT_FIND_PRODUCT_ID,Could not find any product with id
-SETTING_GENERAL_SAVE_SUCCESS,General settings have been saved.
-SETTING_MAIL_SERVER_SAVE_SUCCESS,Mail server settings have been saved
-SETTING_MAIL_TEMPLATE_SAVE_SUCCESS,Mail template settings have been saved
-SETTING_PAYMENT_SAVE_SUCCESS,Payment settings have been saved
+GENERAL_SAVE_SUCCESS,General settings have been saved.
+MAIL_SERVER_SAVE_SUCCESS,Mail server settings have been saved
+MAIL_TEMPLATE_SAVE_SUCCESS,Mail template settings have been saved
+PAYMENT_SAVE_SUCCESS,Payment settings have been saved
 IMPORT_SAVE_SUCCESS,The import has been created.
 IMPORT_NOT_FOUND,Could not find any product with ID
 ACCOUNT_UPDATE_SUCCESS,Your account details have been updated.
@@ -35,3 +35,18 @@ PRODUCT_NAME_LENGTH_ERROR,Product name must be between 3 and 256 characters.
 COST_REQUIRED,Please enter the cost price.
 PRICE_REQUIRED,Please enter the selling price.
 DISCOUNT_REQUIRED,Please enter the discount percentage.
+NOT_FILL_ENOUGH,Please fill at least 5 characters
+FILL_TOO_LONG,Please fill below 256 characters
+MIS_MATCH_NUMBER_PORT,Accept value from 0-99999
+LOGO_UPLOAD_SIZE_ERROR,File size exceeds MB. Please choose a smaller file.
+LOGO_UPLOAD_TYPE_ERROR,Invalid image format. Supported formats are JPEG and PNG.
+NOT_NULL_NOTES,Notes cannot be empty.
+EXCEED_MAX_LENGTH_NOTES, Notes cannot exceed 256 characters.
+NOT_NULL_DELIVERDAYS, Deliver days cannot be empty.
+EXCEED_MAX_LENGTH_DELIVERDAYS, Deliver days must be a positive integer.
+NOT_NULL_PHONENUMBER, Phone number cannot be empty.
+NOT_PHONENUMBER, Phone number must be 10 digit number.
+NOT_NULL_FIRSTNAME, First name cannot be empty.
+EXCEED_MAX_LENGTH_FIRSTNAME, First name cannot exceed 30 characters.
+NOT_NULL_LASTNAME,Last name cannot be empty.
+EXCEED_MAX_LENGTH_LASTNAME, Last name cannot exceed 30 characters.

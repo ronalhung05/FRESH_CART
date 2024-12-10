@@ -24,8 +24,10 @@
                                 </div>
                             </div>
                             <div>
-                                <button type="submit" form="orderForm" class="btn btn-primary me-2">Save</button>
-                                <button type="button" id="buttonCancel" class="btn btn-light">Cancel</button>
+                                <button th:if="${!order.status.toString().matches('CANCELLED|RETURNED')}"
+                                        id="submitButton" type="submit" form="orderForm"
+                                        class="btn btn-primary me-2">Save</button>
+                                <a th:href="@{/orders}" class="btn btn-light">Cancel</a>
                             </div>
                         </div>
                     </div>
@@ -109,12 +111,23 @@
         contextPath = "[[@{/}]]";
         var csrfHeaderName = "[[${_csrf.headerName}]]";
         var csrfValue = "[[${_csrf.token}]]";
+    </script>
 
-        $(document).ready(function() {
-            $('#buttonCancel').click(function() {
-                window.location = "[[@{/orders}]]";
-            });
-        });
+    <script th:inline="javascript">
+        /* <![CDATA[ */
+        const messages = {
+            NOT_NULL_NOTES: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_NOTES')}]]*/ '',
+            EXCEED_MAX_LENGTH_NOTES: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_NOTES')}]]*/ '',
+            NOT_NULL_DELIVERDAYS: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_DELIVERDAYS')}]]*/ '',
+            EXCEED_MAX_LENGTH_DELIVERDAYS: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_DELIVERDAYS')}]]*/ '',
+            NOT_NULL_PHONENUMBER: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_PHONENUMBER')}]]*/ '',
+            NOT_PHONENUMBER: /*[[${@messageServiceAdmin.getMessage('NOT_PHONENUMBER')}]]*/ '',
+            NOT_NULL_FIRSTNAME: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_FIRSTNAME')}]]*/ '',
+            EXCEED_MAX_LENGTH_FIRSTNAME: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_FIRSTNAME')}]]*/ '',
+            NOT_NULL_LASTNAME: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_LASTNAME')}]]*/ '',
+            EXCEED_MAX_LENGTH_LASTNAME: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_LASTNAME')}]]*/ '',
+        };
+        /* ]]> */
     </script>
 
     <div th:replace="fragments :: common-js"></div>
@@ -125,5 +138,6 @@
     <script th:src="@{/js/order_form_add_product.js}"></script>
     <script th:src="@{/js/order_form_remove_product.js}"></script>
     <script th:src="@{/js/order_form_tracks.js}"></script>
+    <script th:src="@{/js/order_form_shipping.js}"></script>
 </body>
 </html>

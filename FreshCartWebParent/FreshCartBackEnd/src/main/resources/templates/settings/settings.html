@@ -7,7 +7,7 @@
     <div th:replace="navigation :: top_nav"></div>
     <div class="main-wrapper">
         <div th:replace="navigation :: menu"></div>
-        
+
         <!-- main content -->
         <main class="main-content-wrapper bg-white">
             <div class="container">
@@ -22,33 +22,30 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div th:if="${message != null}"
-			class="alert alert-success text-center">[[${message}]]</div> -->
 
-            
                 <!-- Navigation Tabs -->
                 <ul class="nav nav-pills nav-lb-tab mb-4" id="settingTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="general-tab" data-bs-toggle="tab" 
-                                data-bs-target="#general" type="button" role="tab" 
+                        <button class="nav-link" id="general-tab" data-bs-toggle="tab"
+                                data-bs-target="#general" type="button" role="tab"
                                 aria-controls="general" aria-selected="true">
                             General
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="countries-tab" data-bs-toggle="tab"
-                                data-bs-target="#countries" type="button" role="tab"
-                                aria-controls="countries" aria-selected="false">
-                            Countries
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="states-tab" data-bs-toggle="tab"
-                                data-bs-target="#states" type="button" role="tab"
-                                aria-controls="states" aria-selected="false">
-                            States
-                        </button>
-                    </li>
+<!--                    <li class="nav-item" role="presentation">-->
+<!--                        <button class="nav-link" id="countries-tab" data-bs-toggle="tab"-->
+<!--                                data-bs-target="#countries" type="button" role="tab"-->
+<!--                                aria-controls="countries" aria-selected="false">-->
+<!--                            Countries-->
+<!--                        </button>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item" role="presentation">-->
+<!--                        <button class="nav-link" id="states-tab" data-bs-toggle="tab"-->
+<!--                                data-bs-target="#states" type="button" role="tab"-->
+<!--                                aria-controls="states" aria-selected="false">-->
+<!--                            States-->
+<!--                        </button>-->
+<!--                    </li>-->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="mailServer-tab" data-bs-toggle="tab"
                                 data-bs-target="#mailServer" type="button" role="tab"
@@ -77,12 +74,12 @@
                     <div class="tab-pane active p-3" id="general" role="tabpanel">
                         <div th:replace="settings/general :: content"></div>
                     </div>
-                    <div class="tab-pane p-3" id="countries" role="tabpanel">
-                        <div th:replace="settings/countries :: content"></div>
-                    </div>
-                    <div class="tab-pane p-3" id="states" role="tabpanel">
-                        <div th:replace="settings/states :: content"></div>
-                    </div>
+<!--                    <div class="tab-pane p-3" id="countries" role="tabpanel">-->
+<!--                        <div th:replace="settings/countries :: content"></div>-->
+<!--                    </div>-->
+<!--                    <div class="tab-pane p-3" id="states" role="tabpanel">-->
+<!--                        <div th:replace="settings/states :: content"></div>-->
+<!--                    </div>-->
                     <div class="tab-pane p-3" id="mailServer" role="tabpanel">
                         <div th:replace="settings/mail_server :: content"></div>
                     </div>
@@ -102,8 +99,21 @@
 	<div th:replace="fragments :: common-js"></div>
     <!-- Scripts -->
     <script type="text/javascript" th:src="@{/js/quill-setup.js}"></script>
-    <script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>
-    <script type="text/javascript" th:src="@{/js/states_setting.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/countries_setting.js}"></script>-->
+<!--    <script type="text/javascript" th:src="@{/js/states_setting.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/settings.js}"></script>
+
+    <script th:inline="javascript">
+        /* <![CDATA[ */
+        const messages = {
+            NOT_FULL_FIELD: /*[[${@messageServiceAdmin.getMessage('NOT_FULL_FIELD')}]]*/ '',
+            FILL_TOO_LONG: /*[[${@messageServiceAdmin.getMessage('FILL_TOO_LONG')}]]*/ '',
+            MIS_MATCH_NUMBER_PORT: /*[[${@messageServiceAdmin.getMessage('MIS_MATCH_NUMBER_PORT')}]]*/ '',
+            LOGO_UPLOAD_SIZE_ERROR: /*[[${@messageServiceAdmin.getMessage('LOGO_UPLOAD_SIZE_ERROR')}]]*/ '',
+            LOGO_UPLOAD_TYPE_ERROR: /*[[${@messageServiceAdmin.getMessage('LOGO_UPLOAD_TYPE_ERROR')}]]*/ '',
+        };
+        /* ]]> */
+    </script>
 
     <script type="text/javascript">
         MAX_FILE_SIZE = 102400;
@@ -116,41 +126,12 @@
             var currentTab = /*[[${currentTab}]]*/ 'general';
             // Activate the correct tab
             $('button[data-bs-target="#' + currentTab + '"]').tab('show');
-            
-            var message = /*[[${message}]]*/ '';
+
+            var message = "[[${message}]]";
             if (message && message.trim() !== "") {
                 showSuccessMessage(message);
             }
         });
-        
     </script>
-
-    <script th:inline="javascript">
-        $(document).ready(function() {
-            // Get current tab from URL parameter
-            var currentTab = /*[[${param.tab}]]*/ 'general';
-            currentTab = Array.isArray(currentTab) ? currentTab[0] : 'general';
-            
-            // Activate the correct tab
-            $('#' + currentTab + '-tab').tab('show');
-            
-            var message = /*[[${message}]]*/ '';
-            if (message && message.trim() !== "") {
-                showSuccessMessage(message);
-            }
-            
-            // Prevent dropdown from closing when clicking inside
-            $('#navSettings').on('click', function(e) {
-                e.stopPropagation();
-            });
-
-            // Keep dropdown open when tab is active
-            if (window.location.href.includes('/settings')) {
-                $('#navSettings').addClass('show');
-                $('#navSettings').parent().find('.nav-link').removeClass('collapsed').addClass('show');
-            }
-        });
-    </script>
-
 </body>
 </html>

@@ -64,17 +64,6 @@
                                                    required minlength="3" maxlength="45" placeholder="Brand Name"/>
                                         </div>
 
-                                        <div class="mb-3 col-lg-6">
-                                            <label class="form-label d-block">Status</label>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" 
-                                                       type="checkbox" 
-                                                       role="switch"
-                                                       th:field="*{enabled}"/>
-                                                <label class="form-check-label">Enable this brand</label>
-                                            </div>
-                                        </div>
-
                                         <div class="mb-3 col-lg-12">
                                             <label class="form-label">Categories</label>
                                             <select class="form-select" th:field="*{categories}" multiple

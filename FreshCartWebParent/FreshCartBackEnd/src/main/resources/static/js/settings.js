@@ -1,57 +1,112 @@
-// Constants
-const MAX_FILE_SIZE = 102400;
+$(document).ready(function () {
+    const MAX_FILE_SIZE = 102400; // Maximum file size: 2MB
+    const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg"];
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Khởi tạo các biến từ Thymeleaf
-    const moduleURL = contextPath + "settings";
-    const currentTab = currentTabValue || 'general'; // currentTabValue được set từ Thymeleaf
+    const fieldsToValidate = [
+        "#fileImage",
+        "#SITE_NAME",
+        "#COPYRIGHT",
+        "#MAIL_HOST",
+        "#MAIL_USERNAME",
+        "#MAIL_PASSWORD",
+        "#MAIL_FROM",
+        "#MAIL_PORT",
+        "#MAIL_SENDER_NAME",
+        "#CUSTOMER_VERIFY_SUBJECT",
+        "#customerVerificationContent",
+        "#ORDER_CONFIRMATION_SUBJECT",
+        "#orderConfirmationContent",
+        "#PAYPAL_API_BASE_URL",
+        "#PAYPAL_API_CLIENT_ID",
+        "#PAYPAL_API_CLIENT_SECRET",
+    ];
 
-    // Kích hoạt tab hiện tại
-    activateCurrentTab(currentTab);
+    fieldsToValidate.forEach(function (selector) {
+        const input = $(selector);
 
-    // Hiển thị message nếu có
-    showMessageIfExists(message);
+        input.on("invalid", function (event) {
+            event.preventDefault();
 
-    // Xử lý dropdown settings
-    handleSettingsDropdown();
-});
+            const formGroup = input.closest('.form-group');
+            const errorElement = formGroup.find('.invalid-feedback');
 
-function activateCurrentTab(currentTab) {
-    // Thử cả hai cách để kích hoạt tab
-    const tabButton = document.querySelector(`button[data-bs-target="#${currentTab}"]`);
-    const tabElement = document.getElementById(`${currentTab}-tab`);
-    
-    if (tabButton) {
-        const tab = new bootstrap.Tab(tabButton);
-        tab.show();
-    } else if (tabElement) {
-        const tab = new bootstrap.Tab(tabElement);
-        tab.show();
-    }
-}
+            if(selector === "#fileImage"){
+                validateFileInput(input, errorElement);
+            }
+            if(selector === "#MAIL_PORT"){
+                if(input[0].validity.patternMismatch){
+                    showError(input, errorElement, messages.MIS_MATCH_NUMBER_PORT);
+                }
+            }
+            if (input[0].validity.valueMissing) {
+                showError(input, errorElement, messages.NOT_FULL_FIELD);
+            } else if (input[0].validity.tooLong) {
+                showError(input, errorElement, messages.FILL_TOO_LONG);
+            }
+        });
 
-function showMessageIfExists(message) {
-    if (message && message.trim() !== "") {
-        showSuccessMessage(message);
-    }
-}
-
-function handleSettingsDropdown() {
-    const navSettings = document.getElementById('navSettings');
-    if (!navSettings) return;
-
-    // Ngăn dropdown đóng khi click bên trong
-    navSettings.addEventListener('click', function(e) {
-        e.stopPropagation();
+        input.on("input", function () {
+            const formGroup = input.closest('.form-group');
+            const errorElement = formGroup.find('.invalid-feedback');
+            if (input[0].checkValidity()) {
+                clearError(input, errorElement);
+            }
+        });
     });
 
-    // Giữ dropdown mở khi đang ở trang settings
-    if (window.location.href.includes('/settings')) {
-        navSettings.classList.add('show');
-        const navLink = navSettings.parentElement.querySelector('.nav-link');
-        if (navLink) {
-            navLink.classList.remove('collapsed');
-            navLink.classList.add('show');
+    function validateFileInput(input, errorElement) {
+        const file = input[0].files[0];
+        if (!file) {
+            clearError(input, errorElement);
+            return true;
         }
+        if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+            showError(input, errorElement, messages.LOGO_UPLOAD_TYPE_ERROR);
+            input.val('');
+            return false;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+            showError(input, errorElement, messages.LOGO_UPLOAD_SIZE_ERROR);
+            input.val('');
+            return false;
+        }
+        clearError(input, errorElement);
+        return true;
     }
-} 
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+
+            fieldsToValidate.forEach(function (selector) {
+                const input = $(selector);
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.find('.invalid-feedback');
+
+                if (!input[0].checkValidity()) {
+                    input.trigger("invalid"); // Gọi sự kiện invalid để hiển thị lỗi
+                    isValid = false;
+                } else {
+                    clearError(input, errorElement);
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault(); // Ngăn submit nếu có lỗi
+            }
+        });
+    }
+});
+
+
+function showError(input, errorElement, message) {
+    input.addClass("is-invalid");
+    errorElement.text(message);
+    errorElement.hide().fadeIn();
+}
+
+function clearError(input, errorElement) {
+    input.removeClass("is-invalid");
+    errorElement.hide();
+}

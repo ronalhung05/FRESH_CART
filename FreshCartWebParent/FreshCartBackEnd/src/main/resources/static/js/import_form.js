@@ -11,14 +11,14 @@ $(document).ready(function () {
         let value = $(this).val();
         if (value < 0) {
             $(this).val(1);
-            alert("Amount cannot be negative.");
+            showWarningMessage("Amount cannot be negative.");
         }
     });
     $("#productCost").on("input", function () {
         let value = $(this).val();
         if (value < 0) {
             $(this).val(1);
-            alert("Cost cannot be negative.");
+            showWarningMessage("Cost cannot be negative.");
         }
     });
 
@@ -29,13 +29,13 @@ $(document).ready(function () {
 
         // Check if the selected product exists in the datalist
         if (selectedOption.length === 0) {
-            alert("Please select a valid product from the list");
+            showWarningMessage("Please select a valid product from the list");
             return;
         }
 
         // Check the product in the added list but want to add again
         if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
-            alert("This product is already added to the list. Please delete it to edit or add.");
+            showWarningMessage("This product is already added to the list. Please delete it to edit or add.");
             return;
         }
 
@@ -49,38 +49,22 @@ $(document).ready(function () {
             // Calculate total cost
             const totalCost = parseFloat(productAmount) * parseFloat(productCost);
 
-            // Format số tiền với 2 số thập phân và dấu phẩy phân cách hàng nghìn
-            function formatCurrency(number) {
-                return new Intl.NumberFormat('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }).format(number);
-            }
-
             // Create a new row for the selected product
             const newRow = `
                 <tr data-row-index="${rowIndex}">
                     <td>${selectedProductId}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="${productImage}" alt="${selectedProductName}" 
-                                 style="width: 60px; height: 60px; object-fit: cover;" 
-                                 class="rounded me-3"/>
-                            <div>
-                                <h6 class="mb-0">${selectedProductName}</h6>
-                            </div>
-                        </div>
-                    </td>
+                    <td>${selectedProductName}</td>
+                    <td><img src="${productImage}" alt="${productImage}" style="width: 120px" class="img-fluid"/></td>
                     <td>${productAmount}</td>
-                    <td>$${formatCurrency(productCost)}</td>
-                    <td>$${formatCurrency(totalCost)}</td>
+                    <td>${productCost}</td>
+                    <td>${totalCost.toFixed(2)}</td>
                     <td>${productUnit}</td>
                     <td>
                         <a href="javascript:void(0);"
-                           class="fas fa-trash fa-2x icon-dark link-delete" 
-                           data-row-index="${rowIndex}" 
-                           data-product-id="${selectedProductId}" 
-                           data-product-name="${selectedProductName}"></a>
+                        class="fas fa-trash fa-2x icon-dark link-delete" 
+                        data-row-index="${rowIndex}" 
+                        data-product-id="${selectedProductId}" 
+                        data-product-name="${selectedProductName}"></a>
                     </td>
                 </tr>
             `;
@@ -110,7 +94,7 @@ $(document).ready(function () {
             $("#productAmount").val(1);
             $("#productCost").val(1.0);
         } else {
-            alert("Please fill in all required fields.");
+            showWarningMessage("Please fill in all required fields.");
         }
     });
 
@@ -133,7 +117,7 @@ $(document).ready(function () {
     // Form submission check
     $("form").on("submit", function (event) {
         if ($("#productTableBody tr").length === 0) {
-            alert("Please add at least one product before saving.");
+            showWarningMessage("Please add at least one product before saving.");
             event.preventDefault(); // Prevent form submission
         }
     });
