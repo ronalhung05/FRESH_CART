@@ -14,13 +14,10 @@ public class FreshCartBackEndApplication {
         SpringApplication.run(FreshCartBackEndApplication.class, args);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        // Contraseña a codificar
         String passwordToEncode = "esemio123";
 
-        // Codificar la contraseña
         String encodedPassword = passwordEncoder.encode(passwordToEncode);
 
-        // Imprimir la contraseña codificada
         System.out.println("Contraseña esemio123 codificada es: " + encodedPassword);
     }
 
