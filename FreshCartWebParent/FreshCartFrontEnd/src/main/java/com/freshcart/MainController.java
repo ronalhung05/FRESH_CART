@@ -39,7 +39,7 @@ public class MainController {
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("listNewProducts", listNewProducts);
         model.addAttribute("listSpecialOffers", listSpecialOffers);
-        model.addAttribute("listBestSellers", listBestSellers);
+         model.addAttribute("listBestSellers", listBestSellers);
         
         return "index";
     }

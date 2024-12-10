@@ -86,36 +86,19 @@ public class ProductSpecification {
                     )
             );
 
+            // Lấy giá cuối cùng (finalPrice)
+            var finalPrice = cb.<Number>selectCase()
+                    .when(cb.gt(root.get(Product_.discountPercent), 0), discountedPrice)
+                    .otherwise(root.get(Product_.price));
+
+            // Áp dụng điều kiện lọc
             if (minPrice == null) {
-                return cb.or(
-                        cb.le(root.get(Product_.price), maxPrice),
-                        cb.and(
-                                cb.gt(root.get(Product_.discountPercent), 0),
-                                cb.le(discountedPrice, maxPrice)
-                        )
-                );
+                return cb.le(finalPrice.as(Float.class), cb.literal(maxPrice));
+            } else if (maxPrice == null) {
+                return cb.ge(finalPrice.as(Float.class), cb.literal(minPrice));
+            } else {
+                return cb.between(finalPrice.as(Float.class), cb.literal(minPrice), cb.literal(maxPrice));
             }
-
-            if (maxPrice == null) {
-                return cb.or(
-                        cb.ge(root.get(Product_.price), minPrice),
-                        cb.and(
-                                cb.gt(root.get(Product_.discountPercent), 0),
-                                cb.ge(discountedPrice, minPrice)
-                        )
-                );
-            }
-
-            return cb.or(
-                    cb.between(root.get(Product_.price), minPrice, maxPrice),
-                    cb.and(
-                            cb.gt(root.get(Product_.discountPercent), 0),
-                            cb.and(
-                                    cb.ge(discountedPrice, minPrice),
-                                    cb.le(discountedPrice, maxPrice)
-                            )
-                    )
-            );
         };
     }
 
@@ -138,46 +121,24 @@ public class ProductSpecification {
                     )
             );
 
-            float minPrice, maxPrice;
+            // Lấy giá cuối cùng (finalPrice)
+            var finalPrice = cb.<Number>selectCase()
+                    .when(cb.gt(root.get(Product_.discountPercent), 0), discountedPrice)
+                    .otherwise(root.get(Product_.price));
+
+            // Áp dụng điều kiện lọc theo khoảng giá
             switch (priceRange) {
                 case "UNDER_50":
-                    return cb.or(
-                            cb.lt(root.get(Product_.price), 50f),
-                            cb.and(
-                                    cb.gt(root.get(Product_.discountPercent), 0),
-                                    cb.lt(discountedPrice, 50f)
-                            )
-                    );
+                    return cb.lt(finalPrice.as(Float.class), cb.literal(50f));
                 case "50_TO_100":
-                    minPrice = 50f;
-                    maxPrice = 100f;
-                    break;
+                    return cb.between(finalPrice.as(Float.class), cb.literal(50f), cb.literal(100f));
                 case "100_TO_200":
-                    minPrice = 100f;
-                    maxPrice = 200f;
-                    break;
+                    return cb.between(finalPrice.as(Float.class), cb.literal(100f), cb.literal(200f));
                 case "OVER_200":
-                    return cb.or(
-                            cb.gt(root.get(Product_.price), 200f),
-                            cb.and(
-                                    cb.gt(root.get(Product_.discountPercent), 0),
-                                    cb.gt(discountedPrice, 200f)
-                            )
-                    );
+                    return cb.gt(finalPrice.as(Float.class), cb.literal(200f));
                 default:
                     return null;
             }
-
-            return cb.or(
-                    cb.between(root.get(Product_.price), minPrice, maxPrice),
-                    cb.and(
-                            cb.gt(root.get(Product_.discountPercent), 0),
-                            cb.and(
-                                    cb.ge(discountedPrice, minPrice),
-                                    cb.le(discountedPrice, maxPrice)
-                            )
-                    )
-            );
         };
     }
 

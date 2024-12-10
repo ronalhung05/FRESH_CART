@@ -27155,3 +27155,22 @@ footer .social-icons a:hover {
 .card-product .btn {
 	white-space: nowrap;
 }
+
+.price-input {
+    position: relative;
+    flex: 1;
+}
+
+.btn-primary.search-btn {
+    padding: 0.375rem 0.75rem;
+    height: 38px;  /* Để khớp với chiều cao của input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.price-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

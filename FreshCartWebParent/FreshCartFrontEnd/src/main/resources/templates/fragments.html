@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:fragment="page_head(title, remove)" th:remove="${remove}">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon/favicon.ico}">
+    
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <meta content="width=device-width,initial-scale=1.0, minimum-scale=1.0"
           name="viewport">
@@ -35,8 +38,6 @@
     <!-- Add your custom notify CSS after the original Simple Notify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
     <link th:href="@{/css/custom-notify.css}" rel="stylesheet" type="text/css" />
-
-
 
 </head>
 
@@ -268,6 +269,7 @@
             <div th:if="${product.inStock}">
                 <button class="btn btn-primary btn-sm buttonAdd2Cart"
                         th:pid="${product.id}"
+                        th:data-instock="${product.inStock}"
                         th:data-context-path="@{/}">
                     <i class="bi bi-plus-lg"></i> Add
                 </button>
@@ -278,7 +280,16 @@
     </div>
 </div>
 
-
+<div th:fragment="loading_spinner">
+    <div id="loadingSpinner" class="position-fixed w-100 h-100 text-center" 
+         style="background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); z-index: 9999; top: 0; left: 0; display: none;">
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

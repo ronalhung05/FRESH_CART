@@ -6,337 +6,349 @@
 </head>
 
 <body>
-<div th:replace="navigation :: header_menu"></div>
-<div th:replace="navigation :: search_nav"></div>
-<div th:replace="breadcrumb :: content"></div>
-<div class="mt-8 mb-lg-14 mb-8">
-    <div class="container">
-        <!--  -->
+    <div th:replace="navigation :: header_menu"></div>
+    <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
+    <div th:replace="breadcrumb :: content"></div>
+    <div class="mt-8 mb-lg-14 mb-8">
+        <div class="container">
+            <!--  -->
 
-        <div class="row gx-10">
-            <!-- Sidebar -->
-            <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
-                <div class="offcanvas offcanvas-start offcanvas-collapse" tabindex="-1" id="offcanvasCategory"
-                     aria-labelledby="offcanvasCategoryLabel">
-                    <div class="offcanvas-header d-lg-none">
-                        <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filter</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body ps-lg-2 pt-lg-0">
-                        <div class="mb-8">
-                            <!-- Categories -->
-                            <h5 class="mb-3">Categories</h5>
-                            <div class="category-menu">
-                                <ul class="nav nav-category list-unstyled" id="categoryCollapseMenu">
-                                    <!-- Main category -->
-                                    <li class="nav-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <a th:href="@{'/category/' + ${mainCategory.alias}}" 
-                                               class="category-item flex-grow-1 py-2"
-                                               th:classappend="${mainCategory.alias == category.alias ? 'active' : ''}">
-                                                <span>[[${mainCategory.name}]]</span>
-                                            </a>
-                                            <button class="btn btn-link p-0 ms-2 toggle-btn" type="button">
-                                                <i class="bi bi-chevron-up"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- Sub categories -->
-                                        <ul class="list-unstyled ms-3 collapse show" th:if="${not #lists.isEmpty(mainCategory.children)}">
-                                            <li class="nav-item" th:each="subCat : ${mainCategory.children}" th:if="${subCat.enabled}">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a th:href="@{'/category/' + ${subCat.alias}}" 
-                                                       class="category-item flex-grow-1 py-2"
-                                                       th:classappend="${subCat.alias == category.alias ? 'active' : ''}">
-                                                        <span>[[${subCat.name}]]</span>
-                                                    </a>
-                                                    <button class="btn btn-link p-0 ms-2 toggle-btn" type="button" 
-                                                            th:if="${not #lists.isEmpty(subCat.children)}">
-                                                        <i class="bi bi-chevron-down"></i>
-                                                    </button>
-                                                </div>
-                                                
-                                                <!-- Child categories -->
-                                                <ul class="list-unstyled ms-3 collapse" 
-                                                    th:classappend="${subCat.alias == category.parent?.alias ? 'show' : ''}"
-                                                    th:if="${not #lists.isEmpty(subCat.children)}">
-                                                    <li class="mb-2" th:each="childCat : ${subCat.children}" th:if="${childCat.enabled}">
-                                                        <a th:href="@{'/category/' + ${childCat.alias}}" 
-                                                           class="category-item d-flex py-2"
-                                                           th:classappend="${childCat.alias == category.alias ? 'active' : ''}">
-                                                            <span>[[${childCat.name}]]</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
+            <div class="row gx-10">
+                <!-- Sidebar -->
+                <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
+                    <div class="offcanvas offcanvas-start offcanvas-collapse" tabindex="-1" id="offcanvasCategory"
+                         aria-labelledby="offcanvasCategoryLabel">
+                        <div class="offcanvas-header d-lg-none">
+                            <h5 class="offcanvas-title" id="offcanvasCategoryLabel">Filter</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
-
-                        <!-- Brands -->
-                        <div class="mb-8">
-                            <h5 class="mb-3">Brands</h5>
-                            <div class="my-4 position-relative">
-                                <input type="search"
-                                       class="form-control brand-search"
-                                       placeholder="Search by brand"
-                                       autocomplete="off">
-
+                        <div class="offcanvas-body ps-lg-2 pt-lg-0">
+                            <div class="mb-8">
+                                <!-- Categories -->
+                                <h5 class="mb-3">Categories</h5>
+                                <div class="category-menu">
+                                    <ul class="nav nav-category list-unstyled" id="categoryCollapseMenu">
+                                        <!-- Main category -->
+                                        <li class="nav-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a th:href="@{'/category/' + ${mainCategory.alias}}" 
+                                                   class="category-item flex-grow-1 py-2"
+                                                   th:classappend="${mainCategory.alias == category.alias ? 'active' : ''}">
+                                                        <span>[[${mainCategory.name}]]</span>
+                                                </a>
+                                                <button class="btn btn-link p-0 ms-2 toggle-btn" type="button">
+                                                    <i class="bi bi-chevron-up"></i>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Sub categories -->
+                                            <ul class="list-unstyled ms-3 collapse show" th:if="${not #lists.isEmpty(mainCategory.children)}">
+                                                <li class="nav-item" th:each="subCat : ${mainCategory.children}" th:if="${subCat.enabled}">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <a th:href="@{'/category/' + ${subCat.alias}}" 
+                                                           class="category-item flex-grow-1 py-2"
+                                                           th:classappend="${subCat.alias == category.alias ? 'active' : ''}">
+                                                            <span>[[${subCat.name}]]</span>
+                                                        </a>
+                                                        <button class="btn btn-link p-0 ms-2 toggle-btn" type="button" 
+                                                                th:if="${not #lists.isEmpty(subCat.children)}">
+                                                            <i class="bi bi-chevron-down"></i>
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <!-- Child categories -->
+                                                    <ul class="list-unstyled ms-3 collapse" 
+                                                        th:classappend="${subCat.alias == category.parent?.alias ? 'show' : ''}"
+                                                        th:if="${not #lists.isEmpty(subCat.children)}">
+                                                        <li class="mb-2" th:each="childCat : ${subCat.children}" th:if="${childCat.enabled}">
+                                                            <a th:href="@{'/category/' + ${childCat.alias}}" 
+                                                               class="category-item d-flex py-2"
+                                                               th:classappend="${childCat.alias == category.alias ? 'active' : ''}">
+                                                                <span>[[${childCat.name}]]</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="brand-list" style="max-height: 300px; overflow-y: auto;">
-                                <div class="form-check mb-2" th:each="brand : ${listBrands}">
-                                    <input class="form-check-input brand-filter"
-                                           type="checkbox"
-                                           th:value="${brand.id}"
-                                           th:data-brand-name="${brand.name}"
-                                           th:id="${'brand' + brand.id}">
-                                    <label class="form-check-label"
-                                           th:for="${'brand' + brand.id}"
-                                           th:text="${brand.name}">
+
+                            <!-- Brands -->
+                            <div class="mb-8">
+                                <h5 class="mb-3">Brands</h5>
+                                <div class="my-4 position-relative">
+                                    <input type="search"
+                                           class="form-control brand-search"
+                                           placeholder="Search by brand"
+                                           autocomplete="off">
+
+                                </div>
+                                <div class="brand-list" style="max-height: 300px; overflow-y: auto;">
+                                    <div class="form-check mb-2" th:each="brand : ${listBrands}">
+                                        <input class="form-check-input brand-filter"
+                                               type="checkbox"
+                                               th:value="${brand.id}"
+                                               th:data-brand-name="${brand.name}"
+                                               th:id="${'brand' + brand.id}">
+                                        <label class="form-check-label"
+                                               th:for="${'brand' + brand.id}"
+                                               th:text="${brand.name}">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="mb-8">
+                                <h5 class="mb-3">Rating</h5>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rating-filter" type="radio"
+                                           name="rating" id="rating5" value="5"
+                                           th:checked="${selectedRating != null && selectedRating == 5}"
+                                           onchange="handleFilterChange('rating', this.value)">
+                                    <label class="form-check-label" for="rating5">
+                                        <div class="rating-stars">
+                                            <th:block th:with="num=5">
+													<span th:each="i : ${#numbers.sequence(1, 5)}">
+														<i class="fas fa-star"
+                                                           th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+														</i>
+													</span>
+                                            </th:block>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rating-filter" type="radio"
+                                           name="rating" id="rating4" value="4"
+                                           th:checked="${selectedRating != null && selectedRating == 4}"
+                                           onchange="handleFilterChange('rating', this.value)">
+                                    <label class="form-check-label" for="rating4">
+                                        <div class="rating-stars">
+                                            <th:block th:with="num=4">
+													<span th:each="i : ${#numbers.sequence(1, 5)}">
+														<i class="fas fa-star"
+                                                           th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+														</i>
+													</span>
+                                            </th:block>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rating-filter" type="radio"
+                                           name="rating" id="rating3" value="3"
+                                           th:checked="${selectedRating != null && selectedRating == 3}"
+                                           onchange="handleFilterChange('rating', this.value)">
+                                    <label class="form-check-label" for="rating3">
+                                        <div class="rating-stars">
+                                            <th:block th:with="num=3">
+													<span th:each="i : ${#numbers.sequence(1, 5)}">
+														<i class="fas fa-star"
+                                                           th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+														</i>
+													</span>
+                                            </th:block>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rating-filter" type="radio"
+                                           name="rating" id="rating2" value="2"
+                                           th:checked="${selectedRating != null && selectedRating == 2}"
+                                           onchange="handleFilterChange('rating', this.value)">
+                                    <label class="form-check-label" for="rating2">
+                                        <div class="rating-stars">
+                                            <th:block th:with="num=2">
+													<span th:each="i : ${#numbers.sequence(1, 5)}">
+														<i class="fas fa-star"
+                                                           th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+														</i>
+													</span>
+                                            </th:block>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input rating-filter" type="radio"
+                                           name="rating" id="rating1" value="1"
+                                           th:checked="${selectedRating != null && selectedRating == 1}"
+                                           onchange="handleFilterChange('rating', this.value)">
+                                    <label class="form-check-label" for="rating1">
+                                        <div class="rating-stars">
+                                            <th:block th:with="num=1">
+													<span th:each="i : ${#numbers.sequence(1, 5)}">
+														<i class="fas fa-star"
+                                                           th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
+														</i>
+													</span>
+                                            </th:block>
+                                        </div>
                                     </label>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Rating -->
-                        <div class="mb-8">
-                            <h5 class="mb-3">Rating</h5>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input rating-filter" type="radio"
-                                       name="rating" id="rating5" value="5"
-                                       th:checked="${selectedRating != null && selectedRating == 5}"
-                                       onchange="handleFilterChange('rating', this.value)">
-                                <label class="form-check-label" for="rating5">
-                                    <div class="rating-stars">
-                                        <th:block th:with="num=5">
-												<span th:each="i : ${#numbers.sequence(1, 5)}">
-													<i class="fas fa-star"
-                                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
-													</i>
-												</span>
-                                        </th:block>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input rating-filter" type="radio"
-                                       name="rating" id="rating4" value="4"
-                                       th:checked="${selectedRating != null && selectedRating == 4}"
-                                       onchange="handleFilterChange('rating', this.value)">
-                                <label class="form-check-label" for="rating4">
-                                    <div class="rating-stars">
-                                        <th:block th:with="num=4">
-												<span th:each="i : ${#numbers.sequence(1, 5)}">
-													<i class="fas fa-star"
-                                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
-													</i>
-												</span>
-                                        </th:block>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input rating-filter" type="radio"
-                                       name="rating" id="rating3" value="3"
-                                       th:checked="${selectedRating != null && selectedRating == 3}"
-                                       onchange="handleFilterChange('rating', this.value)">
-                                <label class="form-check-label" for="rating3">
-                                    <div class="rating-stars">
-                                        <th:block th:with="num=3">
-												<span th:each="i : ${#numbers.sequence(1, 5)}">
-													<i class="fas fa-star"
-                                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
-													</i>
-												</span>
-                                        </th:block>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input rating-filter" type="radio"
-                                       name="rating" id="rating2" value="2"
-                                       th:checked="${selectedRating != null && selectedRating == 2}"
-                                       onchange="handleFilterChange('rating', this.value)">
-                                <label class="form-check-label" for="rating2">
-                                    <div class="rating-stars">
-                                        <th:block th:with="num=2">
-												<span th:each="i : ${#numbers.sequence(1, 5)}">
-													<i class="fas fa-star"
-                                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
-													</i>
-												</span>
-                                        </th:block>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input rating-filter" type="radio"
-                                       name="rating" id="rating1" value="1"
-                                       th:checked="${selectedRating != null && selectedRating == 1}"
-                                       onchange="handleFilterChange('rating', this.value)">
-                                <label class="form-check-label" for="rating1">
-                                    <div class="rating-stars">
-                                        <th:block th:with="num=1">
-												<span th:each="i : ${#numbers.sequence(1, 5)}">
-													<i class="fas fa-star"
-                                                       th:style="${i <= num ? 'color: #ffc107' : 'color: #e4e5e9'}">
-													</i>
-												</span>
-                                        </th:block>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+                            <!-- Price -->
+                            <div class="mb-8">
+                                <h5 class="mb-3">Price</h5>
 
-                        <!-- Price -->
-                        <div class="mb-8">
-                            <h5 class="mb-3">Price</h5>
-
-                            <!-- Predefined price ranges -->
-                            <div class="form-check mb-2">
-                                <input class="form-check-input price-range-filter" type="radio"
-                                       name="price" id="priceUnder50" value="UNDER_50"
-                                       th:checked="${param.priceRange != null && param.priceRange[0] == 'UNDER_50'}"
-                                       onchange="handleFilterChange('priceRange', this.value)">
-                                <label class="form-check-label" for="priceUnder50">
-                                    Under $50
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input price-range-filter" type="radio"
-                                       name="price" id="price50to100" value="50_TO_100"
-                                       th:checked="${param.priceRange != null && param.priceRange[0] == '50_TO_100'}"
-                                       onchange="handleFilterChange('priceRange', this.value)">
-                                <label class="form-check-label" for="price50to100">
-                                    $50 to $100
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input price-range-filter" type="radio"
-                                       name="price" id="price100to200" value="100_TO_200"
-                                       th:checked="${param.priceRange != null && param.priceRange[0] == '100_TO_200'}"
-                                       onchange="handleFilterChange('priceRange', this.value)">
-                                <label class="form-check-label" for="price100to200">
-                                    $100 to $200
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input price-range-filter" type="radio"
-                                       name="price" id="priceOver200" value="OVER_200"
-                                       th:checked="${param.priceRange != null && param.priceRange[0] == 'OVER_200'}"
-                                       onchange="handleFilterChange('priceRange', this.value)">
-                                <label class="form-check-label" for="priceOver200">
-                                    Over $200
-                                </label>
-                            </div>
-
-                            <!-- Custom price range -->
-                            <div class="mt-4">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="price-input">
-                                        <input type="number" class="form-control" placeholder="0" id="priceFrom"
-                                               th:value="${param.minPrice != null ? param.minPrice[0] : ''}"
-                                               onchange="handleFilterChange('priceRange', this.value)">
-                                        <span class="currency-symbol">đ</span>
-                                    </div>
-                                    <span>~</span>
-                                    <div class="price-input">
-                                        <input type="number" class="form-control" placeholder="1.000.000" id="priceTo"
-                                               th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}"
-                                               onchange="handleFilterChange('priceRange', this.value)">
-                                        <span class="currency-symbol">đ</span>
-                                    </div>
+                                <!-- Predefined price ranges -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input price-range-filter" type="radio"
+                                           name="price" id="priceUnder50" value="UNDER_50"
+                                           th:checked="${param.priceRange != null && param.priceRange[0] == 'UNDER_50'}"
+                                           onchange="handleFilterChange('priceRange', this.value)">
+                                    <label class="form-check-label" for="priceUnder50">
+                                        Under $50
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input price-range-filter" type="radio"
+                                           name="price" id="price50to100" value="50_TO_100"
+                                           th:checked="${param.priceRange != null && param.priceRange[0] == '50_TO_100'}"
+                                           onchange="handleFilterChange('priceRange', this.value)">
+                                    <label class="form-check-label" for="price50to100">
+                                        $50 to $100
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input price-range-filter" type="radio"
+                                           name="price" id="price100to200" value="100_TO_200"
+                                           th:checked="${param.priceRange != null && param.priceRange[0] == '100_TO_200'}"
+                                           onchange="handleFilterChange('priceRange', this.value)">
+                                    <label class="form-check-label" for="price100to200">
+                                        $100 to $200
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input price-range-filter" type="radio"
+                                           name="price" id="priceOver200" value="OVER_200"
+                                           th:checked="${param.priceRange != null && param.priceRange[0] == 'OVER_200'}"
+                                           onchange="handleFilterChange('priceRange', this.value)">
+                                    <label class="form-check-label" for="priceOver200">
+                                        Over $200
+                                    </label>
                                 </div>
 
+                                <!-- Custom price range -->
+                                <div class="mt-4">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="price-input">
+                                            <input type="number" 
+                                                   class="form-control" 
+                                                   placeholder="0" 
+                                                   id="priceFrom"
+                                                   min="0"
+                                                   oninput="validatePriceInput(this)"
+                                                   th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
+                                            <span class="currency-symbol">
+                                                <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                                            </span>
+                                        </div>
+                                        <span>~</span>
+                                        <div class="price-input">
+                                            <input type="number" 
+                                                   class="form-control" 
+                                                   placeholder="1.000.000" 
+                                                   id="priceTo"
+                                                   min="0"
+                                                   oninput="validatePriceInput(this)"
+                                                   th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
+                                            <span class="currency-symbol">
+                                                <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                                            </span>
+                                        </div>
+                                        <button class="btn btn-primary" onclick="validateAndApplyPriceFilter()">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <div id="priceError" class="text-danger mt-2" style="display: none;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </aside>
+                </aside>
 
-            <!-- Main Content -->
-            <section class="col-lg-9 col-md-12">
-                <!-- Header Card -->
-                <div class="card mb-4 bg-light border-0">
-                    <div class="card-body p-9">
-                        <h2 class="mb-0 fs-1">[[${category.name}]]</h2>
-                    </div>
-                </div>
-
-                <!-- Toolbar -->
-                <div class="d-lg-flex justify-content-between align-items-center">
-                    <div class="mb-3 mb-lg-0">
-                        <p class="mb-0"><span class="text-dark" th:text="${totalItems}"></span> Products found</p>
+                <!-- Main Content -->
+                <section class="col-lg-9 col-md-12">
+                    <!-- Header Card -->
+                    <div class="card mb-4 bg-light border-0">
+                        <div class="card-body p-9">
+                            <h2 class="mb-0 fs-1">[[${category.name}]]</h2>
+                        </div>
                     </div>
 
-                    <!-- View Options & Filters -->
-                    <div class="d-md-flex justify-content-between align-items-center">
+                    <!-- Toolbar -->
+                    <div class="d-lg-flex justify-content-between align-items-center">
+                        <div class="mb-3 mb-lg-0">
+                            <p class="mb-0"><span class="text-dark" th:text="${totalItems}"></span> Products found</p>
+                        </div>
 
-                        <!-- Sort Options -->
-                        <div class="d-flex mt-2 mt-lg-0">
+                        <!-- View Options & Filters -->
+                        <div class="d-md-flex justify-content-between align-items-center">
 
-                            <div>
-                                <select class="form-select" id="sortSelect">
-                                    <option value="LOW_TO_HIGH" th:selected="${currentSort == 'LOW_TO_HIGH'}">Price Low
-                                        to High
-                                    </option>
-                                    <option value="HIGH_TO_LOW" th:selected="${currentSort == 'HIGH_TO_LOW'}">Price High
-                                        to Low
-                                    </option>
-                                    <option value="MOST_SOLD" th:selected="${currentSort == 'MOST_SOLD'}">Most sold
-                                    </option>
-                                    <option value="HIGH_RATING" th:selected="${currentSort == 'HIGH_RATING'}">High
-                                        rating
-                                    </option>
-                                </select>
+                            <!-- Sort Options -->
+                            <div class="d-flex mt-2 mt-lg-0">
+
+                                <div>
+                                    <select class="form-select" id="sortSelect">
+                                        <option value="LOW_TO_HIGH" th:selected="${currentSort == 'LOW_TO_HIGH'}">Price Low to High</option>
+                                        <option value="HIGH_TO_LOW" th:selected="${currentSort == 'HIGH_TO_LOW'}">Price High to Low</option>
+                                        <option value="MOST_SOLD" th:selected="${currentSort == 'MOST_SOLD'}">Most sold</option>
+                                        <option value="HIGH_RATING" th:selected="${currentSort == 'HIGH_RATING'}">High rating</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <input type="hidden" id="currentPage" th:value="${currentPage}"/>
-                <input type="hidden" id="totalPages" th:value="${totalPages}"/>
-                <input type="hidden" id="totalItems" th:value="${totalItems}"/>
-                <input type="hidden" id="currentFilters"
-                       th:value="${#strings.isEmpty(param.filters) ? '' : param.filters[0]}"/>
+                    <input type="hidden" id="currentPage" th:value="${currentPage}"/>
+                    <input type="hidden" id="totalPages" th:value="${totalPages}"/>
+                    <input type="hidden" id="totalItems" th:value="${totalItems}"/>
+                    <input type="hidden" id="currentFilters"
+                           th:value="${#strings.isEmpty(param.filters) ? '' : param.filters[0]}"/>
+                    <input type="hidden" id="currencySymbol" th:value="${CURRENCY_SYMBOL}"/>
+                    <input type="hidden" id="currencySymbolPosition" th:value="${CURRENCY_SYMBOL_POSITION}"/>
 
-                <div class="selected-filters mb-3" id="selectedFilters" style="display: none;">
-                    <div class="d-flex flex-wrap align-items-center gap-2">
-                        <div id="filterTags" class="d-flex flex-wrap gap-2">
-                            <!-- Filter tags sẽ được thêm vào đây bằng JavaScript -->
+                    <div class="selected-filters mb-3" id="selectedFilters" style="display: none;">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <div id="filterTags" class="d-flex flex-wrap gap-2">
+                                <!-- Filter tags sẽ được thêm vào đây bằng JavaScript -->
+                            </div>
+                            <button class="btn-clear-all" onclick="clearAllFilters()">
+                                <i class="fas fa-times-circle me-1"></i>
+                                Clear all 
+                            </button>
                         </div>
-                        <button class="btn-clear-all" onclick="clearAllFilters()">
-                            <i class="fas fa-times-circle me-1"></i>
-                            Clear all 
-                        </button>
                     </div>
-                </div>
-                <!-- Product list container -->
-                <div id="productList" class="row g-4 row-cols-xl-3 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
-                    <th:block th:replace="product/product_fragment :: productList"></th:block>
-                </div>
+                    <!-- Product list container -->
+                    <div id="productList" class="row g-4 row-cols-xl-3 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
+                        <th:block th:replace="product/product_fragment :: productList"></th:block>
+                    </div>
 
-            </section>
+                </section>
+            </div>
         </div>
     </div>
-</div>
 
-<div th:replace="navigation :: footer_menu"></div>
+    <div th:replace="navigation :: footer_menu"></div>
 
-<script type="text/javascript">
-    var csrfHeaderName = "[[${_csrf.headerName}]]";
-    var csrfValue = "[[${_csrf.token}]]";
+    <script type="text/javascript">
+        contextPath = "[[@{/}]]";
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
+        decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+        thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    </script>
+    <script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/cart.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
+    <script type="text/javascript" th:src="@{/js/infinite_scroll.js}"></script>
+    <script type="text/javascript" th:src="@{/js/combined_filter.js}"></script>
+    <script type="text/javascript" th:src="@{/js/category_menu.js}"></script>
 
-    decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-    thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-</script>
-<script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
-<script type="text/javascript" th:src="@{/js/add_to_cart.js}"></script>
-<script type="text/javascript" th:src="@{/js/infinite_scroll.js}"></script>
-<script type="text/javascript" th:src="@{/js/combined_filter.js}"></script>
-<script type="text/javascript" th:src="@{/js/category_menu.js}"></script>
 </body>
 
 </html>

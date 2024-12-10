@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: page_head('Shopme', 'none')">
-    <script th:src="@{/js/common_toast.js}" type="text/javascript"></script>
+<head th:replace="fragments :: page_head('FreshCart', 'none')">
 </head>
 <body>
 <!-- Navigation -->
@@ -110,18 +109,22 @@
 </main>
 
 <div th:replace="navigation :: footer_menu"></div>
+
+<!-- Then other scripts -->
+<script th:src="@{/js/common_toast.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/js/password.js}"></script>
 <script type="text/javascript">
     window.onload = function () {
         grecaptcha.render('recaptcha-container', {
             sitekey: '6LcXA4gqAAAAAJJFJZf9GS_KShM-CBbjrlpevJ-Z',
             callback: function (response) {
-                console.log("reCAPTCHA response token: ", response); // Log for debugging
+                console.log("reCAPTCHA response token: ", response);
             }
         });
     };
+    
     function validateForm() {
         let recaptchaResponse = grecaptcha.getResponse();
-        console.log("reCAPTCHA response token: ", recaptchaResponse); // Log token để kiểm tra
         if (recaptchaResponse) {
             return true;
         } else {
@@ -129,23 +132,23 @@
             return false;
         }
     }
-</script>
-<script type="text/javascript" th:src="@{/js/password.js}"></script>
-<script th:src="@{/js/common_toast.js}" type="text/javascript"></script>
-<script th:inline="javascript">
-    // Check and show error message if exists
-    /*[# th:if="${param.error}"]*/
-    document.addEventListener('DOMContentLoaded', function() {
-        showErrorMessage([[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]);
-    });
-    /*[/]*/
 
-    // Check and show logout message if exists
-    /*[# th:if="${param.logout}"]*/
+    var errorMessage = /*[[${session.SPRING_SECURITY_LAST_EXCEPTION != null ? session.SPRING_SECURITY_LAST_EXCEPTION.message : ''}]]*/ '';
+    
     document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('login') && urlParams.get('login') === 'success') {
+            window.location.href = contextPath;
+        }
+        
+        /*[# th:if="${param.error}"]*/
+        showErrorMessage(errorMessage);
+        /*[/]*/
+
+        /*[# th:if="${param.logout}"]*/
         showWarningMessage('You have been logged out.');
+        /*[/]*/
     });
-    /*[/]*/
 </script>
 </body>
 </html>

@@ -71,7 +71,7 @@ public class ProductController {
 
         model.addAttribute("product", product);
         model.addAttribute("listBrands", listBrands);
-        model.addAttribute("pageTitle", "Create New Product");
+        model.addAttribute("pageTitle", "Add New Product");
         model.addAttribute("numberOfExistingExtraImages", 0);
         model.addAttribute("moduleURL", "/products/new");
 
@@ -127,25 +127,25 @@ public class ProductController {
         return defaultRedirectURL;
     }
 
-    @GetMapping("/products/delete/{id}")
-    public String deleteProduct(@PathVariable(name = "id") Integer id,
-                                Model model, RedirectAttributes redirectAttributes) {
-        try {
-            productService.delete(id);
-            String productExtraImagesDir = "../product-images/" + id + "/extras";
-            String productImagesDir = "../product-images/" + id;
-
-            FileUploadUtil.removeDir(productExtraImagesDir);
-            FileUploadUtil.removeDir(productImagesDir);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "The product ID " + id + " has been deleted successfully");
-        } catch (ProductNotFoundException ex) {
-            redirectAttributes.addFlashAttribute("message", ex.getMessage());
-        }
-
-        return defaultRedirectURL;
-    }
+//    @GetMapping("/products/delete/{id}")
+//    public String deleteProduct(@PathVariable(name = "id") Integer id,
+//                                Model model, RedirectAttributes redirectAttributes) {
+//        try {
+//            productService.delete(id);
+//            String productExtraImagesDir = "../product-images/" + id + "/extras";
+//            String productImagesDir = "../product-images/" + id;
+//
+//            FileUploadUtil.removeDir(productExtraImagesDir);
+//            FileUploadUtil.removeDir(productImagesDir);
+//
+//            redirectAttributes.addFlashAttribute("message",
+//                    "The product ID " + id + " has been deleted successfully");
+//        } catch (ProductNotFoundException ex) {
+//            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+//        }
+//
+//        return defaultRedirectURL;
+//    }
 
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable("id") Integer id, Model model,

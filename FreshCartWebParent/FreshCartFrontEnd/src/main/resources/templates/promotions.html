@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Promotions', 'none')"/>
+
+<body>
+<div class="border-bottom">
+    <div th:replace="navigation :: header_menu"></div>
+    <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
+    <div th:replace="fragments :: loading_spinner"></div>
+</div>
+
+<main>
+    <div class="mt-8 mb-lg-14 mb-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-8">
+                        <div>
+                            <h3 class="mb-0">Special Offers of the Week!</h3>
+                            <p class="mb-0">Get up to 50% off on your first order</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-md-2 mt-2">
+                <div th:replace="product/product_fragment :: productList"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="navigation :: footer_menu"></div>
+
+<script type="text/javascript">
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
+</script>
+<script type="text/javascript" th:src="@{/js/cart.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
+<script type="text/javascript" th:src="@{/js/loading-spinner.js}"></script>
+</body>
+</html> 

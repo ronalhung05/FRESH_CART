@@ -4,10 +4,10 @@ function showModalDialog(title, message) {
     $("#modalDialog").modal();
 }
 
-function showErrorModal(message) {
+function showErrorMessage(message) {
     showModalDialog("Error", message);
 }
 
-function showWarningModal(message) {
+function showWarningMessage(message) {
     showModalDialog("Warning", message);
 }	

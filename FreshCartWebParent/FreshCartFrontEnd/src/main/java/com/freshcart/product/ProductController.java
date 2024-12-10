@@ -62,6 +62,7 @@ public class ProductController {
             Category category = categoryService.getCategory(alias);
             List<Category> listParents = categoryService.getCategoryParents(category);
             List<Brand> listBrands = brandService.listAll();
+            List<Category> listCategories = categoryService.listHierarchicalCategories();
 
             // Xử lý category hierarchy
             if (listParents.size() > 0) {
@@ -107,6 +108,7 @@ public class ProductController {
             model.addAttribute("selectedBrands", brandNames);
             model.addAttribute("pageTitle", category.getName());
             model.addAttribute("currentSort", sort);
+            model.addAttribute("listCategories", listCategories);
 
             if (request.getHeader("X-Requested-With") != null) {
                 return "product/product_fragment :: productList";
@@ -126,6 +128,7 @@ public class ProductController {
             Product product = productService.getProduct(alias);
             List<Category> listCategoryParents = categoryService.getCategoryParents(product.getCategory());
             Page<Review> listReviews = reviewService.list3MostVotedReviewsByProduct(product);
+            List<Category> listCategories = categoryService.listHierarchicalCategories();
 
             Customer customer = controllerHelper.getAuthenticatedCustomer(request);
 
@@ -145,7 +148,8 @@ public class ProductController {
             model.addAttribute("product", product);
             model.addAttribute("listReviews", listReviews);
             model.addAttribute("pageTitle", product.getShortName());
-
+            model.addAttribute("listCategories", listCategories);
+            
             return "product/product_detail";
         } catch (ProductNotFoundException e) {
             return "error/404";
@@ -172,6 +176,7 @@ public class ProductController {
             keyword = keyword.trim();
             Page<Product> pageProducts = productService.search(keyword, pageNum);
             List<Product> listProducts = pageProducts.getContent();
+            List<Category> listCategories = categoryService.listHierarchicalCategories();
 
             model.addAttribute("currentPage", pageNum);
             model.addAttribute("totalPages", pageProducts.getTotalPages());
@@ -180,7 +185,8 @@ public class ProductController {
             model.addAttribute("keyword", keyword);
             model.addAttribute("searchKeyword", keyword);
             model.addAttribute("listProducts", listProducts);
-
+            model.addAttribute("listCategories", listCategories);
+            
             return "product/search_result";
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +194,34 @@ public class ProductController {
             return "product/search_result";
         }
     }
+    
+    @GetMapping("/new-products")
+    public String viewNewProducts(Model model) {
+        List<Product> listProducts = productService.listNewProducts();
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("listCategories", listCategories);
+        return "product/new_products";
+    }
+
+    @GetMapping("/promotions")
+    public String viewPromotions(Model model) {
+        List<Product> listProducts = productService.listSpecialOffers();
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("listCategories", listCategories);
+        return "product/promotions";
+    }
+
+    @GetMapping("/best-sellers") 
+    public String viewBestSellers(Model model) {
+        List<Product> listProducts = productService.listBestSellingProducts(34);
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
+        model.addAttribute("listProducts", listProducts);
+        model.addAttribute("listCategories", listCategories);
+        return "product/best_sellers";
+    }
+
 
     private String normalizeUrl(String url) {
         if (url == null) return null;

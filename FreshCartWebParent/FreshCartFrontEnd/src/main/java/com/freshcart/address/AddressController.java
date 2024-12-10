@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.freshcart.ControllerHelper;
+import com.freshcart.category.CategoryService;
 import com.freshcart.common.entity.Address;
+import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.Country;
 import com.freshcart.common.entity.Customer;
 import com.freshcart.customer.CustomerService;
@@ -27,11 +29,14 @@ public class AddressController {
     private CustomerService customerService;
     @Autowired
     private ControllerHelper controllerHelper;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/address_book")
     public String showAddressBook(Model model, HttpServletRequest request) {
         Customer customer = controllerHelper.getAuthenticatedCustomer(request);
         List<Address> listAddresses = addressService.listAddressBook(customer);
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
 
         boolean usePrimaryAddressAsDefault = true;
         for (Address address : listAddresses) {
@@ -44,18 +49,18 @@ public class AddressController {
         model.addAttribute("listAddresses", listAddresses);
         model.addAttribute("customer", customer);
         model.addAttribute("usePrimaryAddressAsDefault", usePrimaryAddressAsDefault);
-
+        model.addAttribute("listCategories", listCategories);
         return "address_book/addresses";
     }
 
     @GetMapping("/address_book/new")
     public String newAddress(Model model) {
         List<Country> listCountries = customerService.listAllCountries();
-
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
         model.addAttribute("listCountries", listCountries);
         model.addAttribute("address", new Address());
         model.addAttribute("pageTitle", "Add New Address");
-
+        model.addAttribute("listCategories", listCategories);
         return "address_book/address_form";
     }
 

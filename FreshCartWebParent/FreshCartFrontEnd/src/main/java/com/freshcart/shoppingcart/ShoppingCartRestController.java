@@ -3,7 +3,9 @@ package com.freshcart.shoppingcart;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,6 +79,18 @@ public class ShoppingCartRestController {
 
         } catch (CustomerNotFoundException e) {
             return "You must login to remove product.";
+        }
+    }
+
+    @GetMapping("/cart/count")
+    public ResponseEntity<String> getCartItemCount(HttpServletRequest request) {
+        try {
+            Customer customer = getAuthenticatedCustomer(request);
+            Integer numberOfProducts = cartService.getNumberOfProducts(customer);
+            request.getSession().setAttribute("totalCartItems", numberOfProducts);
+            return ResponseEntity.ok(numberOfProducts.toString());
+        } catch (CustomerNotFoundException ex) {
+            return ResponseEntity.ok("0");
         }
     }
 }

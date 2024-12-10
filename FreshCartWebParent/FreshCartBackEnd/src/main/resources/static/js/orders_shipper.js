@@ -38,53 +38,58 @@ $(document).ready(function() {
 		$("#confirmModal").modal("hide");
 	});
 
-	$(document).on("click", "#yesButton", function(e) {
-		e.preventDefault();
-		const button = $(this);
-		sendRequestToUpdateOrderStatus(button);
-	});
+	addEventHandlerForYesButton();
 });
 
+function addEventHandlerForYesButton() {
+	yesButton.click(function(e) {
+		e.preventDefault();
+		sendRequestToUpdateOrderStatus($(this));
+	});
+}
+
 function sendRequestToUpdateOrderStatus(button) {
-	const requestURL = button.attr("href");
+	requestURL = button.attr("href");
 
 	$.ajax({
 		type: 'POST',
 		url: requestURL,
 		beforeSend: function(xhr) {
-			xhr.setRequestHeader(csrfHeaderName, csrfValue); // Use the CSRF token
+			xhr.setRequestHeader(csrfHeaderName, csrfValue);
 		}
 	}).done(function(response) {
 		showMessageModal("Order updated successfully");
 		updateStatusIconColor(response.orderId, response.status);
+
 		console.log(response);
 	}).fail(function(err) {
 		showMessageModal("Error updating order status");
-		console.error(err);
-	});
+	})
 }
-
 
 function updateStatusIconColor(orderId, status) {
 	link = $("#link" + status + orderId);
 	link.replaceWith("<i class='fas " + iconNames[status] + " fa-2x icon-green'></i>");
 }
 
-// Initialize the modal
-const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-
 function showUpdateConfirmModal(link) {
-	const orderId = link.attr("orderId");
-	const status = link.attr("status");
+	noButton.text("NO");
+	yesButton.show();
+
+	orderId = link.attr("orderId");
+	status = link.attr("status");
 	yesButton.attr("href", link.attr("href"));
 
-	if (!orderId || !status || !link.attr("href")) {
+	const href = link.attr("href");
+	if (!orderId || !status || !href) {
 		console.error("Missing attributes for link:", link);
 		return;
 	}
 
-	confirmText.text(`Are you sure you want to update status of the order ID #${orderId} to ${status}?`);
-	confirmModal.show(); // Use Bootstrap's modal API
+	confirmText.text("Are you sure you want to update status of the order ID #" + orderId
+		+ " to " + status + "?");
+	console.log("Showing modal for:", { orderId, status, href });
+	$("#confirmModal").modal("show"); // Chỉ rõ ID modal
 }
 
 function showMessageModal(message) {
@@ -93,8 +98,8 @@ function showMessageModal(message) {
 	confirmText.text(message);
 
 	noButton.off("click").on("click", function () {
-		confirmModal.hide();
+		confirmModalDialog.modal("hide");
 	});
 
-	confirmModal.show();
+	confirmModalDialog.modal("show");
 }

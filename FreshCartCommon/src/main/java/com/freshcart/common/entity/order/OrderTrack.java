@@ -67,12 +67,12 @@ public class OrderTrack extends IdBasedEntity {
 
     @Transient
     public String getUpdatedTimeOnForm() {
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         return dateFormatter.format(this.updatedTime);
     }
 
     public void setUpdatedTimeOnForm(String dateString) {
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 
         try {
             this.updatedTime = dateFormatter.parse(dateString);

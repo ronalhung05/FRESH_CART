@@ -7,7 +7,8 @@
 <div class="container-fluid">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
-
+    <div th:replace="navigation :: category_nav"></div>
+	<div th:replace="fragments :: loading_spinner"></div>
     <div class="container">
         <!-- Heading -->
         <div class="row mt-8 mb-4">
@@ -220,7 +221,7 @@
 
         onError: function (err) {
             // error that prevents buyer from doing checkout
-            showErrorModal("Something wrong with your address information, so payment will not work.");
+            showErrorMessage("Something wrong with your address information, so payment will not work.");
         }
     }).render("#paypal-button-container");
 

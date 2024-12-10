@@ -10,13 +10,13 @@
 				<div class="row g-4">
 					<!-- Title -->
 					<div class="col-md-6">
-						<label class="form-label">Product Name  <span class="text-danger">*</span></label>
+						<label class="form-label">Product Name <span class="text-danger">*</span></label>
 						<div class="form-group">
-							<input type="text" class="form-control" th:field="*{name}" 
-								required minlength="3" maxlength="256"
+							<input type="text" class="form-control validate-field" 
+								th:field="*{name}" 
 								placeholder="Product Name"
 								th:readonly="${isReadOnlyForSalesperson}" />
-							<div class="invalid-feedback" style="display: none;"
+							<div class="invalid-feedback" 
 								th:text="${@messageServiceAdmin.getMessage('PRODUCT_NAME_REQUIRED')}">
 							</div>
 						</div>
@@ -81,16 +81,15 @@
 							<div class="input-group">
 								<span class="input-group-text bg-light">$</span>
 								<input type="number" 
-									   class="form-control" 
+									   class="form-control validate-field" 
 									   th:field="*{cost}"
 									   placeholder="Enter cost" 
 									   step="0.01"
-									   min="0"
 									   th:readonly="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')}"
 									   th:value="${#authorization.expression('hasAuthority(''Editor'')') && product.id == null} ? 0 : *{cost}"
 									   th:style="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')} ? 'background-color: #e9ecef' : ''" />
 							</div>
-							<div class="invalid-feedback" style="display: none;"
+							<div class="invalid-feedback"
 								th:text="${@messageServiceAdmin.getMessage('COST_REQUIRED')}">
 							</div>
 						</div>
@@ -155,8 +154,9 @@
 						<label class="form-label">In Stock</label>
 						<input type="text" 
 							   class="form-control" 
-							   th:field="*{inStock}"
-							   readonly
+							   th:field="*{inStock}" 
+							   readonly 
+							   disabled
 							   style="background-color: #e9ecef;" />
 					</div>
 				</div>
