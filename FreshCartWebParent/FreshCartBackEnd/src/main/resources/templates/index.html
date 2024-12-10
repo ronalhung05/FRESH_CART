@@ -12,15 +12,125 @@
 		
 		<!-- main content -->
 		<main class="main-content-wrapper bg-white">
-			<div class="container">
-				<h2>FreshCart Control Panel</h2>
-				<!-- Your dashboard content here -->
-			</div>
+			<section class="container">
+				<!-- Welcome Banner -->
+				<div class="row mb-8">
+					<div class="col-md-12">
+						<div class="card bg-light border-0 rounded-4"
+							style="background-image: url(images/slider/slider-image-1.jpg); background-repeat: no-repeat; background-size: cover; background-position: right;">
+							<div class="card-body p-lg-12">
+								<h1>Welcome back! FreshCart</h1>
+								<p>FreshCart Admin Control Panel</p>
+								<a th:href="@{/products/new}" class="btn btn-primary">Create Product</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Statistics Cards -->
+				<div class="row">
+					<!-- Earnings Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Earnings</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-danger text-dark-danger rounded-circle">
+										<i class="bi bi-currency-dollar fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 class="mb-2 fw-bold fs-2">$93,438.78</h1>
+									<span>Monthly revenue</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Orders Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Orders</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
+										<i class="bi bi-cart fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 class="mb-2 fw-bold fs-2">42,339</h1>
+									<span>Total orders</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Customers Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Customers</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
+										<i class="bi bi-people fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 class="mb-2 fw-bold fs-2">39,354</h1>
+									<span>Total customers</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Recent Orders Table -->
+				<div class="row">
+					<div class="col-lg-12 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-header">
+								<h4 class="mb-0">Recent Orders</h4>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table text-nowrap">
+										<thead class="table-light">
+											<tr>
+												<th>Order ID</th>
+												<th>Products</th>
+												<th>Date</th>
+												<th>Amount</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											<!-- Sample data - replace with real data -->
+											<tr>
+												<td>#FC0005</td>
+												<td>Fresh Organic Fruits</td>
+												<td>23 Jan 2024</td>
+												<td>$25.00</td>
+												<td><span class="badge bg-light-success text-dark-success">Completed</span></td>
+											</tr>
+											<!-- Add more rows as needed -->
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 		</main>
 
-		<div th:replace="fragments :: footer"></div>
 	</div>
-
+	<div th:replace="fragments :: footer"></div> -->
 	<div th:replace="fragments :: common-js"></div>
 </body>
 

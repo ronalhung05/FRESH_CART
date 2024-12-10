@@ -8,12 +8,23 @@
 			<div class="col-md-4 mb-4">
 				<div class="card h-100 rounded-3 shadow-sm">
 					<div class="card-header bg-white border-bottom">
-						<h6 class="mb-0">Main Image</h6>
-						<small class="text-muted">[[${product.mainImage}]]</small>
+						<div>
+							<h6 class="mb-0">Main Image</h6>
+							<small class="text-muted">[[${product.mainImage}]]</small>
+						</div>
 					</div>
 					<div class="card-body text-center">
-						<img id="thumbnail" alt="Main image preview" class="img-fluid rounded-3 mb-3"
-							th:src="@{${product.mainImagePath}}" />
+						<div class="position-relative mb-3">
+							<img id="mainThumbnail" alt="Main image preview" 
+								class="img-fluid rounded-3"
+								th:src="@{${product.mainImagePath}}" />
+							<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+									id="clearMainImage" 
+									title="Clear main image"
+									style="display: none;">
+								<i class="bi bi-x-lg"></i>
+							</button>
+						</div>
 						<div class="d-grid">
 							<label for="fileImage" class="btn btn-outline-primary">
 								<i class="bi bi-upload me-2"></i>Choose File
@@ -22,9 +33,12 @@
 									accept="image/png, image/jpeg" />
 							</label>
 						</div>
+						<div class="invalid-feedback" id="mainImageError" style="display: none;"
+							th:text="${@messageServiceAdmin.getMessage('IMAGE_MAIN_REQUIRED')}">
+						</div>
 					</div>
 				</div>
-				<input type="hidden" th:field="*{mainImage}" />
+				<input type="hidden" th:field="*{mainImage}" id="mainImage" />
 			</div>
 
 			<!-- Extra Images -->
@@ -36,19 +50,33 @@
 								<h6 class="mb-0">Extra Image #[[${status.index + 1}]]</h6>
 								<small class="text-muted">[[${productImage.name}]]</small>
 							</div>
-							<a name="linkRemoveExtraImage" class="btn btn-outline-danger btn-sm"
-								title="Remove this image">
-								<i class="bi bi-x-lg"></i>
-							</a>
+							<div th:if="${status.index > 0}">
+								<button class="btn btn-outline-danger btn-sm"
+										th:onclick="'removeExtraImage(' + ${status.index} + ')'" 
+										title="Delete this image">
+									<i class="bi bi-trash"></i>
+								</button>
+							</div>
 						</div>
 						<div class="card-body text-center">
-							<img th:id="'extraThumbnail' + ${status.index}"
-								th:alt="'Extra image #' + ${status.index + 1} + ' preview'"
-								class="img-fluid rounded-3 mb-3" th:src="@{${productImage.imagePath}}" />
+							<div class="position-relative mb-3">
+								<img th:id="'extraThumbnail' + ${status.index}"
+									th:alt="'Extra image #' + ${status.index + 1} + ' preview'"
+									class="img-fluid rounded-3" 
+									th:src="@{${productImage.imagePath}}" />
+								<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+										th:id="'btnClearExtra' + ${status.index}"
+										th:onclick="'clearExtraImage(' + ${status.index} + ')'"
+										title="Clear image"
+										style="display: none;">
+									<i class="bi bi-x-lg"></i>
+								</button>
+							</div>
 							<div class="d-grid">
 								<label class="btn btn-outline-primary">
 									<i class="bi bi-upload me-2"></i>Choose File
 									<input type="file" name="extraImage" hidden
+										th:onchange="'showExtraImageThumbnail(this, ' + ${status.index} + ')'"
 										accept="image/png, image/jpeg" />
 								</label>
 							</div>
@@ -65,17 +93,37 @@
 			<!-- New Extra Image -->
 			<div class="col-md-4 mb-4" th:id="'divExtraImage' + ${numberOfExistingExtraImages}">
 				<div class="card h-100 rounded-3 shadow-sm">
-					<div class="card-header bg-white border-bottom">
-						<h6 class="mb-0">Extra Image #[[${numberOfExistingExtraImages + 1}]]</h6>
+					<div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+						<div>
+							<h6 class="mb-0">Extra Image #[[${numberOfExistingExtraImages + 1}]]</h6>
+						</div>
+						<div th:if="${numberOfExistingExtraImages > 0}">
+							<button class="btn btn-outline-danger btn-sm"
+									th:onclick="'removeExtraImage(' + ${numberOfExistingExtraImages} + ')'" 
+									title="Delete this image">
+								<i class="bi bi-trash"></i>
+							</button>
+						</div>
 					</div>
 					<div class="card-body text-center">
-						<img th:id="'extraThumbnail' + ${numberOfExistingExtraImages}"
-							th:alt="'Extra image ' + ${numberOfExistingExtraImages} + ' preview'"
-							class="img-fluid rounded-3 mb-3" th:src="@{/images/image-thumbnail.png}" />
+						<div class="position-relative mb-3">
+							<img th:id="'extraThumbnail' + ${numberOfExistingExtraImages}"
+								th:alt="'Extra image ' + ${numberOfExistingExtraImages} + ' preview'"
+								class="img-fluid rounded-3" 
+								th:src="@{/images/image-thumbnail.png}" />
+							<button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+									th:id="'btnClearExtra' + ${numberOfExistingExtraImages}"
+									th:onclick="'clearExtraImage(' + ${numberOfExistingExtraImages} + ')'"
+									title="Clear image"
+									style="display: none;">
+								<i class="bi bi-x-lg"></i>
+							</button>
+						</div>
 						<div class="d-grid">
 							<label class="btn btn-outline-primary">
 								<i class="bi bi-upload me-2"></i>Choose File
 								<input type="file" name="extraImage" hidden
+									th:onchange="'showExtraImageThumbnail(this, ' + ${numberOfExistingExtraImages} + ')'"
 									accept="image/png, image/jpeg" />
 							</label>
 						</div>

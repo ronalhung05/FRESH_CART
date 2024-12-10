@@ -96,4 +96,13 @@ public class BrandRepositoryTests {
 
         assertThat(result.isEmpty());
     }
+
+    @Test
+    public void testUpdateEnabled(){
+        Integer id = 2;
+        boolean enabled = false;
+        repo.updateEnabledStatus(id,enabled);
+        Optional<Brand> result = repo.findById(2);
+        assertThat(result.get().isEnabled()).isEqualTo(false);
+    }
 }

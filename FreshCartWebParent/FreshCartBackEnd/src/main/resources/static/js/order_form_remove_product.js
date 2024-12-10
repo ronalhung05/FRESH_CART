@@ -3,7 +3,7 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		if (doesOrderHaveOnlyOneProduct()) {
-			showWarningModal("Could not remove product. The order must have at least one product.");
+			showWarningMessage("Could not remove product. The order must have at least one product.");
 		} else {
 			removeProduct($(this));
 			updateOrderAmounts();

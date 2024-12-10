@@ -111,10 +111,36 @@
         </main>
     </div>
 
-    <div th:replace="modal_fragments :: confirm_modal" />
     <div th:replace="fragments :: footer"></div>
     <div th:replace="fragments :: common-js"></div>
 
+	<!-- @formatter:off -->
+	<script th:inline="javascript">
+        /* <![CDATA[ */
+        const messages = {
+            CATEGORY_LOAD_ERROR: /*[[${@messageServiceAdmin.getMessage('CATEGORY_LOAD_ERROR')}]]*/ '',
+            NEGATIVE_NUMBER_ERROR: /*[[${@messageServiceAdmin.getMessage('NEGATIVE_NUMBER_ERROR')}]]*/ '',
+            PRICE_LESS_THAN_COST: /*[[${@messageServiceAdmin.getMessage('PRICE_LESS_THAN_COST')}]]*/ '',
+            DUPLICATE_PRODUCT_NAME: /*[[${@messageServiceAdmin.getMessage('DUPLICATE_PRODUCT_NAME')}]]*/ '',
+            SERVER_ERROR: /*[[${@messageServiceAdmin.getMessage('SERVER_ERROR')}]]*/ '',
+            CONNECTION_ERROR: /*[[${@messageServiceAdmin.getMessage('CONNECTION_ERROR')}]]*/ '',
+            IMAGE_UPLOAD_SIZE_ERROR: /*[[${@messageServiceAdmin.getMessage('IMAGE_UPLOAD_SIZE_ERROR')}]]*/ '',
+            IMAGE_UPLOAD_TYPE_ERROR: /*[[${@messageServiceAdmin.getMessage('IMAGE_UPLOAD_TYPE_ERROR')}]]*/ '',
+            IMAGE_MAIN_REQUIRED: /*[[${@messageServiceAdmin.getMessage('IMAGE_MAIN_REQUIRED')}]]*/ '',
+            SHORT_DESCRIPTION_REQUIRED: /*[[${@messageServiceAdmin.getMessage('SHORT_DESCRIPTION_REQUIRED')}]]*/ '',
+            FULL_DESCRIPTION_REQUIRED: /*[[${@messageServiceAdmin.getMessage('FULL_DESCRIPTION_REQUIRED')}]]*/ '',
+            SHIPPING_LENGTH_ERROR: /*[[${@messageServiceAdmin.getMessage('SHIPPING_LENGTH_ERROR')}]]*/ '',
+            SHIPPING_WIDTH_ERROR: /*[[${@messageServiceAdmin.getMessage('SHIPPING_WIDTH_ERROR')}]]*/ '',
+            SHIPPING_HEIGHT_ERROR: /*[[${@messageServiceAdmin.getMessage('SHIPPING_HEIGHT_ERROR')}]]*/ '',
+            SHIPPING_WEIGHT_ERROR: /*[[${@messageServiceAdmin.getMessage('SHIPPING_WEIGHT_ERROR')}]]*/ '',
+            PRODUCT_NAME_REQUIRED: /*[[${@messageServiceAdmin.getMessage('PRODUCT_NAME_REQUIRED')}]]*/ '',
+            PRODUCT_NAME_LENGTH_ERROR: /*[[${@messageServiceAdmin.getMessage('PRODUCT_NAME_LENGTH_ERROR')}]]*/ '',
+            COST_REQUIRED: /*[[${@messageServiceAdmin.getMessage('COST_REQUIRED')}]]*/ '',
+            PRICE_REQUIRED: /*[[${@messageServiceAdmin.getMessage('PRICE_REQUIRED')}]]*/ '',
+            DISCOUNT_REQUIRED: /*[[${@messageServiceAdmin.getMessage('DISCOUNT_REQUIRED')}]]*/ ''
+        };
+        /* ]]> */
+    </script>
 
 	<script type="text/javascript">
         MAX_FILE_SIZE = 502400; // 500KB
@@ -122,13 +148,17 @@
         brandModuleURL = "[[@{/brands}]]";
         defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]";
         checkUniqueUrl = "[[@{/products/check_unique}]]";
+        
+        // Image validation constants
+        const ALLOWED_EXTENSIONS = ['image/jpeg', 'image/png'];
+        const MAX_FILE_SIZE_IN_MB = (MAX_FILE_SIZE / (1024 * 1024)).toFixed(2);
     </script>
-    <script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
      <script type="text/javascript" th:src="@{/js/product_form_overview.js}"></script>
     <script type="text/javascript" th:src="@{/js/common_form.js}"></script>
     <script type="text/javascript" th:src="@{/js/product_form_images.js}"></script>
     <script type="text/javascript" th:src="@{/js/quill-setup.js}"></script>
     <script type="text/javascript" th:src="@{/js/product_form_details.js}"></script>
+    <script type="text/javascript" th:src="@{/js/product_form_shipping.js}"></script>
 
     
 </body>

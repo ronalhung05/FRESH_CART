@@ -17,13 +17,11 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
                                 <h2>[[${pageTitle}]]</h2>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="@{/}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="@{/categories}" class="text-inherit">Categories</a></li>
-                                        <li class="breadcrumb-item active">[[${pageTitle}]]</li>
-                                    </ol>
-                                </nav>
+                                <div class="d-flex">
+                                    <a th:href="@{/categories}" class="text-inherit">Categories</a>
+                                    <span class="mx-2">/</span>
+                                    <span class="text-muted">[[${pageTitle}]]</span>
+                                </div>
                             </div>
                             <div>
                                 <a th:href="@{/categories}" class="btn btn-light">Back to Categories</a>
@@ -82,17 +80,14 @@
                                             </select>
                                         </div>
 
-                                        <div class="mb-3 col-lg-12">
-                                            <label class="form-label">Status</label><br/>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" th:field="*{enabled}" 
-                                                       id="enabled" value="true" checked/>
-                                                <label class="form-check-label" for="enabled">Active</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" th:field="*{enabled}" 
-                                                       id="disabled" value="false"/>
-                                                <label class="form-check-label" for="disabled">Disabled</label>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="form-label d-block">Status</label>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" 
+                                                       type="checkbox" 
+                                                       role="switch"
+                                                       th:field="*{enabled}"/>
+                                                <label class="form-check-label">Enable this category</label>
                                             </div>
                                         </div>
 
@@ -133,15 +128,15 @@
                 if (response == "OK") {
                     form.submit();
                 } else if (response == "DuplicateName") {
-                    showWarningModal("There is another category having same name " + catName);
+                    showWarningMessage("There is another category having same name " + catName);
                 } else if (response == "DuplicateAlias") {
-                    showWarningModal("There is another category having same alias " + catAlias);
+                    showWarningMessage("There is another category having same alias " + catAlias);
                 } else {
-                    showErrorModal("Unknown response from server");
+                    showErrorMessage("Unknown response from server");
                 }
 
             }).fail(function () {
-                showErrorModal("Could not connect to the server");
+                showErrorMessage("Could not connect to the server");
             });
 
             return false;

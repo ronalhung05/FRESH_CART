@@ -17,13 +17,11 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
                                 <h2>[[${pageTitle}]]</h2>
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a th:href="@{/}" class="text-inherit">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a th:href="@{/reviews}" class="text-inherit">Reviews</a></li>
-                                        <li class="breadcrumb-item active">[[${pageTitle}]]</li>
-                                    </ol>
-                                </nav>
+                                <div class="d-flex">
+                                    <a th:href="@{/reviews}" class="text-inherit">Reviews</a>
+                                    <span class="mx-2">/</span>
+                                    <span class="text-muted">[[${pageTitle}]]</span>
+                                </div>
                             </div>
                             <div>
                                 <a th:href="@{/reviews}" class="btn btn-light">Back to Reviews</a>

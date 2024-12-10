@@ -52,13 +52,13 @@
                                     <table class="table table-centered table-hover text-nowrap table-borderless mb-0">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="hideable-column">
+                                                <th class="text-dark hideable-column">
                                                     <th th:replace="fragments :: column_link('id', 'User ID', 'tag')" />
                                                     </th>
                                             
-                                                    <th>Photos</th>
+                                                    <th class="text-dark">Photos</th>
                                             
-                                                    <th class="hideable-column">
+                                                    <th class="text-dark hideable-column">
                                                     <th
                                                         th:replace="fragments :: column_link('email', 'E-mail', 'tag')" />
                                                     </th>
@@ -68,13 +68,13 @@
                                                     <th
                                                         th:replace="fragments :: column_link('lastName', 'Last Name', 'none')" />
                                             
-                                                    <th>Roles</th>
-                                                    <th
+                                                    <th class="text-dark">Roles</th>
+                                                    <th class="text-dark"
                                                         th:replace="fragments :: column_link('enabled', 'Status', 'none')" />
-                                                <th>Actions</th>
+                                                    <th class="text-dark">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-dark">
                                             <tr th:each="user : ${listUsers}">
                                                 <td>[[${user.id}]]</td>
                                                 <td>
@@ -119,10 +119,10 @@
         moduleURL = "[[@{/users}]]";
 
         $(document).ready(function() {
-            $(".link-delete").on("click", function(e) {
-                e.preventDefault();
-                showDeleteConfirmModal($(this), 'user');
-            });
+            var message = "[[${message}]]";
+            if (message) {
+                showSuccessMessage(message);
+            }
         });
     </script>
 

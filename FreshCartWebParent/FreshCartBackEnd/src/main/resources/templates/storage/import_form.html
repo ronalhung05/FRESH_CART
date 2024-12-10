@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: page_head('Add Import - FreshCart Admin', 'none')" />
+<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
 
 <body>
 <div th:replace="navigation :: top_nav"></div>
@@ -58,7 +59,7 @@
                                             <thead class="bg-light">
                                             <tr>
                                                 <th>Product ID</th>
-                                                <th>Product Name</th>
+                                                <th>Product</th>
                                                 <th>Amount</th>
                                                 <th>Cost</th>
                                                 <th>Sub Total</th>
@@ -77,8 +78,8 @@
 
                                 <!-- Buttons -->
                                 <div class="text-end">
-                                    <button type="button" class="btn btn-secondary me-2" id="buttonCancel">Cancel</button>
                                     <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary me-2" id="buttonCancel">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -102,12 +103,15 @@
                 <div class="row mb-4">
                     <div class="col-6">
                         <label class="form-label">Product</label>
-                        <select class="form-select" id="productSelect">
-                            <option value="" selected disabled>Please select a product</option>
-                            <th:block th:each="product : ${listProducts}">
-                                <option th:value="${product.id}" th:text="${product.name}"></option>
-                            </th:block>
-                        </select>
+                            <input type="text" id="productSearch" class="form-control" placeholder="Type to search..." list="productList" />
+                            <!-- Datalist for displaying the dropdown options -->
+                            <datalist id="productList">
+                                <option th:each="product : ${listProducts}"
+                                        th:value="${product.id}"
+                                        th:data-image-url="${product.mainImagePath}"
+                                        th:text="${product.name}">
+                                </option>
+                            </datalist>
                     </div>
                     <div class="col-6">
                         <label class="form-label">Amount</label>
@@ -145,10 +149,10 @@
 
 <div th:replace="fragments :: footer"></div>
 <div th:replace="fragments :: common-js"></div>
-<script th:src="@{/js/common_form.js}"></script>
 <script th:src="@{/js/import_form.js}"></script>
 <script>
     $(document).ready(function() {
+        moduleURL = "[[@{/imports/}]]";
         // Lưu giá trị ban đầu của các input
         const defaultAmount = $('#productAmount').val();
         const defaultPrice = $('#productCost').val();
@@ -182,11 +186,8 @@
             // Tính lại total price
             calculateTotal();
         });
-
         // Tính toán ban đầu
         calculateTotal();
-
-
     });
 </script>
 <style>
