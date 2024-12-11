@@ -208,11 +208,7 @@ public class Order extends AbstractAddress {
 
     @Transient
     public String getDestination() {
-        String destination = city + ", ";
-        if (state != null && !state.isEmpty()) destination += state + ", ";
-        destination += country;
-
-        return destination;
+        return state + ", " + country;
     }
 
     public void copyShippingAddress(Address address) {

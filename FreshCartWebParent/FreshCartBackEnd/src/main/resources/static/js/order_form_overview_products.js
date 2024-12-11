@@ -142,6 +142,12 @@ function formatNumberForField(fieldRef) {
 }
 
 function processFormBeforeSubmit() {
+	const invalidInputs = document.querySelectorAll('.is-invalid');
+
+	if (invalidInputs.length > 0) {
+		return false;
+	}
+
 	setCountryName();
 
 	removeThousandSeparatorForField(fieldProductCost);
