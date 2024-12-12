@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.freshcart.ControllerHelper;
+import com.freshcart.category.CategoryService;
+import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.Customer;
 import com.freshcart.common.entity.Review;
 import com.freshcart.common.entity.product.Product;
@@ -34,6 +36,8 @@ public class ReviewController {
     private ProductService productService;
     @Autowired
     private ReviewVoteService voteService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/reviews")
     public String listFirstPage(Model model) {
@@ -47,6 +51,7 @@ public class ReviewController {
         Customer customer = controllerHelper.getAuthenticatedCustomer(request);
         Page<Review> page = reviewService.listByCustomerByPage(customer, keyword, pageNum, sortField, sortDir);
         List<Review> listReviews = page.getContent();
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
 
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
@@ -58,7 +63,7 @@ public class ReviewController {
         model.addAttribute("moduleURL", "/reviews");
 
         model.addAttribute("listReviews", listReviews);
-
+        model.addAttribute("listCategories", listCategories);
         long startCount = (pageNum - 1) * ReviewService.REVIEWS_PER_PAGE + 1;
         model.addAttribute("startCount", startCount);
 

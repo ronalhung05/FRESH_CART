@@ -42,7 +42,7 @@
 									</div>
 								</div>
 								<div class="lh-1">
-									<h1 class="mb-2 fw-bold fs-2">$93,438.78</h1>
+									<h1 id="monthlyRevenue" class="mb-2 fw-bold fs-2">$0.00</h1>
 									<span>Monthly revenue</span>
 								</div>
 							</div>
@@ -62,28 +62,28 @@
 									</div>
 								</div>
 								<div class="lh-1">
-									<h1 class="mb-2 fw-bold fs-2">42,339</h1>
-									<span>Total orders</span>
+									<h1 id="totalOrders" class="mb-2 fw-bold fs-2">0</h1>
+									<span>Monthly orders</span>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Customers Card -->
+					<!-- Import Cost Card -->
 					<div class="col-lg-4 col-12 mb-6">
 						<div class="card h-100 card-lg">
 							<div class="card-body p-6">
 								<div class="d-flex justify-content-between align-items-center mb-6">
 									<div>
-										<h4 class="mb-0 fs-5">Customers</h4>
+										<h4 class="mb-0 fs-5">Import Cost</h4>
 									</div>
 									<div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
-										<i class="bi bi-people fs-5"></i>
+										<i class="bi bi-box-seam fs-5"></i>
 									</div>
 								</div>
 								<div class="lh-1">
-									<h1 class="mb-2 fw-bold fs-2">39,354</h1>
-									<span>Total customers</span>
+									<h1 id="totalImportCost" class="mb-2 fw-bold fs-2">$0.00</h1>
+									<span>Monthly import cost</span>
 								</div>
 							</div>
 						</div>
@@ -91,70 +91,29 @@
 				</div>
 
 				<div class="row ">
-					<div class="col-xl-8 col-lg-6 col-md-12 col-12 mb-6">
+					<div class="col-lg-12 col-12 mb-6">
 						<!-- card -->
 						<div class="card h-100 card-lg">
 							<div class="card-body p-6">
 								<!-- heading -->
 								<div class="d-flex justify-content-between">
 									<div>
-										<h3 class="mb-1 fs-5">Revenue </h3>
-										<small>(+63%) than last year)</small>
+										<h3 class="mb-1 fs-5">Revenue & Profit</h3>
+										<small>(Monthly comparison)</small>
 									</div>
 									<div>
 										<!-- select option -->
 										<select class="form-select ">
-											<option selected>2019</option>
-											<option value="2023">2020</option>
-											<option value="2024">2021</option>
-											<option value="2025">2022</option>
-											<option value="2025">2023</option>
+											<option value="2024" selected>2024</option>
+											<option value="2023">2023</option>
+											<option value="2022">2022</option>
+											<option value="2021">2021</option>
 										</select>
 									</div>
 
 								</div>
 								<!-- chart -->
 								<div id="revenueChart" class="mt-6"></div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-4 col-lg-6 col-12 mb-6">
-						<!-- card -->
-						<div class="card h-100 card-lg">
-							<!-- card body -->
-							<div class="card-body p-6">
-								<!-- heading -->
-								<h3 class="mb-0 fs-5">Total Sales </h3>
-								<div id="totalSale" class="mt-6 d-flex justify-content-center"></div>
-								<div class="mt-4">
-									<!-- list -->
-									<ul class="list-unstyled mb-0">
-										<li class="mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="8"
-												height="8" fill="currentColor"
-												class="bi bi-circle-fill text-primary" viewBox="0 0 16 16">
-												<circle cx="8" cy="8" r="8" />
-											</svg> <span class="ms-1"><span class="text-dark">Shippings
-													$32.98</span> (2%)</span></li>
-										<li class="mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="8"
-												height="8" fill="currentColor"
-												class="bi bi-circle-fill text-warning" viewBox="0 0 16 16">
-												<circle cx="8" cy="8" r="8" />
-											</svg> <span class="ms-1"><span class="text-dark">Refunds $11</span>
-												(11%)</span></li>
-										<li class="mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="8"
-												height="8" fill="currentColor" class="bi bi-circle-fill text-danger"
-												viewBox="0 0 16 16">
-												<circle cx="8" cy="8" r="8" />
-											</svg> <span class="ms-1"><span class="text-dark">Order $14.87</span>
-												(1%)</span></li>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
-												fill="currentColor" class="bi bi-circle-fill text-info"
-												viewBox="0 0 16 16">
-												<circle cx="8" cy="8" r="8" />
-											</svg> <span class="ms-1"><span class="text-dark">Income 3,271</span>
-												(86%)</span></li>
-									</ul>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -180,7 +139,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr th:each="order : ${listRecentOrders}">
+											<tr th:each="order : ${recentOrders}">
 												<td th:text="${'#' + order.id}"></td>
 												<td th:text="${order.customer.fullName}"></td>
 												<td th:text="${#dates.format(order.orderTime, 'dd MMM yyyy')}"></td>
@@ -218,7 +177,7 @@
 				'packages': ['corechart']
 			});
 			google.charts.setOnLoadCallback(function() {
-				loadRevenueChart('2019'); // Load initial chart for 2019
+				loadRevenueChart('2024'); // Load initial chart for 2023
 			});
 
 			// Event handler for year selection
@@ -226,32 +185,114 @@
 				var selectedYear = $(this).val();
 				loadRevenueChart(selectedYear);
 			});
+
+			// Lấy doanh thu của tháng hiện tại
+			$.get(contextPath + "reports/current_month_revenue", function(revenue) {
+				$("#monthlyRevenue").text("$" + revenue.toFixed(2));
+			});
+
+			// Lấy số lượng đơn hàng của tháng hiện tại
+			$.get(contextPath + "reports/current_month_orders", function(orders) {
+				$("#totalOrders").text(orders);
+			});
+
+			// Lấy tổng tiền nhập kho trong tháng hiện tại
+			$.get(contextPath + "reports/current_month_import_cost", function(importCost) {
+				$("#totalImportCost").text("$" + importCost.toFixed(2));
+			});
 		});
 
 		function loadRevenueChart(year) {
-			var requestURL = contextPath + "reports/revenue_by_year/" + year;
+			// Tạo ngày bắt đầu và kết thúc cho năm được chọn
+			var startDate = year + "-01-01";
+			var endDate = year + "-12-31";
+			
+			// Sử dụng cùng API với sales report
+			var requestURL = contextPath + "reports/sales_by_date/" + startDate + "/" + endDate;
 			
 			$.get(requestURL, function(responseJSON) {
 				var data = new google.visualization.DataTable();
 				data.addColumn('string', 'Month');
 				data.addColumn('number', 'Revenue');
+				data.addColumn('number', 'Profit');
 
-				responseJSON.forEach(function(reportItem) {
-					data.addRow([reportItem.month, reportItem.revenue]);
+				// Tạo map để gom nhóm dữ liệu theo tháng
+				var monthlyData = {};
+				
+				// Khởi tạo biến tổng
+				var totalRevenue = 0.0;
+				var totalProfit = 0.0;
+
+				// Xử lý dữ liệu từ response
+				$.each(responseJSON, function(index, reportItem) {
+					var date = reportItem.identifier.split('-');
+					var month = date[1];
+					var monthKey = getMonthName(month);
+					
+					// Khởi tạo hoặc cộng dồn dữ liệu cho tháng
+					if (!monthlyData[monthKey]) {
+						monthlyData[monthKey] = {
+							revenue: 0,
+							profit: 0
+						};
+					}
+					
+					var revenue = parseFloat(reportItem.revenue);
+					var profit = parseFloat(reportItem.profit);
+					
+					monthlyData[monthKey].revenue += revenue;
+					monthlyData[monthKey].profit += profit;
+					
+					totalRevenue += revenue;
+					totalProfit += profit;
 				});
 
+				// Thêm dữ liệu vào chart theo từng tháng
+				for (var i = 1; i <= 12; i++) {
+					var monthName = getMonthName(i.toString().padStart(2, '0'));
+					var monthData = monthlyData[monthName] || { revenue: 0, profit: 0 };
+					data.addRow([monthName, monthData.revenue, monthData.profit]);
+				}
+
 				var options = {
-					title: 'Revenue for ' + year,
+					title: 'Revenue & Profit for ' + year,
 					height: 360,
 					legend: { position: 'top' },
-					hAxis: { title: 'Month' },
-					vAxis: { title: 'Revenue', format: 'currency' },
-					series: { 0: { type: 'area' } }
+					hAxis: { 
+						title: 'Month',
+						slantedText: true,
+						slantedTextAngle: 45
+					},
+					vAxis: { 
+						title: 'Amount ($)',
+						format: 'currency'
+					},
+					isStacked: true,
+					series: {
+						0: { // Revenue
+							type: 'area',
+							color: '#4e73df',
+							areaOpacity: 0.6
+						},
+						1: { // Profit
+							type: 'area',
+							color: '#1cc88a',
+							areaOpacity: 0.6
+						}
+					}
 				};
 
 				var chart = new google.visualization.AreaChart(document.getElementById('revenueChart'));
 				chart.draw(data, options);
 			});
+		}
+
+		function getMonthName(monthNumber) {
+			const months = [
+				'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+				'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+			];
+			return months[parseInt(monthNumber) - 1];
 		}
 	</script>
 </body>

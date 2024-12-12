@@ -71,6 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilterTags();
     
     searchBrands();
+
+    // Thêm kiểm tra khi không có brands
+    const brandList = document.querySelector('.brand-list');
+    if (brandList && brandList.children.length === 0) {
+        brandList.innerHTML = '<div class="text-muted">No brands available for this category</div>';
+    }
 });
 
 function updateSortSelectText() {

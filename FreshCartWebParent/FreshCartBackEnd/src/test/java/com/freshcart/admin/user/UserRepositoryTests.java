@@ -31,7 +31,7 @@ public class UserRepositoryTests {
     @Test
     public void testCreateNewUserWithOneRole() {
         Role roleAdmin = entityManager.find(Role.class, 1);
-        User userNamHM = new User("nam@codejava.net", "nam2020", "Nam", "Ha Minh");
+        User userNamHM = new User("hung@gmail.com", "hung311023", "Hung", "Tran Nguyen Phi" );
         userNamHM.addRole(roleAdmin);
 
         User savedUser = repo.save(userNamHM);
@@ -119,7 +119,7 @@ public class UserRepositoryTests {
 
     @Test
     public void testEnableUser() {
-        Integer id = 3;
+        Integer id = 2;
         repo.updateEnabledStatus(id, true);
 
     }
