@@ -138,7 +138,7 @@ public class OrderController {
     }
 
     @PostMapping("/order/save")
-    public String saveOrder(Order order, HttpServletRequest request, Model model, RedirectAttributes ra) throws ProductNotFoundException {
+    public String saveOrder(Order order, HttpServletRequest request, Model model, RedirectAttributes ra){
         updateProductDetails(order, request);
         updateOrderTracks(order, request);
         orderService.save(order);
@@ -177,7 +177,7 @@ public class OrderController {
         String[] trackNotes = request.getParameterValues("trackNotes");
 
         List<OrderTrack> orderTracks = order.getOrderTracks();
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
         for (int i = 0; i < trackIds.length; i++) {
             OrderTrack trackRecord = new OrderTrack();
