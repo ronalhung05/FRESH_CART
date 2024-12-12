@@ -1,7 +1,10 @@
 package com.freshcart.admin;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,11 +13,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.freshcart.admin.order.OrderService;
+import com.freshcart.admin.setting.SettingService;
+import com.freshcart.common.entity.order.Order;
+import com.freshcart.common.entity.setting.Setting;
+
 @Controller
 public class MainController {
 
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private SettingService settingService;
+
     @GetMapping("")
-    public String viewHomePage(Model model) {
+    public String viewHomePage(Model model, HttpServletRequest request) {
+        List<Order> top5RecentOrders = orderService.findTop5RecentOrders();
+        model.addAttribute("recentOrders", top5RecentOrders);
+
+        loadCurrencySettings(request);
         model.addAttribute("moduleURL", "/");
         return "index";
     }
@@ -28,6 +46,15 @@ public class MainController {
 
         return "redirect:/";
     }
+
+    private void loadCurrencySettings(HttpServletRequest request) {
+    List<Setting> currencySettings = settingService.getCurrencySettings();
+    for (Setting setting : currencySettings) {
+        request.setAttribute(setting.getKey(), setting.getValue());
+    }
+}
+
+
 //    @ModelAttribute("moduleURL")
 //    public String getModuleURL(HttpServletRequest request) {
 //        // Lấy đường dẫn và bỏ context path

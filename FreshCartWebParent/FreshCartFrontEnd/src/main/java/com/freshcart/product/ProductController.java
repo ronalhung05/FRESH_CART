@@ -61,7 +61,7 @@ public class ProductController {
             alias = normalizeUrl(alias);
             Category category = categoryService.getCategory(alias);
             List<Category> listParents = categoryService.getCategoryParents(category);
-            List<Brand> listBrands = brandService.listAll();
+            List<Brand> listBrands = brandService.listByCategory(category);
             List<Category> listCategories = categoryService.listHierarchicalCategories();
 
             // Xử lý category hierarchy
@@ -201,7 +201,7 @@ public class ProductController {
         List<Category> listCategories = categoryService.listHierarchicalCategories();
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("listCategories", listCategories);
-        return "product/new_products";
+        return "new_products";
     }
 
     @GetMapping("/promotions")
@@ -210,7 +210,7 @@ public class ProductController {
         List<Category> listCategories = categoryService.listHierarchicalCategories();
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("listCategories", listCategories);
-        return "product/promotions";
+        return "promotions";
     }
 
     @GetMapping("/best-sellers") 
@@ -219,7 +219,7 @@ public class ProductController {
         List<Category> listCategories = categoryService.listHierarchicalCategories();
         model.addAttribute("listProducts", listProducts);
         model.addAttribute("listCategories", listCategories);
-        return "product/best_sellers";
+        return "best_sellers";
     }
 
 

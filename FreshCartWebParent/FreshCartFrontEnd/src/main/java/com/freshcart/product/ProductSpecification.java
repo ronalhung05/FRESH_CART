@@ -36,15 +36,24 @@ public class ProductSpecification {
                 return null;
             }
 
+            Join<Product, Brand> brandJoin = root.join(Product_.brand);
+            Predicate brandEnabled = cb.isTrue(brandJoin.get("enabled"));
+
             // Nếu là category con (không có subcategories)
             if (category.getChildren() == null || category.getChildren().isEmpty()) {
-                return cb.equal(root.get(Product_.category), category);
+                return cb.and(
+                    brandEnabled,
+                    cb.equal(root.get(Product_.category), category)
+                );
             }
 
             // Nếu là category cha (có subcategories)
             String categoryIdMatch = "-" + String.valueOf(category.getId()) + "-";
-            return cb.like(root.get(Product_.category).get("allParentIDs"),
-                    "%" + categoryIdMatch + "%");
+            return cb.and(
+                brandEnabled,
+                cb.like(root.get(Product_.category).get("allParentIDs"),
+                        "%" + categoryIdMatch + "%")
+            );
         };
     }
 
@@ -167,6 +176,40 @@ public class ProductSpecification {
             return cb.and(
                 cb.isTrue(root.get(Product_.enabled)),
                 cb.like(cb.lower(root.get(Product_.name)), searchTerm)
+            );
+        };
+    }
+
+    public static Specification<Product> hasBrandsAndCategory(List<String> brandNames, Category category) {
+        return (root, query, cb) -> {
+            if ((brandNames == null || brandNames.isEmpty()) && category == null) {
+                return null;
+            }
+
+            Join<Product, Brand> brandJoin = root.join(Product_.brand);
+            Predicate brandEnabled = cb.isTrue(brandJoin.get("enabled"));
+
+            if (category == null) {
+                return cb.and(brandEnabled, brandJoin.get(Brand_.name).in(brandNames));
+            }
+
+            Predicate categoryPredicate;
+            if (category.getChildren() == null || category.getChildren().isEmpty()) {
+                categoryPredicate = cb.equal(root.get(Product_.category), category);
+            } else {
+                String categoryIdMatch = "-" + category.getId() + "-";
+                categoryPredicate = cb.like(root.get(Product_.category).get("allParentIDs"),
+                        "%" + categoryIdMatch + "%");
+            }
+
+            if (brandNames == null || brandNames.isEmpty()) {
+                return cb.and(brandEnabled, categoryPredicate);
+            }
+
+            return cb.and(
+                brandEnabled,
+                categoryPredicate,
+                brandJoin.get(Brand_.name).in(brandNames)
             );
         };
     }

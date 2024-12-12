@@ -27174,3 +27174,33 @@ footer .social-icons a:hover {
     align-items: center;
     gap: 0.5rem;
 }
+.category-card {
+    height: 200px; /* Chiều cao cố định cho card */
+    width: 100%;
+    padding: 1rem;
+}
+
+.category-image-wrapper {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 10%;
+}
+
+/* Đảm bảo slider item có cùng kích thước */
+.category-slider .item {
+    height: 100%;
+}
+
+.category-slider .card {
+    height: 100%;
+}
