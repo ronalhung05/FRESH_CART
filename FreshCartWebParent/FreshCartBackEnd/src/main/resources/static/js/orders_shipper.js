@@ -69,7 +69,7 @@ function sendRequestToUpdateOrderStatus(button) {
 
 function updateStatusIconColor(orderId, status) {
 	link = $("#link" + status + orderId);
-	link.replaceWith("<i class='fas " + iconNames[status] + " fa-2x icon-green'></i>");
+	link.replaceWith("<i style=\"color: #0aad0a\" class='fas " + iconNames[status] + " fa-2x'></i>");
 }
 
 function showUpdateConfirmModal(link) {

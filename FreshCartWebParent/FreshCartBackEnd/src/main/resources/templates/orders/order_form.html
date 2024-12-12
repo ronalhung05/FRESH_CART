@@ -17,11 +17,6 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h2>[[${pageTitle}]]</h2>
-                                <div class="d-flex">
-                                    <a th:href="@{/orders}" class="text-inherit">Orders</a>
-                                    <span class="mx-2">/</span>
-                                    <span class="text-muted">[[${pageTitle}]]</span>
-                                </div>
                             </div>
                             <div>
                                 <button th:if="${!order.status.toString().matches('CANCELLED|RETURNED')}"
@@ -119,7 +114,7 @@
             NOT_NULL_NOTES: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_NOTES')}]]*/ '',
             EXCEED_MAX_LENGTH_NOTES: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_NOTES')}]]*/ '',
             NOT_NULL_DELIVERDAYS: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_DELIVERDAYS')}]]*/ '',
-            EXCEED_MAX_LENGTH_DELIVERDAYS: /*[[${@messageServiceAdmin.getMessage('EXCEED_MAX_LENGTH_DELIVERDAYS')}]]*/ '',
+            DELIVERDAYS_NUMBER_ERROR: /*[[${@messageServiceAdmin.getMessage('DELIVERDAYS_NUMBER_ERROR')}]]*/ '',
             NOT_NULL_PHONENUMBER: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_PHONENUMBER')}]]*/ '',
             NOT_PHONENUMBER: /*[[${@messageServiceAdmin.getMessage('NOT_PHONENUMBER')}]]*/ '',
             NOT_NULL_FIRSTNAME: /*[[${@messageServiceAdmin.getMessage('NOT_NULL_FIRSTNAME')}]]*/ '',
@@ -132,7 +127,6 @@
 
     <div th:replace="fragments :: common-js"></div>
     <script th:src="@{/js/common_form.js}"></script>
-    <script th:src="@{/js/common_form_country_state.js}"></script>
     <script th:src="@{/js/jquery.number.min.js}"></script>
     <script th:src="@{/js/order_form_overview_products.js}"></script>
     <script th:src="@{/js/order_form_add_product.js}"></script>

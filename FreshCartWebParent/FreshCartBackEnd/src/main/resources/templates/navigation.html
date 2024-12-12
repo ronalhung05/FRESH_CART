@@ -200,7 +200,7 @@
                         </th:block>
 
                         <!-- Products Menu -->
-                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor')">
                             <li class="nav-item">
                                 <a class="nav-link"
                                    th:classappend="${moduleURL != null && (moduleURL == '/products' || moduleURL == '/products/new') ? 'show' : 'collapsed'}"

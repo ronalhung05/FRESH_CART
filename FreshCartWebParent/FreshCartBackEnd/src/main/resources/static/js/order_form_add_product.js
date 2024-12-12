@@ -21,14 +21,6 @@ $(document).on("input", ".cost-input, .price-input, .ship-input, .tax-input", fu
 	validateInput(this, /^\d*\.?\d*$/, "Please enter numbers only!");
 });
 
-$(document).on("input", ".firstName-input, .lastName-input", function () {
-	validateInput(this, /^[a-zA-Z\s]*$/, "Please enter letters only!", 50);
-});
-
-$(document).on("input", ".phone-input", function () {
-	validateInput(this, /^\d*\.?\d*$/, "Please enter numbers only!", 11);
-});
-
 function validateInput(input, regex, errorMessage, maxLength = null) {
 	const value = input.value;
 

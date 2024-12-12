@@ -43,10 +43,11 @@ LOGO_UPLOAD_TYPE_ERROR,Invalid image format. Supported formats are JPEG and PNG.
 NOT_NULL_NOTES,Notes cannot be empty.
 EXCEED_MAX_LENGTH_NOTES, Notes cannot exceed 256 characters.
 NOT_NULL_DELIVERDAYS, Deliver days cannot be empty.
-EXCEED_MAX_LENGTH_DELIVERDAYS, Deliver days must be a positive integer.
+DELIVERDAYS_NUMBER_ERROR, Deliver days must be a positive integer.
 NOT_NULL_PHONENUMBER, Phone number cannot be empty.
 NOT_PHONENUMBER, Phone number must be 10 digit number.
 NOT_NULL_FIRSTNAME, First name cannot be empty.
 EXCEED_MAX_LENGTH_FIRSTNAME, First name cannot exceed 30 characters.
 NOT_NULL_LASTNAME,Last name cannot be empty.
 EXCEED_MAX_LENGTH_LASTNAME, Last name cannot exceed 30 characters.
+UPDATE_ORDER_INFO_SUCCESS, The order ID ? has been updated successfully.
