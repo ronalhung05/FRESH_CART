@@ -87,7 +87,7 @@ public class Product extends IdBasedEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductDetail> details = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ImportDetail> importDetails = new ArrayList<>();
 
     private int reviewCount;

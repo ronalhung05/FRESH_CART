@@ -11,14 +11,14 @@ $(document).ready(function () {
         let value = $(this).val();
         if (value < 0) {
             $(this).val(1);
-            alert("Amount cannot be negative.");
+            showWarningMessage("Amount cannot be negative.");
         }
     });
     $("#productCost").on("input", function () {
         let value = $(this).val();
         if (value < 0) {
             $(this).val(1);
-            alert("Cost cannot be negative.");
+            showWarningMessage("Cost cannot be negative.");
         }
     });
 
@@ -29,13 +29,13 @@ $(document).ready(function () {
 
         // Check if the selected product exists in the datalist
         if (selectedOption.length === 0) {
-            alert("Please select a valid product from the list");
+            showWarningMessage("Please select a valid product from the list");
             return;
         }
 
         // Check the product in the added list but want to add again
         if ($(`#productTableBody tr td:first-child:contains(${selectedProductId})`).length > 0) {
-            alert("This product is already added to the list. Please delete it to edit or add.");
+            showWarningMessage("This product is already added to the list. Please delete it to edit or add.");
             return;
         }
 
@@ -44,6 +44,16 @@ $(document).ready(function () {
         const productAmount = $("#productAmount").val();
         const productCost = $("#productCost").val();
         const productUnit = $("#productUnit").val();
+
+        if(selectedProductId.length === 0){
+            showWarningMessage("Please fill Product ID");
+        }
+        else if(productAmount.length === 0){
+            showWarningMessage("Please fill Product Amount");
+        }
+        else if(productCost.length === 0){
+            showWarningMessage("Please fill Product Cost");
+        }
 
         if (selectedProductId && productAmount && productCost) {
             // Calculate total cost
@@ -109,8 +119,6 @@ $(document).ready(function () {
             $("#addProductModal").modal('hide');
             $("#productAmount").val(1);
             $("#productCost").val(1.0);
-        } else {
-            alert("Please fill in all required fields.");
         }
     });
 
@@ -133,7 +141,7 @@ $(document).ready(function () {
     // Form submission check
     $("form").on("submit", function (event) {
         if ($("#productTableBody tr").length === 0) {
-            alert("Please add at least one product before saving.");
+            showWarningMessage("Please add at least one product before saving.");
             event.preventDefault(); // Prevent form submission
         }
     });
