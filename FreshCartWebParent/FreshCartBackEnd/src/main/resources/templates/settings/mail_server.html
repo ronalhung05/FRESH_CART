@@ -65,11 +65,12 @@
                             <div class="col-lg-6">
                                 <label class="form-label">Password</label>
                                 <div class="password-field position-relative">
-                                    <div class="input-group">
+                                    <div class="form-group">
+                                        <div class="input-group">
 											<span class="input-group-text">
 												<i class="bi bi-key"></i>
 											</span>
-                                        <div class="form-group">
+
                                             <input type="password"
                                                    class="form-control"
                                                    name="MAIL_PASSWORD"
@@ -77,13 +78,10 @@
                                                    id="MAIL_PASSWORD"
                                                    placeholder="Enter mail password"
                                                    required/>
-                                            <div class="invalid-feedback"></div>
                                         </div>
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                     <span><i class="bi bi-eye-slash password-toggler"></i></span>
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please enter password.
                                 </div>
                             </div>
 
@@ -113,7 +111,8 @@
                             <div class="col-lg-6">
                                 <label class="form-label">Sender Name</label>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="MAIL_SENDER_NAME" id="MAIL_SENDER_NAME"
+                                    <input type="text" class="form-control" name="MAIL_SENDER_NAME"
+                                           id="MAIL_SENDER_NAME"
                                            th:value="${MAIL_SENDER_NAME}" required maxlength="255"/>
                                     <div class="invalid-feedback"></div>
                                 </div>

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const MAX_FILE_SIZE = 102400; // Maximum file size: 2MB
+    const MAX_FILE_SIZE = 102400; // Maximum file size: 100KB
     const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg"];
 
     const fieldsToValidate = [
