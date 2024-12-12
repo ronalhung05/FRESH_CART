@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.freshcart.admin.MessageServiceAdmin;
 import com.freshcart.common.exception.ProductNotFoundException;
 import com.freshcart.common.exception.ProductOutOfStockException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class OrderController {
 
     @Autowired
     private SettingService settingService;
+    @Autowired
+    private MessageServiceAdmin messageServiceAdmin;
 
     @GetMapping("/orders")
     public String listFirstPage() {
@@ -122,11 +125,8 @@ public class OrderController {
         try {
             Order order = orderService.get(id);
 
-            List<Country> listCountries = orderService.listAllCountries();
-
             model.addAttribute("pageTitle", "Edit Order (ID: " + id + ")");
             model.addAttribute("order", order);
-            model.addAttribute("listCountries", listCountries);
 
             return "orders/order_form";
 
@@ -139,26 +139,10 @@ public class OrderController {
 
     @PostMapping("/order/save")
     public String saveOrder(Order order, HttpServletRequest request, Model model, RedirectAttributes ra) throws ProductNotFoundException {
-        String countryName = request.getParameter("countryName");
-        order.setCountry(countryName);
-
-        // Kiểm tra tồn kho sản phẩm trước khi lưu
-        Map<Integer, String> stockErrors = checkProductStock(order, request);
-
-        if (stockErrors != null && !stockErrors.isEmpty()) {
-            // Chuyển lỗi tồn kho thành chuỗi JSON hoặc danh sách
-            ra.addFlashAttribute("stockErrors", stockErrors);
-            ra.addFlashAttribute("message", "There are stock errors in the order.");
-
-            return "redirect:/orders/edit/" + order.getId(); // Redirect về trang chỉnh sửa
-        }
-
-        // Nếu không có lỗi tồn kho, tiếp tục lưu đơn hàng
         updateProductDetails(order, request);
         updateOrderTracks(order, request);
-
         orderService.save(order);
-        ra.addFlashAttribute("message", "The order ID " + order.getId() + " has been updated successfully");
+        ra.addFlashAttribute("message", messageServiceAdmin.getMessage("UPDATE_ORDER_INFO_SUCCESS").replace("?", String.valueOf(order.getId())));
 
         return defaultRedirectURL;
     }

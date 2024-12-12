@@ -39,7 +39,7 @@ $(document).ready(function () {
             noteField.addClass('is-invalid');
             noteField.focus();
         } else if (!Number.isInteger(Number(value)) || parseInt(value, 10) <= 0) {
-            showWarningMessage(messages.EXCEED_MAX_LENGTH_DELIVERDAYS);
+            showWarningMessage(messages.DELIVERDAYS_NUMBER_ERROR);
             noteField.addClass('is-invalid');
             noteField.focus();
         } else {
