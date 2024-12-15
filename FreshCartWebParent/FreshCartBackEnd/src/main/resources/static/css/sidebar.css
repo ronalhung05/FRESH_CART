@@ -1,0 +1,98 @@
+/* Sidebar styling */
+.navbar-vertical {
+    width: 280px;
+    min-width: 280px;
+    transition: width 0.3s ease;
+}
+
+.navbar-vertical.collapse {
+    width: 70px !important;
+    min-width: 70px !important;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hide text and some elements when collapsed */
+.navbar-vertical.collapse .navbar-brand,
+.navbar-vertical.collapse .nav-link-text,
+.navbar-vertical.collapse .nav-label {
+    display: none !important;
+}
+
+/* Hide dropdown arrows when collapsed */
+.navbar-vertical.collapse .nav-link[data-bs-toggle="collapse"]::after {
+    display: none !important;
+}
+
+/* Toggle button styling */
+.toggle-btn {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.toggle-btn i {
+    font-size: 1.5rem !important;
+    color: var(--fc-gray-600) !important;
+    transition: transform 0.3s ease !important;
+}
+
+.navbar-vertical.collapse .toggle-btn i {
+    transform: rotate(180deg) !important;
+}
+
+/* Dropdown menus when sidebar is collapsed */
+.navbar-vertical.collapse .nav-item .collapse {
+    position: absolute !important;
+    left: 70px !important;
+    top: 0 !important;
+    width: 200px !important;
+    background: var(--fc-white) !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    display: none !important;
+}
+
+.navbar-vertical.collapse .nav-item:hover .collapse {
+    display: block !important;
+}
+
+/* Keep submenu styles from theme */
+.nav-item .collapse .nav-link {
+    padding-left: 2.5rem !important;
+}
+
+
+/* Main content wrapper adjustment */
+.main-content-wrapper {
+    transition: all 0.3s ease;
+    width: calc(100% - 280px);
+    float: left;
+}
+
+/* Adjust main content when sidebar is collapsed */
+.navbar-vertical.collapse ~ .main-content-wrapper {
+    width: calc(100% - 70px) !important;
+}
+
+/* Clear float */
+.main-wrapper {
+    overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199.98px) {
+    .main-content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .navbar-vertical.collapse ~ .main-content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}

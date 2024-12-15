@@ -86,13 +86,15 @@
                     </button>
                     <div class="navbar-brand ms-3">
                         <a th:href="@{/}" class="text-decoration-none">
-                            <img th:src="@{/images/ShopmeAdminSmall.png}" alt="">
+                            <img th:src="@{/images/FreshcartBig.png}" alt="FreshCart" class="d-inline-block align-text-top" style="width: 150px" />
                         </a>
                     </div>
                 </div>
 
                 <div class="navbar-vertical-content flex-grow-1" data-simplebar="">
                     <ul class="navbar-nav flex-column" id="sideNavbar">
+
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/}" th:classappend="${moduleURL == '/' ? 'active' : ''}">
                                 <div class="d-flex align-items-center">
@@ -101,7 +103,7 @@
                                 </div>
                             </a>
                         </li>
-
+                        </th:block>
                         <li class="nav-item mt-6 mb-3">
                             <span class="nav-label">Store Managements</span>
                         </li>

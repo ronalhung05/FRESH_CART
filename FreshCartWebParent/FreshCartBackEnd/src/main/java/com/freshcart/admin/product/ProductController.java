@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.freshcart.admin.MessageServiceAdmin;
+import com.freshcart.admin.product.export.ProductCsvExporter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.freshcart.admin.FileUploadUtil;
 import com.freshcart.admin.brand.BrandService;
 import com.freshcart.admin.category.CategoryService;
 import com.freshcart.admin.paging.PagingAndSortingHelper;
@@ -27,9 +26,11 @@ import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.product.Product;
 import com.freshcart.common.exception.ProductNotFoundException;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class ProductController {
-    private String defaultRedirectURL = "redirect:/products/page/1?sortField=name&sortDir=asc&categoryId=0";
+    private String defaultRedirectURL = "redirect:/products/page/1?sortField=inStock&sortDir=desc&categoryId=0";
     @Autowired
     private ProductService productService;
     @Autowired
@@ -192,5 +193,12 @@ public class ProductController {
 
             return defaultRedirectURL;
         }
+    }
+
+    @GetMapping("/products/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Product> listProducts = productService.listAll();
+        ProductCsvExporter exporter = new ProductCsvExporter();
+        exporter.export(listProducts, response);
     }
 }

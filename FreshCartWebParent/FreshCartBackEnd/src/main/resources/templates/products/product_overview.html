@@ -85,7 +85,7 @@
 									   th:field="*{cost}"
 									   placeholder="Enter cost" 
 									   step="0.01"
-									   th:readonly="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')}"
+									   th:readonly="${#strings.contains(pageTitle, 'Edit Product')}"
 									   th:value="${#authorization.expression('hasAuthority(''Editor'')') && product.id == null} ? 0 : *{cost}"
 									   th:style="${#authorization.expression('hasAuthority(''Editor'')')  || #authorization.expression('hasAuthority(''Salesperson'')')} ? 'background-color: #e9ecef' : ''" />
 							</div>

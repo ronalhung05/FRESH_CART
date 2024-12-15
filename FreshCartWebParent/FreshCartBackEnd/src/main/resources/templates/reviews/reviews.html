@@ -125,12 +125,18 @@
       if (message) {
         showSuccessMessage(message);
       }
-
+      handleDeleteLink();
       handleProductDetailLink();
       handleCustomerDetailLink();
       handleReviewDetailLink();
       
     });
+
+    function handleDeleteLink() {
+      $(".link-delete").on("click", function (e) {
+        showSuccessMessage($(this), 'review');
+      });
+    }
 
     function handleProductDetailLink() {
       $(".link-detail-product").on("click", function(e) {

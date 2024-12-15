@@ -9,7 +9,7 @@
 
 	<div class="main-wrapper">
 		<div th:replace="navigation :: menu"></div>
-		
+		<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
 		<!-- main content -->
 		<main class="main-content-wrapper bg-white">
 			<section class="container">
@@ -165,7 +165,7 @@
 				</div>
 			</section>
 		</main>
-
+		</th:block>
 	</div>
 	<div th:replace="fragments :: footer"></div>
 	<div th:replace="fragments :: common-js"></div>

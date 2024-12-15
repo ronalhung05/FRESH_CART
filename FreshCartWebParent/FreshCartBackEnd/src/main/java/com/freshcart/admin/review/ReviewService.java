@@ -48,6 +48,13 @@ public class ReviewService {
             throw new ReviewNotFoundException("Could not find any reviews with ID " + id);
         }
 
+        Review review = reviewRepo.findById(id).orElseThrow(() ->
+                new ReviewNotFoundException("Could not find any reviews with ID " + id));
+        Integer productId = review.getProduct().getId();
+
         reviewRepo.deleteById(id);
+
+        productRepo.updateReviewCountAndAverageRating(productId);
     }
+
 }

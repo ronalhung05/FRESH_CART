@@ -7,7 +7,7 @@
   <div th:replace="navigation :: top_nav"></div>
   <div class="main-wrapper">
     <div th:replace="navigation :: menu"></div>
-    
+
     <!-- main content -->
     <main class="main-content-wrapper bg-white">
       <div class="container">
@@ -17,11 +17,12 @@
             <div class="d-md-flex justify-content-between align-items-center">
               <div>
                 <h2>Products</h2>
-                
               </div>
-              <div>
-                <a th:href="@{/products/new}" class="btn btn-primary">Add Product</a>
-              </div>
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                  <div>
+                    <a th:href="@{/products/new}" class="btn btn-primary">Add Product</a>
+                  </div>
+                </th:block>
             </div>
           </div>
         </div>
@@ -32,31 +33,40 @@
             <div class="card h-100 card-lg">
               <!-- Search Form -->
               <div class="p-4">
-                <form th:action="@{/products/page/1}" class="row g-3" id="searchForm">
-                  <input type="hidden" name="sortField" th:value="${sortField}" />
-                  <input type="hidden" name="sortDir" th:value="${sortDir}" />
-                  
-                  <div class="col-md-4">
-                    <select class="form-select" name="categoryId" id="dropdownCategory">
-                      <option value="0">All Categories</option>
-                      <th:block th:each="cat : ${listCategories}">
-                        <option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
-                      </th:block>
-                    </select>
+                <div class="row g-3">
+                  <div class="col-md-9">
+                    <form th:action="@{/products/page/1}" class="row g-3" id="searchForm">
+                      <input type="hidden" name="sortField" th:value="${sortField}" />
+                      <input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+                      <div class="col-md-4">
+                        <select class="form-select" name="categoryId" id="dropdownCategory">
+                          <option value="0">All Categories</option>
+                          <th:block th:each="cat : ${listCategories}">
+                            <option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+                          </th:block>
+                        </select>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="input-group">
+                          <input type="search" name="keyword" th:value="${keyword}" class="form-control" placeholder="Search products..." />
+                          <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                          </button>
+                          <button type="button" class="btn btn-secondary" onclick="clearFilter()">
+                            <i class="bi bi-x-lg"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
-                  
-                  <div class="col-md-6">
-                    <div class="input-group">
-                      <input type="search" name="keyword" th:value="${keyword}" class="form-control" placeholder="Search products..." />
-                      <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-search"></i>
-                      </button>
-                      <button type="button" class="btn btn-secondary" onclick="clearFilter()">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </div>
+                  <div class="col-md-3 text-end">
+                    <a th:href="@{/products/export/csv}" class="btn btn-secondary">
+                      <i class="fas fa-file-csv"></i> Export to CSV
+                    </a>
                   </div>
-                </form>
+                </div>
               </div>
 
               <!-- Table -->
@@ -73,14 +83,16 @@
                         <th class="text-dark">
                           <th th:replace="fragments :: column_link('brand', 'Brand', 'tag')" />
                           </th>
-              
+
                         <th class="text-dark">
                           <th
                             th:replace="fragments :: column_link('category', 'Category', 'tag')" />
                           </th>
-                        <th class="text-dark">In Stock</th>
+                        <th class="text-dark">
+                        <th class="text-dark" th:replace="fragments :: column_link('inStock', 'In Stock', 'tag')" />
+                        </th>
                         <th class="text-dark">Stock Status</th>
-                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">				
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
                           <th class="text-dark">Enabled</th>
                         </th:block>
                         <th class="text-dark">Actions</th>
@@ -116,20 +128,22 @@
                             </span>
                           </div>
                         </td>
-                        <td>
-                          <div th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" />
-                        </td>
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <td>
+                              <div th:replace="fragments :: status(${product.enabled}, 'product', '/products/' + ${product.id})" />
+                            </td>
+                        </th:block>
                         <td>
                           <a class="btn btn-light btn-icon-text link-detail" th:href="@{'/products/detail/' + ${product.id}}"
                              data-bs-toggle="tooltip" data-bs-placement="top" title="View details">
                             <i class="bi bi-eye fs-5"></i>
                           </a>
-                          
-                          <a class="btn btn-light btn-icon-text" th:href="@{'/products/edit/' + ${product.id}}" 
+
+                          <a class="btn btn-light btn-icon-text" th:href="@{'/products/edit/' + ${product.id}}"
                              data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                             <i class="bi bi-pencil fs-5"></i>
                           </a>
-                          
+
                         </td>
                       </tr>
                     </tbody>
@@ -171,7 +185,7 @@
       $(".link-detail").on("click", function(e) {
         e.preventDefault();
         let linkDetailURL = $(this).attr("href");
-        
+
         // Load content vào modal
         $.get(linkDetailURL, function(responseHtml) {
           $("#detailModal .modal-dialog").html(responseHtml);

@@ -38,7 +38,7 @@ DISCOUNT_REQUIRED,Please enter the discount percentage.
 NOT_FILL_ENOUGH,Please fill at least 5 characters
 FILL_TOO_LONG,Please fill below 256 characters
 MIS_MATCH_NUMBER_PORT,Accept value from 0-99999
-LOGO_UPLOAD_SIZE_ERROR,File size exceeds MB. Please choose a smaller file.
+LOGO_UPLOAD_SIZE_ERROR,File size exceeds 100 KB. Please choose a smaller file.
 LOGO_UPLOAD_TYPE_ERROR,Invalid image format. Supported formats are JPEG and PNG.
 NOT_NULL_NOTES,Notes cannot be empty.
 EXCEED_MAX_LENGTH_NOTES, Notes cannot exceed 256 characters.

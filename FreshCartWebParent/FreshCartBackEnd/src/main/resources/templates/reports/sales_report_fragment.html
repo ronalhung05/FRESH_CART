@@ -12,6 +12,8 @@
         <button period="last_6_months" class="btn btn-light m-1" th:classappend="${buttonClass}">Last 6 Months</button>
         <button period="last_year" class="btn btn-light m-1" th:classappend="${buttonClass}">Last Year</button>
         <button class="btn btn-light m-1" th:classappend="${buttonClass}">Custom Date Range</button>
+        <button th:if="${reportType == '_product'}" class="btn btn-success m-1 export-data" th:data-reportType="${reportType}">Export Data</button>
+        <button th:if="${reportType != '_product'}" class="btn btn-success m-1 download-chart" th:data-reportType="${reportType}">Download Chart</button>
     </div>
 
     <form>

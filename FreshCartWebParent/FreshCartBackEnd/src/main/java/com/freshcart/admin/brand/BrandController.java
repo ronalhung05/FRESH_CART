@@ -3,6 +3,8 @@ package com.freshcart.admin.brand;
 import java.io.IOException;
 import java.util.List;
 
+import com.freshcart.admin.brand.export.BrandCsvExporter;
+import com.freshcart.admin.brand.export.BrandExcelExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.common.entity.Brand;
 import com.freshcart.common.entity.Category;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class BrandController {
@@ -91,6 +95,20 @@ public class BrandController {
             ra.addFlashAttribute("message", ex.getMessage());
             return defaultRedirectURL;
         }
+    }
+
+    @GetMapping("/brands/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Brand> listBrands = brandService.listAll();
+        BrandCsvExporter exporter = new BrandCsvExporter();
+        exporter.export(listBrands, response);
+    }
+
+    @GetMapping("/brands/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<Brand> listBrands = brandService.listAll();
+        BrandExcelExporter exporter = new BrandExcelExporter();
+        exporter.export(listBrands, response);
     }
 
     @GetMapping("/brands/{id}/enabled/{status}")

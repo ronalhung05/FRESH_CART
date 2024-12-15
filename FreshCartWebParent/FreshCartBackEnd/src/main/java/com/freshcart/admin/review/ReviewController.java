@@ -77,7 +77,7 @@ public class ReviewController {
     public String deleteReview(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
             service.delete(id);
-            ra.addFlashAttribute("message", messageService.getMessage("REVIEW_UPDATE_SUCCESS") + " (ID: " + id + ")");
+            ra.addFlashAttribute("message", messageService.getMessage("REVIEW_DELETE_SUCCESS") + " (ID: " + id + ")");
         } catch (ReviewNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
         }
