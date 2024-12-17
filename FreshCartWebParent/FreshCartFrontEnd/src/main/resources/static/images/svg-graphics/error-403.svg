@@ -1,0 +1,29 @@
+<svg width="536" height="333" viewBox="0 0 536 333" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_403)">
+    <!-- Background Elements -->
+    <path d="M343.094 322.855C346.884 320.726 351.75 320.647 355.611 322.649C359.472 324.651 362.21 328.671 362.653 333C354.662 333.008 346.789 331.14 343.094 322.855Z" fill="#EBEBEB"/>
+    
+    <!-- Main Lock Icon -->
+    <path d="M250 100 L286 100 C300 100 310 110 310 124 L310 190 C310 204 300 214 286 214 L214 214 C200 214 190 204 190 190 L190 124 C190 110 200 100 214 100 L250 100" stroke="#0AAD0A" stroke-width="8" fill="none"/>
+    <path d="M238 60 C238 40 258 30 274 40 C290 50 290 80 290 100" stroke="#0AAD0A" stroke-width="8" fill="none"/>
+    
+    <!-- Lock Body -->
+    <rect x="210" y="140" width="80" height="50" rx="4" fill="#0AAD0A"/>
+    <circle cx="250" cy="165" r="15" fill="white"/>
+    <rect x="247" y="160" width="6" height="15" rx="2" fill="#0AAD0A"/>
+    
+    <!-- Decorative Elements -->
+    <path d="M164.861 291.93C162.938 297.066 163.761 303.143 166.997 307.574C170.233 312.006 175.764 314.649 181.239 314.372C179.728 304.409 175.89 294.953 164.861 291.93Z" fill="#EBEBEB"/>
+    <path d="M6.73706 92.2455C3.75409 100.198 5.0359 109.615 10.0444 116.476C15.053 123.337 23.63 127.428 32.112 127.009C29.7621 111.578 23.8278 96.9302 6.73706 92.2455Z" fill="#EBEBEB"/>
+    
+    <!-- "403" Text -->
+    <path d="M400 160 L440 160 L440 180 L400 180 Z" fill="#0AAD0A"/>
+    <path d="M450 160 L490 160 L490 180 L450 180 Z" fill="#0AAD0A"/>
+    <path d="M500 160 L540 160 L540 180 L500 180 Z" fill="#0AAD0A"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_403">
+      <rect width="536" height="333" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>

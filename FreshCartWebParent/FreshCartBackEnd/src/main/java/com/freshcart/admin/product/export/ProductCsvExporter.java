@@ -18,8 +18,8 @@ public class ProductCsvExporter extends AbstractExporter {
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
                 CsvPreference.STANDARD_PREFERENCE);
 
-        String[] csvHeader = {"Product ID", "Product Name", "Created Time", "In Stock", "Enabled"};
-        String[] fieldMapping = {"id", "name", "createdTime", "inStock", "enabled"};
+        String[] csvHeader = {"Product ID", "Product Name", "Created Time", "Updated Time", "In Stock", "Cost", "Price", "Enabled"};
+        String[] fieldMapping = {"id", "name", "createdTime", "updatedTime", "inStock", "cost", "price", "enabled"};
 
         csvWriter.writeHeader(csvHeader);
 

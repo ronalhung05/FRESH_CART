@@ -89,10 +89,14 @@ public class UserRepositoryTests {
 
     @Test
     public void testDeleteUser() {
-        Integer userId = 2;
-        repo.deleteById(userId);
-
+//        for (int userId = 2; userId <= 23; userId++) {
+//            repo.deleteById(userId);
+//            System.out.println("Deleted user with ID: " + userId);
+//        }
+        repo.deleteById(29);
+        repo.deleteById(28);
     }
+
 
     @Test
     public void testGetUserByEmail() {

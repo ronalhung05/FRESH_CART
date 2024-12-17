@@ -84,7 +84,7 @@
                             </a>
                             <a class="btn btn-light btn-icon-text link-delete" 
                                th:href="@{'/reviews/delete/' + ${review.id}}"
-                               data-bs-toggle="tooltip" 
+                               data-bs-toggle="tooltip"
                                data-bs-placement="top" 
                                title="Delete">
                               <i class="bi bi-trash"></i>
@@ -133,8 +133,14 @@
     });
 
     function handleDeleteLink() {
-      $(".link-delete").on("click", function (e) {
-        showSuccessMessage($(this), 'review');
+      $(".link-delete").on("click", function(e) {
+        e.preventDefault();
+        let link = $(this);
+        let reviewId = link.attr("href").split("/").pop();
+        $("#yesButton").attr("href", link.attr("href"));
+        $("#confirmText").text("Are you sure you want to delete review ID " + reviewId + "?");
+        let confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        confirmModal.show();
       });
     }
 

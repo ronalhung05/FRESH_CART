@@ -81,7 +81,6 @@ public class ReviewController {
         } catch (ReviewNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
         }
-
         return defaultRedirectURL;
     }
 }
