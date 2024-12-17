@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.freshcart.ControllerHelper;
+import com.freshcart.category.CategoryService;
+import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.Customer;
 import com.freshcart.common.entity.order.Order;
 import com.freshcart.common.entity.order.OrderDetail;
@@ -27,6 +29,8 @@ public class OrderController {
     private ControllerHelper controllerHelper;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/orders")
     public String listFirstPage(Model model, HttpServletRequest request) {
@@ -42,7 +46,7 @@ public class OrderController {
 
         Page<Order> page = orderService.listForCustomerByPage(customer, pageNum, sortField, sortDir, keyword);
         List<Order> listOrders = page.getContent();
-
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("currentPage", pageNum);
@@ -52,7 +56,7 @@ public class OrderController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("moduleURL", "/orders");
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
+        model.addAttribute("listCategories", listCategories);
         long startCount = (pageNum - 1) * OrderService.ORDERS_PER_PAGE + 1;
         model.addAttribute("startCount", startCount);
 

@@ -2,136 +2,135 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" th:remove="tag">
-		<!-- Header -->
-		<div class="d-flex justify-content-between align-items-center mb-4">
-			<h2 class="mb-0">Mail Server Settings</h2>
-		</div>
+<div th:fragment="content" th:remove="tag">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Mail Server Settings</h2>
+    </div>
 
-		<!-- Description Card -->
-		<div class="card mb-4 bg-light border-0">
-			<div class="card-body">
-				<div class="d-flex align-items-center">
-					<div class="me-3">
-						<i class="bi bi-info-circle text-primary fs-4"></i>
-					</div>
-					<p class="mb-0">
-						Configure your SMTP mail server settings here. These settings will be used for sending emails to customers.
-					</p>
-				</div>
-			</div>
-		</div>
+    <!-- Description Card -->
+    <div class="card mb-4 bg-light border-0">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="bi bi-info-circle text-primary fs-4"></i>
+                </div>
+                <p class="mb-0">
+                    Configure your SMTP mail server settings here. These settings will be used for sending emails to
+                    customers.
+                </p>
+            </div>
+        </div>
+    </div>
 
-		<!-- Mail Server Form -->
-		<div class="row">
-			<div class="col-12">
-				<div class="card border-0" style="box-shadow: var(--fc-box-shadow-sm)">
-					<div class="card-body p-lg-8">
-						<form th:action="@{/settings/save_mail_server}" method="post" class="needs-validation" novalidate>
-							<div class="row g-3">
-								<!-- SMTP Server Host -->
-								<div class="col-lg-6">
-									<label class="form-label">SMTP Server Host Name</label>
-									<input type="text" class="form-control" name="MAIL_HOST"
-										th:value="${MAIL_HOST}" required />
-									<div class="invalid-feedback">
-										Please enter SMTP host name.
-									</div>
-								</div>
+    <!-- Mail Server Form -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0" style="box-shadow: var(--fc-box-shadow-sm)">
+                <div class="card-body p-lg-8">
+                    <form th:action="@{/settings/save_mail_server}" method="post" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <!-- SMTP Server Host -->
+                            <div class="col-lg-6">
+                                <label class="form-label">SMTP Server Host Name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MAIL_HOST" id="MAIL_HOST"
+                                           th:value="${MAIL_HOST}" required maxlength="255"/>
+                                    <div class="invalid-feedback">
+                                    </div>
+                                </div>
+                            </div>
 
-								<!-- Port Number -->
-								<div class="col-lg-6">
-									<label class="form-label">Port Number</label>
-									<input type="text" class="form-control" name="MAIL_PORT"
-										th:value="${MAIL_PORT}" required />
-									<div class="invalid-feedback">
-										Please enter port number.
-									</div>
-								</div>
+                            <!-- Port Number -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Port Number</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MAIL_PORT" id="MAIL_PORT"
+                                           th:value="${MAIL_PORT}" required maxlength="5" pattern="\d{1,5}"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
 
-								<!-- Username -->
-								<div class="col-lg-6">
-									<label class="form-label">Username</label>
-									<input type="text" class="form-control" name="MAIL_USERNAME"
-										th:value="${MAIL_USERNAME}" required />
-									<div class="invalid-feedback">
-										Please enter username.
-									</div>
-								</div>
+                            <!-- Username -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Username</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MAIL_USERNAME" id="MAIL_USERNAME"
+                                           th:value="${MAIL_USERNAME}" required maxlength="255"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
 
-								<!-- Password field -->
-								<div class="col-lg-6">
-									<label class="form-label">Password</label>
-									<div class="password-field position-relative">
-										<div class="input-group">
+                            <!-- Password field -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Password</label>
+                                <div class="password-field position-relative">
+                                    <div class="form-group">
+                                        <div class="input-group">
 											<span class="input-group-text">
 												<i class="bi bi-key"></i>
 											</span>
-											<input type="password" 
-												class="form-control" 
-												name="MAIL_PASSWORD"
-												th:value="${MAIL_PASSWORD}" 
-												placeholder="Enter mail password"
-												required />
-										</div>
-										<span><i class="bi bi-eye-slash password-toggler"></i></span>
-									</div>
-									<div class="invalid-feedback">
-										Please enter password.
-									</div>
-								</div>
 
-								<!-- Server Authentication -->
-								<div class="col-lg-6">
-									<label class="form-label">Server Authentication Required</label>
-									<select name="SMTP_AUTH" class="form-select">
-										<option value="true" th:selected="(${SMTP_AUTH} == 'true')">True</option>
-										<option value="false" th:selected="(${SMTP_AUTH} == 'false')">False</option>
-									</select>
-								</div>
+                                            <input type="password"
+                                                   class="form-control"
+                                                   name="MAIL_PASSWORD"
+                                                   th:value="${MAIL_PASSWORD}" maxlength="255"
+                                                   id="MAIL_PASSWORD"
+                                                   placeholder="Enter mail password"
+                                                   required/>
+                                        </div>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <span><i class="bi bi-eye-slash password-toggler"></i></span>
+                                </div>
+                            </div>
 
-								<!-- TLS Required -->
-								<div class="col-lg-6">
-									<label class="form-label">Server Requires TLS</label>
-									<select name="SMTP_SECURED" class="form-select">
-										<option value="true" th:selected="(${SMTP_SECURED} == 'true')">True</option>
-										<option value="false" th:selected="(${SMTP_SECURED} == 'false')">False</option>
-									</select>
-								</div>
+                            <!-- Server Authentication -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Server Authentication Required</label>
+                                <input type="text" name="SMTP_AUTH" class="form-control" value="true" readonly>
+                            </div>
 
-								<!-- From Email -->
-								<div class="col-lg-6">
-									<label class="form-label">From E-mail Address</label>
-									<input type="email" class="form-control" name="MAIL_FROM"
-										th:value="${MAIL_FROM}" required />
-									<div class="invalid-feedback">
-										Please enter valid email address.
-									</div>
-								</div>
+                            <!-- TLS Required -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Server Requires TLS</label>
+                                <input type="text" name="SMTP_SECURED" class="form-control" value="true" readonly>
+                            </div>
 
-								<!-- Sender Name -->
-								<div class="col-lg-6">
-									<label class="form-label">Sender Name</label>
-									<input type="text" class="form-control" name="MAIL_SENDER_NAME"
-										th:value="${MAIL_SENDER_NAME}" required />
-									<div class="invalid-feedback">
-										Please enter sender name.
-									</div>
-								</div>
-							</div>
+                            <!-- From Email -->
+                            <div class="col-lg-6">
+                                <label class="form-label">From E-mail Address</label>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="MAIL_FROM" id="MAIL_FROM"
+                                           th:value="${MAIL_FROM}" required maxlength="255"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
 
-							<!-- Action Buttons -->
-							<div class="d-flex mt-4">
-								<button type="submit" class="btn btn-primary me-2">
-									Save
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                            <!-- Sender Name -->
+                            <div class="col-lg-6">
+                                <label class="form-label">Sender Name</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MAIL_SENDER_NAME"
+                                           id="MAIL_SENDER_NAME"
+                                           th:value="${MAIL_SENDER_NAME}" required maxlength="255"/>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex mt-4">
+                            <button type="submit" class="btn btn-primary me-2">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 

@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.freshcart.ControllerHelper;
 import com.freshcart.Utility;
 import com.freshcart.address.AddressService;
+import com.freshcart.category.CategoryService;
 import com.freshcart.checkout.paypal.PayPalApiException;
 import com.freshcart.checkout.paypal.PayPalService;
 import com.freshcart.common.entity.Address;
 import com.freshcart.common.entity.CartItem;
+import com.freshcart.common.entity.Category;
 import com.freshcart.common.entity.Customer;
 import com.freshcart.common.entity.ShippingRate;
 import com.freshcart.common.entity.order.Order;
@@ -55,6 +57,8 @@ public class CheckoutController {
     private SettingService settingService;
     @Autowired
     private PayPalService paypalService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/checkout")
     public String showCheckoutPage(Model model, HttpServletRequest request) {
@@ -77,6 +81,7 @@ public class CheckoutController {
 
         List<CartItem> cartItems = cartService.listCartItems(customer);
         CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems, shippingRate);
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
 
         String currencyCode = settingService.getCurrencyCode();
         PaymentSettingBag paymentSettings = settingService.getPaymentSettings();
@@ -87,12 +92,12 @@ public class CheckoutController {
         model.addAttribute("customer", customer);
         model.addAttribute("checkoutInfo", checkoutInfo);
         model.addAttribute("cartItems", cartItems);
-
+        model.addAttribute("listCategories", listCategories);
         return "checkout/checkout";
     }
 
     @PostMapping("/place_order")
-    public String placeOrder(HttpServletRequest request)
+    public String placeOrder(Model model, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         String paymentType = request.getParameter("paymentMethod");
         PaymentMethod paymentMethod = PaymentMethod.valueOf(paymentType);
@@ -115,6 +120,7 @@ public class CheckoutController {
         cartService.deleteByCustomer(customer);
         sendOrderConfirmationEmail(request, createdOrder);
 
+        model.addAttribute("order", createdOrder);
         return "checkout/order_completed";
     }
 
@@ -164,7 +170,7 @@ public class CheckoutController {
 
         try {
             if (paypalService.validateOrder(orderId)) {
-                return placeOrder(request);
+                return placeOrder(model, request);
             } else {
                 pageTitle = "Checkout Failure";
                 message = "ERROR: Transaction could not be completed because order information is invalid";

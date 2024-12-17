@@ -54,13 +54,7 @@
 			</div>
 			<div class="mb-3">
 				<label class="form-label">Country:</label>
-				<input type="hidden" name="countryName" id="countryName"
-					   th:value="${order.country}" />
-				<select class="form-control bg-light" id="country" style="pointer-events: none;">
-				<option th:each="aCountry : ${listCountries}"
-						th:value="${aCountry.id}"
-						th:selected="${aCountry.name == order.country}">[[${aCountry.name}]]</option>
-			</select>
+				<input type="text" class="form-control bg-light" name="countryName" th:field="*{country}" readonly />
 			</div>
 			<div class="mb-3">
 				<label class="form-label">State:</label>

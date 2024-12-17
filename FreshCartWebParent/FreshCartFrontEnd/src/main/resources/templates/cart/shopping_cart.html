@@ -5,183 +5,197 @@
 
 <body>
 <div class="container-fluid">
+	<div th:replace="fragments :: loading_spinner"></div>
 	<div th:replace="navigation :: header_menu"></div>
 	<div th:replace="navigation :: search_nav"></div>
+	<div th:replace="navigation :: category_nav"></div>
 
 	<!-- Main Content -->
-	<div class="container">
-		<!-- Heading -->
-		<div class="row mt-8 mb-4">
-			<div class="col">
-				<h2>Shopping Cart</h2>
+	<section class="mb-lg-14 mb-8 mt-8">
+		<div class="container">
+			<!-- Heading -->
+			<div class="row">
+				<div class="col">
+					
+							<h1 class="fw-bold">Shop Cart</h1>
+							<p class="mb-0">Shopping in your area</p>
+
+				</div>
 			</div>
-		</div>
 
-		<div class="row" th:unless="${#lists.isEmpty(cartItems)}">
-			<!-- Cart Items -->
-			<div class="col-12 col-lg-8 mb-4">
-				<div class="card">
-					<div class="card-body p-0">
-						<!-- Cart Item -->
-						<th:block th:each="item, status : ${cartItems}">
-							<div class="row align-items-center p-4 border-bottom" th:id="'row' + ${item.product.id}" th:with="product = ${item.product}">
-								<!-- Product Image -->
-								<div class="col-3 col-md-2">
-									<img th:src="@{${product.mainImagePath}}" class="img-fluid" />
-								</div>
+			<div class="row" th:unless="${#lists.isEmpty(cartItems)}">
+				<!-- Cart Items -->
+				<div class="col-lg-8 col-md-7">
+					<div class="py-3">
 
-								<!-- Product Details -->
-								<div class="col-4 col-md-5">
-									<a th:href="@{'/p/' + ${product.alias}}" class="text-decoration-none">
-										<h6 class="mb-0" th:text="${product.shortName}"></h6>
-									</a>
-									<!-- Remove Link -->
-									<div class="mt-2 small lh-1">
-										<a class="text-decoration-none text-inherit linkRemove"
-										   th:rowNumber="${status.count}"
-										   th:href="@{'/cart/remove/' + ${product.id}}">
-											<span class="me-1 align-text-bottom">
-												<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-													stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-													class="feather feather-trash-2 text-success">
-													<polyline points="3 6 5 6 21 6"></polyline>
-													<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-													<line x1="10" y1="11" x2="10" y2="17"></line>
-													<line x1="14" y1="11" x2="14" y2="17"></line>
-												</svg>
-											</span>
-											<span class="text-muted">Remove</span>
+						<!-- Cart Items List -->
+						<ul class="list-group list-group-flush">
+							<th:block th:each="item, status : ${cartItems}">
+								<div class="row align-items-center p-4 border-bottom" th:id="'row' + ${item.product.id}" th:with="product = ${item.product}">
+									<!-- Product Image -->
+									<div class="col-3 col-md-2">
+										<img th:src="@{${product.mainImagePath}}" class="img-fluid" />
+									</div>
+
+									<!-- Product Details -->
+									<div class="col-4 col-md-5">
+										<a th:href="@{'/p/' + ${product.alias}}" class="text-decoration-none">
+											<h6 class="mb-0" th:text="${product.shortName}"></h6>
 										</a>
-									</div>
-								</div>
-
-								<!-- Quantity -->
-								<div class="col-3 col-md-3 col-lg-2">
-									<div class="input-group input-spinner">
-										<input type="button" value="-" class="button-minus btn btn-sm" th:pid="${product.id}"/>
-										<input type="number" th:id="'quantity' + ${product.id}"
-											   th:pid="${product.id}"
-											   th:value="${item.quantity}" class="quantity-field form-control-sm form-input"
-											   step="1" max="10"/>
-										<input type="button" value="+" class="button-plus btn btn-sm" th:pid="${product.id}"/>
-									</div>
-								</div>
-
-								<!-- Price -->
-								<div class="col-2 text-lg-end text-start text-md-end col-md-2">
-									<span th:if="${item.product.discountPercent <= 0}" class="fw-bold">
-										<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-										<span th:id="'subtotal' + ${item.product.id}" class="subtotal" 
-											  th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}">
-										</span>
-										<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-									</span>
-									<span th:if="${item.product.discountPercent > 0}">
-										<span class="fw-bold text-danger">
-											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-											<span th:id="'subtotal' + ${product.id}" class="subtotal" th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
-											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-										</span>
-										<div class="text-decoration-line-through text-muted small">
-											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-											<span th:text="${#numbers.formatDecimal(item.product.price, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
-											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										<!-- Remove Link -->
+										<div class="mt-2 small lh-1">
+											<a class="text-decoration-none text-inherit linkRemove"
+											   th:rowNumber="${status.count}"
+											   th:href="@{'/cart/remove/' + ${product.id}}">
+												<span class="me-1 align-text-bottom">
+													<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+															stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+															class="feather feather-trash-2 text-success">
+															<polyline points="3 6 5 6 21 6"></polyline>
+															<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+															<line x1="10" y1="11" x2="10" y2="17"></line>
+															<line x1="14" y1="11" x2="14" y2="17"></line>
+														</svg>
+												</span>
+												<span class="text-muted">Remove</span>
+											</a>
 										</div>
-									</span>
+									</div>
+
+									<!-- Quantity -->
+									<div class="col-3 col-md-3 col-lg-2">
+										<div class="input-group input-spinner">
+											<input type="button" value="-" class="button-minus btn btn-sm"/>
+											<input type="number" th:id="'quantity' + ${product.id}"
+												   th:value="${item.quantity}" 
+												   th:data-instock="${product.inStock}"
+												   class="quantity-field form-control-sm form-input"
+												   min="1"/>
+											<input type="button" value="+" class="button-plus btn btn-sm"/>
+										</div>
+									</div>
+
+									<!-- Price -->
+									<div class="col-2 text-lg-end text-start text-md-end col-md-2">
+										<span th:if="${item.product.discountPercent <= 0}" class="fw-bold">
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											<span th:id="'subtotal' + ${item.product.id}" class="subtotal" 
+												  th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}">
+											</span>
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										</span>
+										<span th:if="${item.product.discountPercent > 0}">
+											<span class="fw-bold text-danger">
+												<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+												<span th:id="'subtotal' + ${product.id}" class="subtotal" th:text="${#numbers.formatDecimal(item.subtotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+												<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											</span>
+											<div class="text-decoration-line-through text-muted small">
+												<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+												<span th:text="${#numbers.formatDecimal(item.product.price, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+												<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											</div>
+										</span>
+									</div>
 								</div>
-							</div>
-						</th:block>
+							</th:block>
+						</ul>
+
+						<!-- Action Buttons -->
+						<div class="d-flex justify-content-between mt-4">
+							<a th:href="@{/}" class="btn btn-primary">Continue Shopping</a>
+						</div>
 					</div>
 				</div>
-				<div class="mt-4">
-					<a th:href="@{/}" class="btn btn-primary">Continue Shopping</a>
-				</div>
-			</div>
 
-			<!-- Order Summary -->
-			<div class="col-12 col-lg-4">
-				<div class="card shadow-sm">
-					<div class="card-body p-6">
-						<!-- heading -->
-						<h2 class="h5 mb-4">Summary</h2>
-						
-						<div class="card mb-2">
-							<!-- list group -->
-							<ul class="list-group list-group-flush">
-								<!-- Subtotal -->
-								<li class="list-group-item d-flex justify-content-between align-items-start">
-									<div class="me-auto">
-										<div class="fw-bold">Subtotal</div>
-									</div>
+				<!-- Order Summary -->
+				<div class="col-12 col-lg-4">
+					<div class="card shadow-sm">
+						<div class="card-body p-6">
+							<h2 class="h5 mb-4">Summary</h2>
+
+							<div class="card mb-2">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item d-flex justify-content-between align-items-start">
+										<div class="me-auto">
+											<div class="fw-bold">Subtotal</div>
+										</div>
+										<span class="fw-bold">
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+											<span class="estimatedTotal" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+											<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
+										</span>
+									</li>
+								</ul>
+							</div>
+
+							<!-- Checkout Button -->
+							<div th:if="${shippingSupported}" class="d-grid mb-1 mt-4">
+								<a th:href="@{/checkout}" class="btn btn-primary btn-lg d-flex justify-content-between align-items-center">
+									Go to Checkout 
 									<span class="fw-bold">
 										<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-										<span class="estimatedTotal" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
+										<span id="checkout-amount" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
 										<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
 									</span>
-								</li>
-							</ul>
-						</div>
-
-						<!-- Checkout Button -->
-						<div th:if="${shippingSupported}" class="d-grid mb-1 mt-4">
-							<a th:href="@{/checkout}" class="btn btn-primary btn-lg d-flex justify-content-between align-items-center">
-								Go to Checkout 
-								<span class="fw-bold">
-									<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-									<span id="checkout-amount" th:text="${#numbers.formatDecimal(estimatedTotal, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}"></span>
-									<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag" th:text="${CURRENCY_SYMBOL}"></span>
-								</span>
-							</a>
-						</div>
-
-						<!-- No Shipping Available Message -->
-						<div th:unless="${shippingSupported}">
-							<div>
-								<span class="h5 text-warning">No shipping available for your location</span>
+								</a>
 							</div>
 
-							<div th:if="${usePrimaryAddressAsDefault}">
-								<a th:href="@{/account_details(redirect=cart)}" class="h6">Update your address</a>
+							<!-- No Shipping Available Message -->
+							<div th:unless="${shippingSupported}">
+								<div>
+									<span class="h5 text-warning">No shipping available for your location</span>
+								</div>
+
+								<div th:if="${usePrimaryAddressAsDefault}">
+									<a th:href="@{/account_details(redirect=cart)}" class="h6">Update your address</a>
+								</div>
+
+								<div th:unless="${usePrimaryAddressAsDefault}">
+									<a th:href="@{/address_book(redirect=cart)}" class="h6">Use another shipping address</a>
+								</div>
 							</div>
 
-							<div th:unless="${usePrimaryAddressAsDefault}">
-								<a th:href="@{/address_book(redirect=cart)}" class="h6">Use another shipping address</a>
-							</div>
+							<!-- Terms -->
+							<p class="small text-muted mt-2 mb-0">
+								By placing your order, you agree to be bound by the Freshcart 
+								<a href="#" class="text-success text-decoration-none">Terms of Service</a> and 
+								<a href="#" class="text-success text-decoration-none">Privacy Policy</a>.
+							</p>
 						</div>
-
-						<!-- Terms -->
-						<p class="small text-muted mt-2 mb-0">
-							By placing your order, you agree to be bound by the Freshcart 
-							<a href="#" class="text-success text-decoration-none">Terms of Service</a> and 
-							<a href="#" class="text-success text-decoration-none">Privacy Policy</a>.
-						</p>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- Empty Cart Message -->
-		<div id="sectionEmptyCartMessage" class="text-center py-5"
-			 th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}">
-			<h3>Your shopping cart is empty</h3>
-			<a th:href="@{/}" class="btn btn-primary mt-3">Continue Shopping</a>
+			<!-- Empty Cart Message -->
+			<div id="sectionEmptyCartMessage" class="text-center py-5"
+				 th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}">
+				<h3>Your shopping cart is empty</h3>
+				<a th:href="@{/}" class="btn btn-primary mt-3">Continue Shopping</a>
+			</div>
 		</div>
-	</div>
+	</section>
 
 	<div th:replace="fragments :: modal_dialog"></div>
-	<div th:replace="navigation :: footer_menu"></div>
-
 </div>
 
+<div th:replace="navigation :: footer_menu"></div>
+
 <script type="text/javascript">
-	contextPath = "[[@{/}]]";
-	var csrfHeaderName = "[[${_csrf.headerName}]]";
-	var csrfValue = "[[${_csrf.token}]]";
-	decimalDigits = [[${DECIMAL_DIGITS}]];
-	decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
-	thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+	Object.assign(window, {
+		contextPath: "[[@{/}]]",
+		csrfHeaderName: "[[${_csrf.headerName}]]",
+		csrfValue: "[[${_csrf.token}]]",
+		decimalDigits: [[${DECIMAL_DIGITS}]],
+		decimalPointType: "[[${DECIMAL_POINT_TYPE}]]",
+		thousandsPointType: "[[${THOUSANDS_POINT_TYPE}]]",
+		currencySymbol: "[[${CURRENCY_SYMBOL}]]",
+		currencySymbolPosition: "[[${CURRENCY_SYMBOL_POSITION}]]"
+	});
 </script>
 <script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/shopping_cart.js}"></script>
+<script type="text/javascript" th:src="@{/js/cart.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
+
 </body>
 </html>

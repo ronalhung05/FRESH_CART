@@ -7,6 +7,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import com.freshcart.category.CategoryService;
+import com.freshcart.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -33,6 +35,8 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private SettingService settingService;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -98,9 +102,11 @@ public class CustomerController {
         String email = Utility.getEmailOfAuthenticatedCustomer(request);
         Customer customer = customerService.getCustomerByEmail(email);
         List<Country> listCountries = customerService.listAllCountries();
+        List<Category> listCategories = categoryService.listHierarchicalCategories();
 
         model.addAttribute("customer", customer);
         model.addAttribute("listCountries", listCountries);
+        model.addAttribute("listCategories", listCategories);
 
         return "customer/account_form";
     }

@@ -3,24 +3,28 @@
 
 <body>
 <div th:fragment="content" th:remove="tag">
-    <div
-            th:if="${listCategoryParents != null && !listCategoryParents.empty}">
+    <div th:if="${listCategoryParents != null && !listCategoryParents.empty}" class="container">
         <div class="row">
-            <div class="col">
-                <nav>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-
-                        <th:block th:each="parent : ${listCategoryParents}">
-                            <li class="breadcrumb-item"><a
-                                    th:href="@{'/category/' + ${parent.alias}}">[[${parent.name}]]</a></li>
+            <div class="col-12">
+                <div class="d-flex align-items-center py-3">
+                    <a th:href="@{/}" class="text-primary text-decoration-none">Home</a>
+                    
+                    <th:block th:each="parent, status : ${listCategoryParents}">
+                        <span class="mx-2 text-muted">/</span>
+                        <th:block th:if="${!status.last}">
+                            <a th:href="@{'/category/' + ${parent.alias}}" 
+                               class="text-primary text-decoration-none">[[${parent.name}]]</a>
                         </th:block>
+                        <th:block th:if="${status.last}">
+                            <a th:href="@{'/category/' + ${parent.alias}}"  class="text-primary text-decoration-none">[[${parent.name}]]</a>
+                        </th:block>
+                    </th:block>
 
-                        <li class="breadcrumb-item" th:if="${product != null}"><span>[[${product.shortName}]]</span>
-                        </li>
-
-                    </ol>
-                </nav>
+                    <th:block th:if="${product != null}">
+                        <span class="mx-2 text-muted">/</span>
+                        <span class="text-secondary">[[${product.shortName}]]</span>
+                    </th:block>
+                </div>
             </div>
         </div>
     </div>

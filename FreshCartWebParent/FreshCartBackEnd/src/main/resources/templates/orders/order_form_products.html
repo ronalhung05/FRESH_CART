@@ -30,30 +30,30 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="text" class="form-control text-center cost-input" name="productDetailCost"
+                                <input type="text" class="form-control text-center cost-input bg-light" name="productDetailCost"
                                        th:value="${detail.productCost}" th:rowNumber="${status.count}"
                                        min="0" step="any" readonly style="width: 100px"/>
                             </td>
                             <td>
-                                <input type="number" class="form-control text-center quantity-input" name="quantity"
+                                <input type="number" class="form-control text-center quantity-input bg-light" name="quantity"
                                        th:id="'quantity' + ${status.count}" th:value="${detail.quantity}"
                                        th:attr="max=${product.inStock} + ${detail.quantity}"
                                        th:rowNumber="${status.count}" min="1" step="1" required readonly style="width: 100px"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control text-center price-input" name="productPrice"
+                                <input type="text" class="form-control text-center price-input bg-light" name="productPrice"
                                        th:id="'price' + ${status.count}"
                                        th:rowNumber="${status.count}" th:value="${detail.unitPrice}"
                                        min="0" step="any" required readonly style="width: 100px"/>
 
                             </td>
                             <td>
-                                <input type="text" class="form-control text-center ship-input" name="productShipCost"
+                                <input type="text" class="form-control text-center ship-input bg-light" name="productShipCost"
                                        th:value="${detail.shippingCost}"
                                        min="0" step="any" required readonly style="width: 100px"/>
                             </td>
                             <td>
-                                <input type="text" class="form-control text-center subtotal-output" name="productSubtotal"
+                                <input type="text" class="form-control text-center subtotal-output bg-light" name="productSubtotal"
                                        th:id="'subtotal' + ${status.count}" th:value="${detail.subtotal}" readonly style="width: 100px"/>
                             </td>
                             <!--

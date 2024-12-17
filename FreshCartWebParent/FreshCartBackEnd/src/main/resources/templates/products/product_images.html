@@ -84,9 +84,9 @@
 					</div>
 
 					<input type="hidden" name="imageIDs" th:id="'imageId' + ${status.index}"
-						th:value="${productImage.id}" />
+						th:value="${productImage.id != null ? productImage.id : ''}" />
 					<input type="hidden" name="imageNames" th:id="'imageName' + ${status.index}"
-						th:value="${productImage.name}" />
+						th:value="${productImage.name != null ? productImage.name : ''}" />
 				</div>
 			</th:block>
 

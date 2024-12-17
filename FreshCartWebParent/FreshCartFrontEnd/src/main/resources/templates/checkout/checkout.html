@@ -7,7 +7,8 @@
 <div class="container-fluid">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
-
+    <div th:replace="navigation :: category_nav"></div>
+	<div th:replace="fragments :: loading_spinner"></div>
     <div class="container">
         <!-- Heading -->
         <div class="row mt-8 mb-4">
@@ -49,16 +50,18 @@
                         <!-- COD Payment -->
                         <div th:if="${checkoutInfo.codSupported}" class="mb-3">
                             <form th:action="@{/place_order}" method="post">
-                                <div class="form-check">
-                                    <input type="radio" name="paymentMethod" id="radioCOD" value="COD"
-                                           class="form-check-input"/>
-                                    <label class="form-check-label" for="radioCOD">
-                                        Cash on Delivery (COD)
-                                    </label>
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input type="radio" name="paymentMethod" id="radioCOD" value="COD"
+                                               class="form-check-input"/>
+                                        <label class="form-check-label" for="radioCOD">
+                                            Cash on Delivery (COD)
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary d-none ms-3" type="submit" id="buttonSubmit">
+                                        Place Order with COD
+                                    </button>
                                 </div>
-                                <button class="btn btn-primary d-none mt-3" type="submit" id="buttonSubmit">
-                                    Place Order with COD
-                                </button>
                             </form>
                         </div>
 
@@ -220,7 +223,7 @@
 
         onError: function (err) {
             // error that prevents buyer from doing checkout
-            showErrorModal("Something wrong with your address information, so payment will not work.");
+            showErrorMessage("Something wrong with your address information, so payment will not work.");
         }
     }).render("#paypal-button-container");
 

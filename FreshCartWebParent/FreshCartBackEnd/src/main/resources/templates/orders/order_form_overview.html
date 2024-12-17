@@ -69,10 +69,7 @@
         <!-- Payment Method -->
         <div class="col-md-6">
             <label class="form-label">Payment Method</label>
-            <select th:field="*{paymentMethod}" class="form-select" style="pointer-events: none;" >
-                <option th:each="pm : ${T(com.freshcart.common.entity.order.PaymentMethod).values()}"
-                        th:value="${pm}" th:text="${pm}" />
-            </select>
+            <input type="text" th:field="*{paymentMethod}" class="form-control bg-light" readonly/>
         </div>
 
         <!-- Status -->

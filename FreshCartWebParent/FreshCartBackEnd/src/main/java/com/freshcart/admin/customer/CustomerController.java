@@ -1,7 +1,13 @@
 package com.freshcart.admin.customer;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.freshcart.admin.brand.export.BrandCsvExporter;
+import com.freshcart.admin.brand.export.BrandExcelExporter;
+import com.freshcart.admin.customer.export.CustomerCsvExporter;
+import com.freshcart.admin.customer.export.CustomerExcelExporter;
+import com.freshcart.common.entity.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +21,8 @@ import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.common.entity.Country;
 import com.freshcart.common.entity.Customer;
 import com.freshcart.common.exception.CustomerNotFoundException;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class CustomerController {
@@ -98,6 +106,21 @@ public class CustomerController {
         }
 
         return defaultRedirectURL;
+    }
+
+
+    @GetMapping("/customers/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Customer> listCustomers = service.listAll();
+        CustomerCsvExporter exporter = new CustomerCsvExporter();
+        exporter.export(listCustomers, response);
+    }
+
+    @GetMapping("/customers/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<Customer> listCustomers = service.listAll();
+        CustomerExcelExporter exporter = new CustomerExcelExporter();
+        exporter.export(listCustomers, response);
     }
 
 }

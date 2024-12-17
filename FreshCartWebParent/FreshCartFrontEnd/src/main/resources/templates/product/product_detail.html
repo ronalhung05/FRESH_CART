@@ -14,7 +14,8 @@
     <link rel="stylesheet" th:href="@{/libs/tiny-slider/dist/tiny-slider.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/libs/slick-carousel/slick/slick-theme.css}" type="text/css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/drift-zoom@1.5.1/dist/drift-basic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/drift-zoom@1.5.1/dist/Drift.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
 
@@ -23,6 +24,7 @@
 <div class="container-fluid">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
     <div th:replace="breadcrumb :: content"></div>
     
 
@@ -31,15 +33,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="slider slider-for">
-                        <div>
-                            <img th:src="@{${product.mainImagePath}}" alt="" class="img-fluid zoom-image">
-                        </div>
-                        <th:block th:each="extraImage : ${product.images}">
+                    <div class="position-relative">
+                        <div class="slider slider-for">
                             <div>
-                                <img th:src="@{${extraImage.imagePath}}" alt="" class="img-fluid zoom-image">
+                                <img class="zoom-image" 
+                                     th:src="@{${product.mainImagePath}}"
+                                     th:data-zoom="@{${product.mainImagePath}}" 
+                                     alt="Product image">
                             </div>
-                        </th:block>
+                            <th:block th:each="extraImage : ${product.images}">
+                                <div>
+                                    <img class="zoom-image"
+                                         th:src="@{${extraImage.imagePath}}" 
+                                         th:data-zoom="@{${extraImage.imagePath}}"
+                                         alt="">
+                                </div>
+                            </th:block>
+                        </div>
+                        <div id="zoom-pane" class="position-absolute" style="top: 0; right: -100%; width: 100%; height: 100%;"></div>
                     </div>
                     <div class="slider slider-nav mt-4">
                         <div>
@@ -78,20 +89,28 @@
                                 <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
                             </span>
                             <span th:if="${product.discountPercent > 0}">
-                                <span class="fw-bold text-danger">
+                                <span class="fw-bold text-dark">
                                     <div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
                                 </span>
                                 <span class="text-decoration-line-through text-muted">
                                     <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
                                 </span>
-                                <span class="text-danger">
-                                    ([[${#numbers.formatDecimal(product.discountPercent, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]% Off)
+                                <span class="fs-6 ms-2 text-danger">
+                                    [[${#numbers.formatInteger(product.discountPercent, 0, 'COMMA')}]]% Off
                                 </span>
                             </span>
                         </div>
                         <hr class="my-6">
                         <div th:if="${product.inStock}">
-                            <div th:replace="cart/quantity_control :: quantity_control(1, ${product.id})"></div>
+                            <div class="input-group input-spinner">
+                                <input type="button" value="-" class="button-minus btn btn-sm"/>
+                                <input type="number" th:id="'quantity' + ${product.id}"
+                                       th:data-instock="${product.inStock}"
+                                       value="1" 
+                                       class="quantity-field form-control-sm form-input"
+                                       min="1"/>
+                                <input type="button" value="+" class="button-plus btn btn-sm"/>
+                            </div>
                         </div>
                         <div class="mt-3 row justify-content-start g-2 align-items-center">
                             <div class="col-xxl-4 col-lg-4 col-md-5 col-5 d-grid">
@@ -104,7 +123,7 @@
                                 </button>
                             </div>
                             <div class="col-auto" th:if="${product.inStock<= 20}">
-                                <span class="badge bg-danger" th:text="'Only ' + ${product.inStock} + ' left'"></span>
+                                <span class="text-danger" th:text="'Only ' + ${product.inStock} + ' left'"></span>
                             </div>
                         </div>
 
@@ -121,7 +140,7 @@
                             </div>
                         </div>
                         <div class="mt-3">
-                            <p class="mb-0" th:text="${product.shortDescription}"></p>
+                            <p class="mb-0" th:utext="${product.shortDescription}"></p>
                         </div>
                     </div>
                 </div>
@@ -205,15 +224,24 @@
     <div th:replace="navigation :: footer_menu"></div>
 </div>
 <script type="text/javascript">
-    contextPath = "[[@{/}]]";
-    productId = "[[${product.id}]]";
-    var csrfHeaderName = "[[${_csrf.headerName}]]";
-    var csrfValue = "[[${_csrf.token}]]";
+    Object.assign(window, {
+        contextPath: "[[@{/}]]",
+        productId: "[[${product.id}]]",
+        csrfHeaderName: "[[${_csrf.headerName}]]",
+        csrfValue: "[[${_csrf.token}]]",
+        decimalDigits: "[[${DECIMAL_DIGITS}]]",
+        decimalPointType: "[[${DECIMAL_POINT_TYPE}]]",
+        thousandsPointType: "[[${THOUSANDS_POINT_TYPE}]]",
+        currencySymbol: "[[${CURRENCY_SYMBOL}]]",
+        currencySymbolPosition: "[[${CURRENCY_SYMBOL_POSITION}]]"
+    });
 
-    decimalSeparator = "[[${DECIMAL_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
-    thousandSeparator = "[[${THOUSANDS_POINT_TYPE == 'COMMA' ? ',' : '.'}]]";
+    $(document).ready(function() {
+        $("#buttonAdd2Cart").on("click", function(e) {
+            e.preventDefault();
+            addToCart(window.productId);
+        });
 
-    $(document).ready(function () {
         $('.slider-for').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
@@ -301,26 +329,88 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        mediumZoom('.zoom-image', {
-            margin: 24,
-            background: 'rgba(0, 0, 0, 0.9)',
-            scrollOffset: window.innerHeight / 2,  // Thêm scrollOffset bằng nửa chiều cao viewport
-            container: null,  // Bỏ container constraint để cho phép zoom full màn hình
+        // Khởi tạo Drift cho tất cả ảnh có class zoom-image
+        const driftImages = document.querySelectorAll('.zoom-image');
+        driftImages.forEach(function(image) {
+            new Drift(image, {
+                paneContainer: document.querySelector('#zoom-pane'),
+                inlinePane: false,
+                containInline: true,
+                zoomFactor: 3,
+                hoverBoundingBox: true,
+                handleTouch: true,
+                touchDelay: 500,
+                sourceAttribute: 'data-zoom',
+                inlineOffsetX: 0,
+                inlineOffsetY: 0
+            });
         });
+
+        // Slick slider code...
     });
 
 
 </script>
 
 <script type="text/javascript" th:src="@{/js/common_rating.js}"></script>
-<script type="text/javascript" th:src="@{/js/add_to_cart.js}"></script>
+<script type="text/javascript" th:src="@{/js/cart.js}"></script>
 <script type="text/javascript" th:src="@{/libs/slick-carousel/slick/slick.min.js}"></script>
 <script type="text/javascript" th:src="@{/libs/tiny-slider/dist/min/tiny-slider.js}"></script>
 <script type="text/javascript" th:src="@{/js/tns-slider.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.number.min.js}"></script>
-<!--<script type="text/javascript" th:src="@{/js/common_modal.js}"></script>-->
 <script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
-<script type="text/javascript" th:src="@{/js/quantity_control.js}"></script>
 <script type="text/javascript" th:src="@{/js/review_vote.js}"></script>
+<style>
+.drift-zoom-pane {
+    background: #fff;
+    position: absolute;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1500;
+    border: 1px solid #ddd;
+}
+
+.zoom-image {
+    max-width: 100%;
+    height: auto;
+    cursor: crosshair;
+}
+
+#zoom-pane {
+    z-index: 999;
+    pointer-events: none;
+}
+
+.position-relative {
+    position: relative;
+    z-index: 1400;
+}
+
+.drift-bounding-box {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.slick-slider {
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .drift-zoom-pane {
+        max-width: 100%;
+        transform: translateX(0);
+        top: 0;
+        left: 0;
+    }
+}
+
+.input-group.input-spinner {
+    position: relative;
+    z-index: 1;
+}
+</style>
 </body>
 </html>

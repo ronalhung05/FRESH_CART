@@ -38,6 +38,23 @@ $(document).ready(function() {
 	}).on("blur", function() {
 		validateProductName($(this));
 	});
+
+	// Add validation on form submit
+	$("form").on("submit", function(e) {
+		if (!validateForm()) {
+			e.preventDefault();
+			return false;
+		}
+	});
+
+	// Add realtime validation for all required fields
+	$(".validate-field").on("input blur", function() {
+		if ($(this).attr("id") === "name") {
+			validateProductName($(this));
+		} else {
+			validatePositiveNumber($(this), $(this).attr("id"));
+		}
+	});
 });
 
 function getCategoriesForNewForm() {
@@ -103,6 +120,8 @@ function validatePrice() {
 		priceInput.addClass("is-invalid");
 		if (!priceInput.next(".invalid-feedback").length) {
 			priceInput.after(`<div class="invalid-feedback">${messages.PRICE_LESS_THAN_COST}</div>`);
+		} else {
+			priceInput.next(".invalid-feedback").text(messages.PRICE_LESS_THAN_COST);
 		}
 		return false;
 	} else {
@@ -122,7 +141,12 @@ function validateProductName(input) {
 		errorElement.text(messages.PRODUCT_NAME_REQUIRED);
 		errorElement.hide().fadeIn();
 		return false;
-	} else if (value.length < 3 || value.length > 256) {
+	} else if (value.length < 3) {
+		input.addClass("is-invalid");
+		errorElement.text(messages.PRODUCT_NAME_LENGTH_ERROR);
+		errorElement.hide().fadeIn();
+		return false;
+	} else if (value.length > 256) {
 		input.addClass("is-invalid");
 		errorElement.text(messages.PRODUCT_NAME_LENGTH_ERROR);
 		errorElement.hide().fadeIn();
@@ -134,36 +158,53 @@ function validateProductName(input) {
 	}
 }
 
-function checkUnique(form) {
+function validateForm() {
+	let isValid = true;
+	
 	// Validate product name
-	const nameValid = validateProductName($("#name"));
-	if (!nameValid) {
-		document.getElementById('overview-tab').click();
-		return false;
+	const nameInput = $("#name");
+	if (!validateProductName(nameInput)) {
+		isValid = false;
 	}
-
-	// Validate all numbers are positive
-	const costValid = validatePositiveNumber($("#cost"), "cost");
-	const priceValid = validatePositiveNumber($("#price"), "price");
-	const discountValid = validatePositiveNumber($("#discountPercent"), "discount");
+	
+	// Validate cost
+	const costInput = $("#cost");
+	if (!validatePositiveNumber(costInput, "cost")) {
+		isValid = false;
+	}
+	
+	// Validate price
+	const priceInput = $("#price");
+	if (!validatePositiveNumber(priceInput, "price")) {
+		isValid = false;
+	}
+	
+	// Validate discount
+	const discountInput = $("#discountPercent");
+	if (!validatePositiveNumber(discountInput, "discount")) {
+		isValid = false;
+	}
 	
 	// Validate price is greater than cost
-	const priceValidation = validatePrice();
+	if (!validatePrice()) {
+		isValid = false;
+	}
 	
-	// Validate shipping dimensions and weight
-	const shippingValidation = validateShipping();
-	
-	if (!costValid || !priceValid || !discountValid || !priceValidation || !shippingValidation) {
+	return isValid;
+}
+
+function checkUnique(form) {
+	if (!validateForm()) {
 		return false;
 	}
 	
 	productId = $("#id").val();
 	productName = $("#name").val();
-
+	
 	csrfValue = $("input[name='_csrf']").val();
-
-	params = { id: productId, name: productName, _csrf: csrfValue };
-
+	
+	params = {id: productId, name: productName, _csrf: csrfValue};
+	
 	$.post(checkUniqueUrl, params, function(response) {
 		if (response == "OK") {
 			form.submit();
@@ -175,6 +216,6 @@ function checkUnique(form) {
 	}).fail(function() {
 		showErrorMessage(messages.CONNECTION_ERROR);
 	});
-
+	
 	return false;
 }	

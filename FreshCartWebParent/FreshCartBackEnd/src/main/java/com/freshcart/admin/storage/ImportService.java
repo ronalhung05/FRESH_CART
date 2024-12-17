@@ -53,11 +53,6 @@ public class ImportService {
             Integer quantity = Integer.parseInt(detailAmounts[count]);
             Float cost = Float.parseFloat(detailCosts[count]);
             sumCost += (quantity * cost);
-            System.out.println("===========" + count);
-            System.out.println(productId);
-            System.out.println(quantity);
-            System.out.println(cost);
-            System.out.println(quantity * cost);
 
             ip.addDetail(product, quantity, cost);
         }

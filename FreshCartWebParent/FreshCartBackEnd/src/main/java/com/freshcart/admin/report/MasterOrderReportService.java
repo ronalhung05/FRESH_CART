@@ -9,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.freshcart.admin.order.OrderRepository;
+import com.freshcart.admin.storage.ImportRepository;
 import com.freshcart.common.entity.order.Order;
 
 @Service
 public class MasterOrderReportService extends AbstractReportService {
     @Autowired
     private OrderRepository repo;
+    @Autowired
+    private ImportRepository importRepo;
 
     protected List<ReportItem> getReportDataByDateRangeInternal(Date startTime, Date endTime, ReportType reportType) {
         List<Order> listOrders = repo.findByOrderTimeBetween(startTime, endTime);
@@ -99,5 +102,54 @@ public class MasterOrderReportService extends AbstractReportService {
         });
     }
 
+    public float getCurrentMonthRevenue() {
+        // Lấy ngày đầu và cuối của tháng hiện tại
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // Ngày đầu tháng
+        Date startTime = calendar.getTime();
+        
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, -1); // Ngày cuối tháng
+        Date endTime = calendar.getTime();
+        
+        // Lấy danh sách đơn hàng trong tháng
+        List<Order> orders = repo.findByOrderTimeBetween(startTime, endTime);
+        
+        // Tính tổng doanh thu
+        float totalRevenue = 0;
+        for (Order order : orders) {
+            totalRevenue += order.getTotal();
+        }
+        
+        return totalRevenue;
+    }
+
+    public int getCurrentMonthOrders() {
+        // Lấy ngày đầu và cuối của tháng hiện tại
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // Ngày đầu tháng
+        Date startTime = calendar.getTime();
+        
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, -1); // Ngày cuối tháng
+        Date endTime = calendar.getTime();
+        
+        // Đếm số lượng đơn hàng trong tháng
+        List<Order> orders = repo.findByOrderTimeBetween(startTime, endTime);
+        return orders.size();
+    }
+
+    public float getTotalImportCostForCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date startTime = calendar.getTime();
+
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date endTime = calendar.getTime();
+
+        Float totalImportCost = importRepo.getTotalImportCostForCurrentMonth(startTime, endTime);
+        return totalImportCost != null ? totalImportCost : 0;
+    }
 
 }

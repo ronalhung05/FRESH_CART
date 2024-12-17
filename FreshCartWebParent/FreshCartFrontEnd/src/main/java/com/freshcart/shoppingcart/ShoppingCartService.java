@@ -66,4 +66,8 @@ public class ShoppingCartService {
         List<CartItem> cartItems = cartRepo.findByCustomer(customer);
         return cartItems.size();
     }
+
+    public CartItem findCartItem(Integer productId, Customer customer) {
+        return cartRepo.findByCustomerAndProduct(customer.getId(), productId);
+    }
 }

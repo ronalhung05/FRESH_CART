@@ -5,11 +5,11 @@
 
 	<div th:fragment="content(statusVar, statusName, iconName)" class="col-3 text-center">
 		<th:block th:if="${statusVar}">
-			<i th:class="'fas ' + ${iconName} + ' fa-2x icon-green'"></i>
+			<i style="color: #0aad0a" th:class="'fas ' + ${iconName} + ' fa-2x'"></i>
 		</th:block>
 		<th:block th:unless="${statusVar}">
-			<a
-				th:class="'fas ' + ${iconName} + ' fa-2x icon-dark linkUpdateStatus'"
+			<a style="color: gray"
+				th:class="'fas ' + ${iconName} + ' fa-2x linkUpdateStatus'"
 				th:id="'link' + ${statusName} + ${order.id}"
 				th:data-current-status="${order.status}"
 				th:orderId="${order.id}" th:status="${statusName}"

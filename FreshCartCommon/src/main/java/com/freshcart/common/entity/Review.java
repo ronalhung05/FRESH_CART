@@ -1,15 +1,12 @@
 package com.freshcart.common.entity;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.freshcart.common.entity.product.Product;
+import javax.persistence.CascadeType;
 
 @Entity
 @Table(name = "reviews")
@@ -24,6 +21,9 @@ public class Review extends IdBasedEntity {
     private int rating;
 
     private int votes;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewVote> reviewVotes;
 
     @Column(nullable = false, updatable = false)
     private Date reviewTime;
@@ -95,6 +95,14 @@ public class Review extends IdBasedEntity {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<ReviewVote> getReviewVotes() {
+        return reviewVotes;
+    }
+
+    public void setReviewVotes(List<ReviewVote> reviewVotes) {
+        this.reviewVotes = reviewVotes;
     }
 
     @Override

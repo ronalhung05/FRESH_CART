@@ -3,6 +3,8 @@ package com.freshcart.admin.brand;
 import java.io.IOException;
 import java.util.List;
 
+import com.freshcart.admin.brand.export.BrandCsvExporter;
+import com.freshcart.admin.brand.export.BrandExcelExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import com.freshcart.admin.paging.PagingAndSortingHelper;
 import com.freshcart.admin.paging.PagingAndSortingParam;
 import com.freshcart.common.entity.Brand;
 import com.freshcart.common.entity.Category;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class BrandController {
@@ -93,21 +97,28 @@ public class BrandController {
         }
     }
 
-    @GetMapping("/brands/delete/{id}")
-    public String deleteBrand(@PathVariable(name = "id") Integer id,
-                              Model model,
+    @GetMapping("/brands/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Brand> listBrands = brandService.listAll();
+        BrandCsvExporter exporter = new BrandCsvExporter();
+        exporter.export(listBrands, response);
+    }
+
+    @GetMapping("/brands/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<Brand> listBrands = brandService.listAll();
+        BrandExcelExporter exporter = new BrandExcelExporter();
+        exporter.export(listBrands, response);
+    }
+
+    @GetMapping("/brands/{id}/enabled/{status}")
+    public String updateBrandEnabledStatus(@PathVariable("id") Integer id,
+                              @PathVariable("status") boolean enabled,
                               RedirectAttributes redirectAttributes) {
-        try {
-            brandService.delete(id);
-            String brandDir = "brand-logos/" + id;
-            AmazonS3Util.removeFolder(brandDir);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "The brand ID " + id + " has been deleted successfully");
-        } catch (BrandNotFoundException ex) {
-            redirectAttributes.addFlashAttribute("message", ex.getMessage());
-        }
-
+        brandService.updateBrandEnabledStatus(id, enabled);
+        String status = enabled ? "enabled" : "disabled";
+        String message = "The category ID " + id + " has been " + status;
+        redirectAttributes.addFlashAttribute("message", message);
         return defaultRedirectURL;
     }
 }
