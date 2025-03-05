@@ -31,7 +31,7 @@ public class UserRepositoryTests {
     @Test
     public void testCreateNewUserWithOneRole() {
         Role roleAdmin = entityManager.find(Role.class, 1);
-        User userNamHM = new User("nam@codejava.net", "nam2020", "Nam", "Ha Minh");
+        User userNamHM = new User("hung@gmail.com", "hung311023", "Hung", "Tran Nguyen Phi" );
         userNamHM.addRole(roleAdmin);
 
         User savedUser = repo.save(userNamHM);
@@ -89,10 +89,14 @@ public class UserRepositoryTests {
 
     @Test
     public void testDeleteUser() {
-        Integer userId = 2;
-        repo.deleteById(userId);
-
+//        for (int userId = 2; userId <= 23; userId++) {
+//            repo.deleteById(userId);
+//            System.out.println("Deleted user with ID: " + userId);
+//        }
+        repo.deleteById(29);
+        repo.deleteById(28);
     }
+
 
     @Test
     public void testGetUserByEmail() {
@@ -119,7 +123,7 @@ public class UserRepositoryTests {
 
     @Test
     public void testEnableUser() {
-        Integer id = 3;
+        Integer id = 2;
         repo.updateEnabledStatus(id, true);
 
     }

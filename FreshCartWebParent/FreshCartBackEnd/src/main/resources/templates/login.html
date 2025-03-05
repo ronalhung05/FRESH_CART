@@ -2,56 +2,109 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	
+	<title>Login - FreshCart Admin</title>
+	<link rel="stylesheet" th:href="@{/css/theme.min.css}" type="text/css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css"/>
+    <link th:href="@{/css/custom-notify.css}" rel="stylesheet" type="text/css" />
 
-<title>Login - Shopme Admin</title>
-
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	
 </head>
 
 <body>
-	<div class="container-fluid text-center">
+    <!-- Navigation -->
+    <div class="border-bottom shadow-sm">
+        <nav class="navbar navbar-light py-2">
+            <div class="container justify-content-center justify-content-lg-between">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img th:src="@{/images/FreshcartBig.png}" alt="FreshCart" class="d-inline-block align-text-top" style="width: 150px" />
+                </a>
+            </div>
+        </nav>
+    </div>
 
-		<div>
-			<img th:src="@{/images/ShopmeAdminBig.png}" class="img-fluid" />
-		</div>
+    <main>
+        <section class="my-lg-14 my-8">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <!-- Left column for image -->
+                    <div class="col-12 col-md-6 col-lg-4 order-lg-1 order-2">
+                        <img src="images/svg-graphics/signin-g.svg" alt="" class="img-fluid"/>
+                    </div>
 
-		<form th:action="@{/login}" method="post"
-			style="max-width: 350px; margin: 0 auto">
-			<div th:if="${param.error}">
-				<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
-			</div>
-			<div th:if="${param.logout}">
-				<p class="text-warning">You have been logged out.</p>
-			</div>
+                    <!-- Right column for login form -->
+                    <div class="col-12 col-md-6 offset-lg-1 col-lg-4 order-lg-2 order-1">
+                        <div class="mb-4">
+                            <h1 class="mb-1 h2 fw-bold">Sign in to Admin Panel</h1>
+                            <p>Welcome back! Please enter your credentials.</p>
+                        </div>
 
-			<div class="border border-secondary rounded p-3">
-				<p>Access to Shopme Control Panel</p>
-				<p>
-					<input type="email" name="email" class="form-control"
-						placeholder="E-mail" required />
-				</p>
-				<p>
-					<input type="password" name="password" class="form-control"
-						placeholder="Password" required />
-				</p>
-				<p>
-					<input type="checkbox" name="remember-me" />&nbsp;Remember Me
-				</p>
-				<p>
-					<input type="submit" value="Login" class="btn btn-primary" />
-				</p>
-			</div>
-		</form>
+                        <!-- Login Form -->
+                        <form th:action="@{/login}" method="post">
+                            <div class="row g-3">
+                                <!-- Email input -->
+                                <div class="col-12">
+                                    <input type="email" class="form-control" name="email" 
+                                           placeholder="Email" required/>
+                                </div>
 
-		<div>
-			<p>Shopme Control Panel - Copyright &copy; Shopme</p>
-		</div>
+                                <!-- Password input -->
+                                <div class="col-12">
+                                    <div class="password-field position-relative">
+                                        <input type="password" class="form-control" id="password" 
+                                               name="password" placeholder="Password" required/>
+                                        <span><i id="passwordToggler" class="bi bi-eye-slash password-toggler"></i></span>
+                                    </div>
+                                </div>
 
-	</div>
+                                <!-- Remember me -->
+                                <div class="d-flex justify-content-between">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="remember-me"/>
+                                        <label class="form-check-label">Remember me</label>
+                                    </div>
+                                </div>
+
+                                <!-- Submit button -->
+                                <div class="col-12 d-grid">
+                                    <button type="submit" class="btn btn-primary">Sign In</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="fragments :: footer"></div>
+	
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/password.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common_toast.js}"></script>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for error message
+            var error = /*[[${param.error}]]*/ false;
+            var errorMessage = /*[[${session.SPRING_SECURITY_LAST_EXCEPTION != null ? session.SPRING_SECURITY_LAST_EXCEPTION.message : ''}]]*/ '';
+            
+            if (error && errorMessage) {
+                showErrorMessage(errorMessage);
+            }
+
+            // Check for logout message
+            var logout = /*[[${param.logout}]]*/ false;
+            if (logout) {
+                showWarningMessage('You have been logged out.');
+            }
+        });
+    </script>
 </body>
-
 </html>

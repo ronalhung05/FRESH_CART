@@ -1,0 +1,36 @@
+<svg width="536" height="333" viewBox="0 0 536 333" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_500)">
+    <!-- Background Elements -->
+    <path d="M343.094 322.855C346.884 320.726 351.75 320.647 355.611 322.649C359.472 324.651 362.21 328.671 362.653 333C354.662 333.008 346.789 331.14 343.094 322.855Z" fill="#EBEBEB"/>
+    
+    <!-- Main Server Icon -->
+    <rect x="200" y="80" width="160" height="200" rx="8" fill="#0AAD0A"/>
+    
+    <!-- Server Details -->
+    <rect x="220" y="100" width="120" height="20" rx="4" fill="white"/>
+    <rect x="220" y="130" width="120" height="20" rx="4" fill="white"/>
+    <rect x="220" y="160" width="120" height="20" rx="4" fill="white"/>
+    
+    <!-- Error Symbols -->
+    <path d="M180 140 L190 160 L170 160 Z" fill="#FF4444"/>
+    <path d="M380 180 L390 200 L370 200 Z" fill="#FF4444"/>
+    
+    <!-- Gear Icons -->
+    <path d="M150 220 A30 30 0 1 1 150 280 A30 30 0 1 1 150 220" stroke="#0AAD0A" stroke-width="8" fill="none"/>
+    <path d="M400 100 A30 30 0 1 1 400 160 A30 30 0 1 1 400 100" stroke="#0AAD0A" stroke-width="8" fill="none"/>
+    
+    <!-- "500" Text -->
+    <path d="M240 230 L260 230 L260 250 L240 250 Z" fill="white"/>
+    <path d="M270 230 L290 230 L290 250 L270 250 Z" fill="white"/>
+    <path d="M300 230 L320 230 L320 250 L300 250 Z" fill="white"/>
+    
+    <!-- Decorative Elements -->
+    <path d="M164.861 291.93C162.938 297.066 163.761 303.143 166.997 307.574C170.233 312.006 175.764 314.649 181.239 314.372C179.728 304.409 175.89 294.953 164.861 291.93Z" fill="#EBEBEB"/>
+    <path d="M6.73706 92.2455C3.75409 100.198 5.0359 109.615 10.0444 116.476C15.053 123.337 23.63 127.428 32.112 127.009C29.7621 111.578 23.8278 96.9302 6.73706 92.2455Z" fill="#EBEBEB"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_500">
+      <rect width="536" height="333" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>

@@ -95,7 +95,7 @@ function setSalesAmount(period, reportType, labelTotalItems) {
 	$("#textTotalItems" + reportType).text(totalItems);
 }
 
-function formatChartData(data, columnIndex1, columnIndex2) {
+function formatChartData(data, columnStart, columnEnd) {
 	var formatter = new google.visualization.NumberFormat({
 		prefix: prefixCurrencySymbol,
 		suffix: suffixCurrencySymbol,
@@ -104,6 +104,77 @@ function formatChartData(data, columnIndex1, columnIndex2) {
 		fractionDigits: decimalDigits
 	});
 
-	formatter.format(data, columnIndex1);
-	formatter.format(data, columnIndex2);
+	for (var i = columnStart; i <= columnEnd; i++) {
+		formatter.format(data, i);
+	}
+}
+
+$(document).on("click", ".download-chart", function() {
+	var reportType = $(this).data("reporttype"); // Xác định loại báo cáo
+	var chartId = "chart_sales_by" + reportType; // Lấy ID của biểu đồ trong tab hiện tại
+
+	var chartElement = document.getElementById(chartId); // Lấy phần tử biểu đồ
+
+	if (chartElement) {
+		html2canvas(chartElement).then(canvas => {
+			var link = document.createElement("a");
+			link.download = "sales_report_" + reportType + ".png"; // Tên file tải về
+			link.href = canvas.toDataURL("image/png");
+			link.click();
+		});
+	} else {
+		showWarningMessage("Not Found any Chart!");
+	}
+});
+
+$(document).on("click", ".export-data", function () {
+	var reportType = $(this).data("reporttype"); // Loại báo cáo
+	if (reportType === "_product") {
+		exportTableDataAsCSV();
+	}
+});
+
+function exportTableDataAsCSV() {
+	if (!data) {
+		showWarningMessage("No Information!");
+		return;
+	}
+
+	var csvContent = "data:text/csv;charset=utf-8,";
+
+	// Lấy tiêu đề cột từ DataTable
+	var columnCount = data.getNumberOfColumns();
+	var columns = [];
+	for (var col = 0; col < columnCount; col++) {
+		columns.push(data.getColumnLabel(col));
+	}
+	csvContent += columns.join(",") + "\n";
+
+	// Lấy dữ liệu từ DataTable
+	var rowCount = data.getNumberOfRows();
+	for (var row = 0; row < rowCount; row++) {
+		var rowData = [];
+		for (var col = 0; col < columnCount; col++) {
+			var value = data.getValue(row, col);
+
+			// Áp dụng định dạng tiền tệ cho các cột cụ thể
+			if (columns[col].toLowerCase().includes("revenue") ||
+				columns[col].toLowerCase().includes("profit") ||
+				columns[col].toLowerCase().includes("cost")) {
+				value = formatCurrency(value); // Định dạng tiền tệ
+			}
+
+			rowData.push(value);
+		}
+		csvContent += rowData.join(",") + "\n";
+	}
+
+	// Tạo file và tải xuống
+	var encodedUri = encodeURI(csvContent);
+	var link = document.createElement("a");
+	link.setAttribute("href", encodedUri);
+	link.setAttribute("download", "sales_report_products.csv");
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 }

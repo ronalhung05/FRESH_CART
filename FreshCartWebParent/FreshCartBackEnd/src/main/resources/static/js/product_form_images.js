@@ -134,6 +134,8 @@ function addNextExtraImageSection(index) {
 
 function removeExtraImage(index) {
 	$("#divExtraImage" + index).remove();
+	extraImagesCount--;
+	updateExtraImageIndices();
 }
 
 function showMainImageThumbnail(fileInput) {
@@ -169,6 +171,7 @@ function clearMainImage() {
 function clearExtraImage(index) {
 	$(`#divExtraImage${index} input[type="file"]`).val('');
 	$(`#extraThumbnail${index}`).attr("src", defaultImageThumbnailSrc);
+	$(`#imageId${index}`).val('');
 	$(`#imageName${index}`).val('');
 	$(`#btnClearExtra${index}`).hide();
 }
@@ -185,5 +188,29 @@ if (productForm) {
             showErrorMessage(messages.IMAGE_MAIN_REQUIRED);
             document.getElementById('images-tab').click();
         }
+    });
+}
+
+// Thêm hàm để cập nhật lại các indices khi xóa image
+function updateExtraImageIndices() {
+    // Cập nhật lại số thứ tự và IDs cho tất cả extra images
+    $("div[id^='divExtraImage']").each(function(index) {
+        // Cập nhật heading
+        $(this).find('h6').text('Extra Image #' + (index + 1));
+        
+        // Cập nhật IDs và names
+        $(this).find('img').attr('id', 'extraThumbnail' + index)
+            .attr('alt', 'Extra image #' + (index + 1) + ' preview');
+        
+        $(this).find('input[type="file"]')
+            .attr('onchange', 'showExtraImageThumbnail(this, ' + index + ')');
+            
+        $(this).find('button[id^="btnClearExtra"]')
+            .attr('id', 'btnClearExtra' + index)
+            .attr('onclick', 'clearExtraImage(' + index + ')');
+            
+        // Cập nhật hidden fields
+        $(this).find('input[name="imageIDs"]').attr('id', 'imageId' + index);
+        $(this).find('input[name="imageNames"]').attr('id', 'imageName' + index);
     });
 }

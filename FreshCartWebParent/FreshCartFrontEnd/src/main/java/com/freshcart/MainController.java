@@ -33,7 +33,7 @@ public class MainController {
         // Thêm danh sách sản phẩm cho trang chủ
         List<Product> listNewProducts = productService.listNewProducts();
         List<Product> listSpecialOffers = productService.listSpecialOffers();
-         List<Product> listBestSellers = productService.listBestSellingProducts(10); // Lấy top 10 sản phẩm bán chạy
+        List<Product> listBestSellers = productService.listBestSellingProducts(10); // Lấy top 10 sản phẩm bán chạy
 
 
         model.addAttribute("listCategories", listCategories);

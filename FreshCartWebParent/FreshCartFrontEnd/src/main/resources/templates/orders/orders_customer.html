@@ -7,6 +7,7 @@
 <div class="container-fluid">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
 
     <main class="py-6">
         <div class="container">
@@ -74,7 +75,11 @@
                             <tbody>
                                 <tr th:each="order : ${listOrders}">
                                     <td class="ps-6">
-                                        <a class="text-decoration-none link-primary fw-medium">
+                                        <a class="text-decoration-none link-primary fw-medium linkDetail"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           th:href="@{'/orders/detail/' + ${order.id}}"
+                                           title="View Details">
                                             #[[${order.id}]]
                                         </a>
                                     </td>
@@ -120,23 +125,23 @@
                                     </td>
                                     <td class="text-end pe-6">
                                         <div class="d-flex justify-content-end gap-2">
-                                            <a class="btn btn-sm btn-light-primary linkDetail"
+                                            <a class="btn btn-sm btn-light btn-icon-text linkDetail"
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top"
                                                th:href="@{'/orders/detail/' + ${order.id}}"
                                                title="View Details">
-                                                <i class="feather-icon icon-eye"></i>
+                                                <i class="bi bi-eye"></i>
                                             </a>
 
                                             <th:block
                                                     th:if="${order.returnRequested == false && order.delivered == true && order.returned == false}">
-                                                <button class="btn btn-sm btn-light-secondary linkReturnOrder"
+                                                <button class="btn btn-sm btn-light btn-icon-text linkReturnOrder"
                                                         data-bs-toggle="tooltip"
                                                         data-bs-placement="top"
                                                         th:classappend="'linkReturn' + ${order.id}"
                                                         th:orderId="${order.id}"
                                                         title="Return Order">
-                                                    <i class="feather-icon icon-rotate-ccw"></i>
+                                                    <i class="bi bi-arrow-counterclockwise"></i>
                                                 </button>
                                             </th:block>
                                         </div>

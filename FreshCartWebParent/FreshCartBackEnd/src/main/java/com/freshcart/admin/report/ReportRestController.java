@@ -3,6 +3,7 @@ package com.freshcart.admin.report;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,5 +85,39 @@ public class ReportRestController {
             default:
                 return orderDetailReportService.getReportDataLast7Days(reportType);
         }
+    }
+
+    @GetMapping("/reports/revenue_by_year/{year}")
+    public List<ReportItem> getReportDataByYear(@PathVariable("year") String year) {
+        // Convert year string to Date range
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date startTime;
+        Date endTime;
+        try {
+            startTime = dateFormatter.parse(year + "-01-01");
+            endTime = dateFormatter.parse(year + "-12-31");
+            return masterOrderReportService.getReportDataByDateRange(startTime, endTime, ReportType.MONTH);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    @GetMapping("/reports/current_month_revenue")
+    public float getCurrentMonthRevenue() {
+        // Logic để tính doanh thu của tháng hiện tại
+        // Giả sử bạn có một service để tính toán
+        return masterOrderReportService.getCurrentMonthRevenue();
+    }
+
+    @GetMapping("/reports/current_month_orders")
+    public int getCurrentMonthOrders() {
+        // Logic để tính số lượng đơn hàng của tháng hiện tại
+        return masterOrderReportService.getCurrentMonthOrders();
+    }
+
+    @GetMapping("/reports/current_month_import_cost")
+    public float getCurrentMonthImportCost() {
+        return masterOrderReportService.getTotalImportCostForCurrentMonth();
     }
 }

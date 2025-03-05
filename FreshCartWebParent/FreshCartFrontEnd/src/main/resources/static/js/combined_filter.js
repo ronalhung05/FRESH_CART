@@ -7,8 +7,16 @@ let currentFilters = {
     sort: 'LOW_TO_HIGH'
 };
 
+// Thêm các biến để lưu thông tin currency
+let currencySymbol = '';
+let currencySymbolPosition = '';
+
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Lấy thông tin currency từ server (thêm vào đầu hàm)
+    currencySymbol = document.getElementById('currencySymbol')?.value || '$';
+    currencySymbolPosition = document.getElementById('currencySymbolPosition')?.value || 'Before price';
     
     if (urlParams.has('brands')) {
         const brandNames = urlParams.get('brands').split(',');
@@ -63,6 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilterTags();
     
     searchBrands();
+
+    // Thêm kiểm tra khi không có brands
+    const brandList = document.querySelector('.brand-list');
+    if (brandList && brandList.children.length === 0) {
+        brandList.innerHTML = '<div class="text-muted">No brands available for this category</div>';
+    }
 });
 
 function updateSortSelectText() {
@@ -74,6 +88,7 @@ function updateSortSelectText() {
 }
 
 function handleFilterChange(filterType, value, checked = null) {
+
     switch(filterType) {
         case 'brand':
             const checkbox = document.querySelector(`.brand-filter[value="${value}"]`);
@@ -176,6 +191,7 @@ function clearPriceFilter() {
 }
 
 function clearAllFilters() {
+
     currentFilters = {
         brands: [],
         rating: null,
@@ -239,16 +255,16 @@ function updateFilterTags() {
         let priceText = '';
         switch (currentFilters.priceRange) {
             case 'UNDER_50':
-                priceText = 'Under 50$';
+                priceText = `Under ${formatCurrency('50')}`;
                 break;
             case '50_TO_100':
-                priceText = '50$ - 100$';
+                priceText = `${formatCurrency('50')} - ${formatCurrency('100')}`;
                 break;
             case '100_TO_200':
-                priceText = '100$ - 200$';
+                priceText = `${formatCurrency('100')} - ${formatCurrency('200')}`;
                 break;
             case 'OVER_200':
-                priceText = 'Over 200$';
+                priceText = `Over ${formatCurrency('200')}`;
                 break;
         }
         const tag = createFilterTag(priceText, clearPriceFilter);
@@ -257,11 +273,11 @@ function updateFilterTags() {
         hasFilters = true;
         let priceText = '';
         if (currentFilters.minPrice && currentFilters.maxPrice) {
-            priceText = `${currentFilters.minPrice}đ - ${currentFilters.maxPrice}đ`;
+            priceText = `${formatCurrency(currentFilters.minPrice)} - ${formatCurrency(currentFilters.maxPrice)}`;
         } else if (currentFilters.minPrice) {
-            priceText = `Từ ${currentFilters.minPrice}đ`;
+            priceText = `From ${formatCurrency(currentFilters.minPrice)}`;
         } else if (currentFilters.maxPrice) {
-            priceText = `Đến ${currentFilters.maxPrice}đ`;
+            priceText = `To ${formatCurrency(currentFilters.maxPrice)}`;
         }
         const tag = createFilterTag(priceText, clearPriceFilter);
         filterTagsContainer.appendChild(tag);
@@ -315,4 +331,66 @@ function searchBrands() {
             });
         });
     }
+}
+
+function validatePriceInput(input) {
+    // Chỉ cho phép số dương
+    if (input.value < 0) {
+        input.value = 0;
+    }
+}
+
+function validateAndApplyPriceFilter() {
+    const minPrice = document.getElementById('priceFrom');
+    const maxPrice = document.getElementById('priceTo');
+    const errorDiv = document.getElementById('priceError');
+    
+    // Reset error message
+    errorDiv.style.display = 'none';
+    errorDiv.textContent = '';
+    
+    // Validate empty fields
+    if (minPrice.value === '' && maxPrice.value === '') {
+        errorDiv.textContent = 'Please enter at least one price value';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    
+    // Convert to numbers for comparison
+    const minVal = minPrice.value ? parseFloat(minPrice.value) : 0;
+    const maxVal = maxPrice.value ? parseFloat(maxPrice.value) : Infinity;
+    
+    // Validate min price is less than max price
+    if (minVal > maxVal) {
+        errorDiv.textContent = 'Minimum price cannot be greater than maximum price';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    
+    // If all validations pass, apply the filter
+    applyPriceFilter();
+}
+
+function applyPriceFilter() {
+    const minPrice = document.getElementById('priceFrom').value;
+    const maxPrice = document.getElementById('priceTo').value;
+    
+    if (minPrice || maxPrice) {
+        currentFilters.minPrice = minPrice;
+        currentFilters.maxPrice = maxPrice;
+        currentFilters.priceRange = null;
+        document.querySelectorAll('input[name="price"]').forEach(input => {
+            input.checked = false;
+        });
+    }
+    
+    applyFilters();
+}
+
+// Thêm hàm mới để format currency
+function formatCurrency(value) {
+    if (!value) return '';
+    return currencySymbolPosition === 'Before price' 
+        ? `${currencySymbol}${value}`
+        : `${value}${currencySymbol}`;
 }

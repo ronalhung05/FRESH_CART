@@ -27,6 +27,8 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public List<Customer> listAll() {return (List<Customer>) customerRepo.findAll();}
+
     public void listByPage(int pageNum, PagingAndSortingHelper helper) {
         helper.listEntities(pageNum, CUSTOMERS_PER_PAGE, customerRepo);
     }

@@ -1,22 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('Shopme', 'none')" />
+<head>
+    <head th:replace="fragments :: page_head('Order Completed', 'none')" />
+    <style>
+        .animate-up-down {
+            animation: upDown 3s ease-in-out infinite;
+        }
+        
+        .animate-down-up {
+            animation: downUp 3s ease-in-out infinite;
+        }
+        
+        @keyframes upDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes downUp {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(15px); }
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+    </style>
+</head>
 
 <body>
-	<div class="container-fluid">
-		<div th:replace="navigation :: header_menu"></div>
-		<div th:replace="navigation :: search_nav"></div>
+    <div class="container-fluid">
+        <div th:replace="navigation :: header_menu"></div>
+        <div th:replace="navigation :: search_nav"></div>
 
-		<div class="text-center border border-secondary rounded m-3 p-3">
-			<h2>Your Order has been Completed!</h2>
-			<h4>A confirmation email has been sent to you.</h4>
-			<h4>Kindly check your email for the details.</h4>
-		</div>
+        <section class="container pt-3 pt-sm-4 pb-5 mb-2 mb-md-3 mb-lg-4 mb-xl-5">
+            <div class="position-relative overflow-hidden rounded-5 p-4 p-sm-5" 
+                 style="background-color: #e8f8f3">
+                <div class="position-relative z-2 text-center py-4 py-md-5 my-md-2 my-lg-5 mx-auto" 
+                     style="max-width: 536px">
+                    <h1 class="pt-xl-4 mb-4">Thank you for your order!</h1>
+                    <p class="text-dark-emphasis pb-3 pb-sm-4">
+                        Your order <span class="fw-semibold" th:text="${'#' + order.id}"></span>
+                        accepted and will be processed shortly. Expect our courier 
+                        <span class="fw-semibold" th:text="${'on ' + #dates.format(order.deliverDate, 'EEEE, MMM d')}"></span>
+                    </p>
+                    <a class="btn btn-lg btn-dark rounded-pill mb-xl-4" th:href="@{/}">
+                        Continue shopping
+                    </a>
+                </div>
+                <img th:src="@{/images/thankyou-bg-1.png}" 
+                     class="animate-up-down position-absolute top-0 start-0 w-100 h-100 object-fit-cover" 
+                     alt="Background image">
+                <img th:src="@{/images/thankyou-bg-2.png}" 
+                     class="animate-down-up position-absolute top-0 start-0 w-100 h-100 object-fit-cover" 
+                     alt="Background image">
+            </div>
+        </section>
 
-
-		<div th:replace="navigation :: footer_menu"></div>
-	</div>
+        <div th:replace="navigation :: footer_menu"></div>
+    </div>
 </body>
 
 </html>

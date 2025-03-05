@@ -9,19 +9,292 @@
 
 	<div class="main-wrapper">
 		<div th:replace="navigation :: menu"></div>
-		
+		<th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
 		<!-- main content -->
 		<main class="main-content-wrapper bg-white">
-			<div class="container">
-				<h2>FreshCart Control Panel</h2>
-				<!-- Your dashboard content here -->
-			</div>
+			<section class="container">
+				<!-- Welcome Banner -->
+				<div class="row mb-8">
+					<div class="col-md-12">
+						<div class="card bg-light border-0 rounded-4"
+							style="background-image: url(images/slider/slider-image-1.jpg); background-repeat: no-repeat; background-size: cover; background-position: right;">
+							<div class="card-body p-lg-12">
+								<h1>Welcome back! FreshCart</h1>
+								<p>FreshCart Admin Control Panel</p>
+								<a th:href="@{/products/new}" class="btn btn-primary">Create Product</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Statistics Cards -->
+				<div class="row">
+					<!-- Earnings Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Earnings</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-danger text-dark-danger rounded-circle">
+										<i class="bi bi-currency-dollar fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 id="monthlyRevenue" class="mb-2 fw-bold fs-2">$0.00</h1>
+									<span>Monthly revenue</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Orders Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Orders</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-warning text-dark-warning rounded-circle">
+										<i class="bi bi-cart fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 id="totalOrders" class="mb-2 fw-bold fs-2">0</h1>
+									<span>Monthly orders</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Import Cost Card -->
+					<div class="col-lg-4 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<div class="d-flex justify-content-between align-items-center mb-6">
+									<div>
+										<h4 class="mb-0 fs-5">Import Cost</h4>
+									</div>
+									<div class="icon-shape icon-md bg-light-info text-dark-info rounded-circle">
+										<i class="bi bi-box-seam fs-5"></i>
+									</div>
+								</div>
+								<div class="lh-1">
+									<h1 id="totalImportCost" class="mb-2 fw-bold fs-2">$0.00</h1>
+									<span>Monthly import cost</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row ">
+					<div class="col-lg-12 col-12 mb-6">
+						<!-- card -->
+						<div class="card h-100 card-lg">
+							<div class="card-body p-6">
+								<!-- heading -->
+								<div class="d-flex justify-content-between">
+									<div>
+										<h3 class="mb-1 fs-5">Revenue & Profit</h3>
+										<small>(Monthly comparison)</small>
+									</div>
+									<div>
+										<!-- select option -->
+										<select class="form-select ">
+											<option value="2024" selected>2024</option>
+											<option value="2023">2023</option>
+											<option value="2022">2022</option>
+											<option value="2021">2021</option>
+										</select>
+									</div>
+
+								</div>
+								<!-- chart -->
+								<div id="revenueChart" class="mt-6"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Recent Orders Table -->
+				<div class="row">
+					<div class="col-lg-12 col-12 mb-6">
+						<div class="card h-100 card-lg">
+							<div class="p-6">
+								<h3 class="mb-0 fs-5">Recent Order</h3>
+							 </div>
+							<div class="card-body p-0">
+								<div class="table-responsive">
+									<table class="table table-centered table-borderless text-nowrap table-hover">
+										<thead class="table-light">
+											<tr>
+												<th>Order ID</th>
+												<th>Customer</th>
+												<th>Date</th>
+												<th>Amount</th>
+												<th>Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="order : ${recentOrders}">
+												<td th:text="${'#' + order.id}"></td>
+												<td th:text="${order.customer.fullName}"></td>
+												<td th:text="${#dates.format(order.orderTime, 'dd MMM yyyy')}"></td>
+												<td>
+													<div th:replace="fragments :: format_currency(${order.total})"></div>
+												</td>
+												<td>
+													<span th:class="${'badge ' + 
+														(order.status.toString() == 'NEW' ? 'badge bg-light-info text-dark-info' : 
+														(order.status.toString() == 'PROCESSING' ? 'badge bg-light-warning text-dark-warning' : 
+														(order.status.toString() == 'DELIVERED' ? 'badge bg-light-success text-dark-success' : 
+														(order.status.toString() == 'CANCELLED' ? 'bg-danger' : ' badge bg-light-secondary text-dark-secondary'))))}">
+														[[${order.status}]]
+													</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 		</main>
-
-		<div th:replace="fragments :: footer"></div>
+		</th:block>
 	</div>
-
+	<div th:replace="fragments :: footer"></div>
 	<div th:replace="fragments :: common-js"></div>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		var contextPath = "[[@{/}]]";
+		$(document).ready(function() {
+			google.charts.load('current', {
+				'packages': ['corechart']
+			});
+			google.charts.setOnLoadCallback(function() {
+				loadRevenueChart('2024'); // Load initial chart for 2023
+			});
+
+			// Event handler for year selection
+			$('.form-select').change(function() {
+				var selectedYear = $(this).val();
+				loadRevenueChart(selectedYear);
+			});
+
+			// Lấy doanh thu của tháng hiện tại
+			$.get(contextPath + "reports/current_month_revenue", function(revenue) {
+				$("#monthlyRevenue").text("$" + revenue.toFixed(2));
+			});
+
+			// Lấy số lượng đơn hàng của tháng hiện tại
+			$.get(contextPath + "reports/current_month_orders", function(orders) {
+				$("#totalOrders").text(orders);
+			});
+
+			// Lấy tổng tiền nhập kho trong tháng hiện tại
+			$.get(contextPath + "reports/current_month_import_cost", function(importCost) {
+				$("#totalImportCost").text("$" + importCost.toFixed(2));
+			});
+		});
+
+		function loadRevenueChart(year) {
+			// Tạo ngày bắt đầu và kết thúc cho năm được chọn
+			var startDate = year + "-01-01";
+			var endDate = year + "-12-31";
+			
+			// Sử dụng cùng API với sales report
+			var requestURL = contextPath + "reports/sales_by_date/" + startDate + "/" + endDate;
+			
+			$.get(requestURL, function(responseJSON) {
+				var data = new google.visualization.DataTable();
+				data.addColumn('string', 'Month');
+				data.addColumn('number', 'Revenue');
+				data.addColumn('number', 'Profit');
+
+				// Tạo map để gom nhóm dữ liệu theo tháng
+				var monthlyData = {};
+				
+				// Khởi tạo biến tổng
+				var totalRevenue = 0.0;
+				var totalProfit = 0.0;
+
+				// Xử lý dữ liệu từ response
+				$.each(responseJSON, function(index, reportItem) {
+					var date = reportItem.identifier.split('-');
+					var month = date[1];
+					var monthKey = getMonthName(month);
+					
+					// Khởi tạo hoặc cộng dồn dữ liệu cho tháng
+					if (!monthlyData[monthKey]) {
+						monthlyData[monthKey] = {
+							revenue: 0,
+							profit: 0
+						};
+					}
+					
+					var revenue = parseFloat(reportItem.revenue);
+					var profit = parseFloat(reportItem.profit);
+					
+					monthlyData[monthKey].revenue += revenue;
+					monthlyData[monthKey].profit += profit;
+					
+					totalRevenue += revenue;
+					totalProfit += profit;
+				});
+
+				// Thêm dữ liệu vào chart theo từng tháng
+				for (var i = 1; i <= 12; i++) {
+					var monthName = getMonthName(i.toString().padStart(2, '0'));
+					var monthData = monthlyData[monthName] || { revenue: 0, profit: 0 };
+					data.addRow([monthName, monthData.revenue, monthData.profit]);
+				}
+
+				var options = {
+					title: 'Revenue & Profit for ' + year,
+					height: 360,
+					legend: { position: 'top' },
+					hAxis: { 
+						title: 'Month',
+						slantedText: true,
+						slantedTextAngle: 45
+					},
+					vAxis: { 
+						title: 'Amount ($)',
+						format: 'currency'
+					},
+					isStacked: true,
+					series: {
+						0: { // Revenue
+							type: 'area',
+							color: '#4e73df',
+							areaOpacity: 0.6
+						},
+						1: { // Profit
+							type: 'area',
+							color: '#1cc88a',
+							areaOpacity: 0.6
+						}
+					}
+				};
+
+				var chart = new google.visualization.AreaChart(document.getElementById('revenueChart'));
+				chart.draw(data, options);
+			});
+		}
+
+		function getMonthName(monthNumber) {
+			const months = [
+				'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+				'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+			];
+			return months[parseInt(monthNumber) - 1];
+		}
+	</script>
 </body>
 
 </html>

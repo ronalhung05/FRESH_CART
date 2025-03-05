@@ -7,6 +7,7 @@
 <div class="container-fluid">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
 
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -57,7 +58,7 @@
                                     <input type="tel" th:field="*{phoneNumber}" 
                                            class="form-control" id="phone"
                                            placeholder="Phone Number" required 
-                                           maxlength="15" minlength="8" pattern="[0-9]+">
+                                           maxlength="10" minlength="8" pattern="[0-9]+">
                                     <label for="phone">Phone Number</label>
                                     <div class="invalid-feedback">Please enter a valid phone number</div>
                                 </div>

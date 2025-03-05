@@ -8,6 +8,7 @@
      th:with="redirectedFromCheckoutPage = ${param.redirect != null && param.redirect[0] == 'checkout'}">
     <div th:replace="navigation :: header_menu"></div>
     <div th:replace="navigation :: search_nav"></div>
+    <div th:replace="navigation :: category_nav"></div>
 
     <section>
         <div class="container">

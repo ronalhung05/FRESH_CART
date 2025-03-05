@@ -132,7 +132,7 @@
                                             id="rolesSelect" 
                                             required>
                                         <th:block th:each="role : ${listRoles}">
-                                            <option th:value="${role.id}" th:text="${role.name}"></option>
+                                            <option th:if="${role.name != 'Admin'}" th:value="${role.id}" th:text="${role.name}"></option>
                                         </th:block>
                                     </select>
                                 </div>

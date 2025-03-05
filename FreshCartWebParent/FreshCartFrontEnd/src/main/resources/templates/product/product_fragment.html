@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
+
 <th:block th:fragment="productList">
     <div th:each="product : ${listProducts}" class="col">
         <div class="card card-product h-100">
@@ -47,27 +48,26 @@
                 </div>
 
                 <!-- Price and Add to Cart button -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div th:fragment="product_price" th:remove="tag">
-                        <th:block th:if="${product.discountPercent <= 0}">
-                            <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-                        </th:block>
-                        <th:block th:if="${product.discountPercent > 0}">
-                            <div class="d-flex align-items-center">
-									<span class="text-dark me-2">
-										<div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
-									</span>
+                <div class="product-card-footer">
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <span class="text-dark fw-bold" th:if="${product.discountPercent <= 0}">
+                                <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+                            </span>
+                            <span th:if="${product.discountPercent > 0}">
+                                <span class="text-dark fw-bold">
+                                    <div th:replace="product/product_fragment :: price_fragment(${product.discountPrice})"></div>
+                                </span>
                                 <span class="text-decoration-line-through text-muted">
-										<div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
-									</span>
-                            </div>
-                        </th:block>
-                    </div>
-                    <div>
-                        <th:block th:if="${product.inStock}">
-                            <button class="btn btn-primary btn-sm buttonAdd2Cart"
+                                    <div th:replace="product/product_fragment :: price_fragment(${product.price})"></div>
+                                </span>
+                            </span>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-sm buttonAdd2Cart"
                                     th:pid="${product.id}"
-                                    th:data-context-path="@{/}">
+                                    th:data-instock="${product.inStock}"
+                                    th:if="${product.inStock}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                      fill="none"
                                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -78,11 +78,11 @@
                                 </svg>
                                 Add
                             </button>
-                            <input type="hidden" th:id="'quantity' + ${product.id}" value="1"/>
-                        </th:block>
-                        <button class="btn btn-secondary btn-sm" th:unless="${product.inStock}" disabled>
-                            Out of Stock
-                        </button>
+                            <button type="button" class="btn btn-secondary btn-sm" disabled
+                                    th:unless="${product.inStock}">
+                                Out of Stock
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,23 @@ var trackRecordCount;
 $(document).ready(function() {
 	trackRecordCount = $(".hiddenTrackId").length;
 
+	$("#trackList").on('blur', "textarea[name='trackNotes']", function () {
+		const noteField = $(this);
+		const maxLength = 256;
+		console.log(noteField.val().toString().length);
+		if (!noteField.val().toString().trim()) {
+			showWarningMessage(messages.NOT_NULL_NOTES);
+			noteField.addClass('is-invalid');
+			noteField.focus();
+		} else if (noteField.val().toString().length > maxLength) {
+			showWarningMessage(messages.EXCEED_MAX_LENGTH_NOTES);
+			noteField.addClass('is-invalid');
+			noteField.focus();
+		} else {
+			noteField.removeClass('is-invalid');
+		}
+	});
+
 	$("#trackList").on("click", ".linkRemoveTrack", function(e) {
 		e.preventDefault();
 		deleteTrack($(this));
@@ -24,25 +41,6 @@ $(document).ready(function() {
 
 	$("#trackList").on("change", "input[name='trackDate'], select[name='trackStatus']", function() {
 		updateOverviewStatus();
-	});
-
-	$('#trackList').on('blur', "textarea[name='trackNotes']", function () {
-		const noteField = $(this);
-		const maxLength = 256;
-
-		// Kiểm tra nếu rỗng
-		if (!noteField.val().trim()) {
-			showErrorMessage(messages.NOT_NULL_NOTES);
-			noteField.addClass('is-invalid');
-			noteField.focus();
-		} else if (noteField.val().length > maxLength) {
-			// Kiểm tra nếu vượt quá ký tự cho phép
-			showErrorMessage(messages.EXCEED_MAX_LENGTH_NOTES);
-			noteField.addClass('is-invalid');
-			noteField.focus();
-		} else {
-			noteField.removeClass('is-invalid');
-		}
 	});
 
 	updateTrackStatusOptions();
@@ -176,7 +174,7 @@ function generateTrackRowCode() {
 				<input type="datetime-local" name="trackDate" value="${currentDateTime}" class="form-control" required style="width: 100%;" readonly/>
 			</td>
 			<td>
-				<select name="trackStatus" class="form-control dropDownStatus" required rowNumber="${nextCount}">
+				<select name="trackStatus" class="form-control dropDownStatus" required style="max-width: 300px" rowNumber="${nextCount}">
 					<option value="CANCELLED" defaultDescription="Order has been cancelled">CANCELLED</option>
 					<option value="PROCESSING" defaultDescription="Order is being processed">PROCESSING</option>
 					<option value="PACKAGED" defaultDescription="Order has been packaged">PACKAGED</option>
@@ -189,7 +187,7 @@ function generateTrackRowCode() {
 				</select>
 			</td>
 			<td>
-				<textarea rows="2" class="form-control" name="trackNotes" id="${trackNoteId}"></textarea>
+				<textarea rows="2" class="form-control" name="trackNotes" id="${trackNoteId}"  style="width: 100%;"></textarea>
 			</td>
 			<td>
 				<a class="text-danger linkRemoveTrack" href="" rowNumber="${nextCount}">
@@ -219,7 +217,3 @@ function formatCurrentDateTime() {
 
 	return year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second;
 }
-
-
-
-

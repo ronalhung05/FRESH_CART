@@ -109,5 +109,8 @@ public class OrderService {
     public int getExistingOrderQuantity(Integer orderId, Integer productId) {
         return orderRepo.getProductQuantityInOrder(orderId, productId);
     }
+    public List<Order> findTop5RecentOrders() {
+        return orderRepo.findTop5ByOrderByOrderTimeDesc();
+    }
 
 }
